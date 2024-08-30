@@ -1,76 +1,28 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
 	_ "github.com/lib/pq"
-	"log"
-	"orm/scheme"
+	"orm/entities"
+	"orm/lib/client"
+	"orm/lib/config"
+	"orm/lib/scheme"
 )
-
-type DbClient struct {
-	db     *sql.DB
-	config ORMConfig
-	tables map[string]scheme.TableScheme
-}
-
-func (c *DbClient) table(table string) scheme.TableScheme {
-	return c.tables[table]
-}
-
-type ORMConfig struct {
-	DbDriver string
-	Host     string
-	Port     int
-	User     string
-	Password string
-	DbName   string
-	SSLMode  bool
-	Tables   []scheme.TableScheme
-}
-
-func createClient(config ORMConfig) DbClient {
-	var connStr string
-	connStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		config.Host, config.Port, config.User, config.Password, config.DbName)
-	db, err := sql.Open(config.DbDriver, connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer func(db *sql.DB) {
-		err := db.Close()
-		if err != nil {
-			log.Panic(err)
-		}
-	}(db)
-
-	tableMap := make(map[string]scheme.TableScheme)
-	for _, table := range config.Tables {
-		tableMap[table.Name] = table
-	}
-
-	return DbClient{
-		db:     db,
-		config: config,
-		tables: tableMap,
-	}
-}
 
 func main() {
 	userTableSchema := scheme.TableScheme{
 		Name: "users",
 		Fields: []scheme.Field{
-			{Name: "id", Type: "integer", Nullability: false},
-			{Name: "name", Type: "varchar(50)", Nullability: true},
-			{Name: "email", Type: "varchar(100)", Nullability: false},
-			{Name: "password", Type: "varchar(100)", Nullability: true},
+			{Name: "id", Type: "integer"},
+			{Name: "name", Type: "varchar(50)"},
+			{Name: "email", Type: "varchar(100)"},
+			{Name: "password", Type: "varchar(100)"},
 		},
 	}
 
-	config := ORMConfig{
+	ormConfig := config.ORMConfig{
 		DbDriver: "postgres",
 		Host:     "localhost",
-		Port:     5432,
+		Port:     15432,
 		User:     "postgres",
 		Password: "root",
 		DbName:   "orm",
@@ -80,9 +32,28 @@ func main() {
 		},
 	}
 
-	db := createClient(config)
+	//ormConfig := config.ORMConfig{
+	//	DbDriver: "sqlite",
+	//	Host:     "localhost",
+	//	Port:     5432,
+	//	User:     "postgres",
+	//	Password: "root",
+	//	DbName:   "orm",
+	//	SSLMode:  false,
+	//	Tables: []scheme.TableScheme{
+	//		userTableSchema,
+	//	},
+	//}
 
-	db.table("users").Create(db.db, "name", "email", "password")
+	db := client.CreateClient(ormConfig)
+
+	user := &entities.User{
+		Model: entities.Model{},
+		Name:  "Name",
+		Email: "Email",
+	}
+
+	db.Create(user)
 
 	//err := schema.createTable(db)
 	//if err != nil {
