@@ -21,7 +21,7 @@ build-js:
 
 .PHONY: watch
 watch:
-	$(MAKE) -j2 watch-app watch-templ
+	$(MAKE) -j4 watch-app watch-templ watch-css watch-assets
 	#$(MAKE) -j5 watch-app watch-templ watch-css watch-js watch-assets
 
 .PHONY: watch-app

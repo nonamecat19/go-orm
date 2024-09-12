@@ -1,3 +1,5 @@
 .idea
 studio/bin
 studio/tmp/build-errors.log
+studio/web/node_modules
+studio/web/package-lock.json

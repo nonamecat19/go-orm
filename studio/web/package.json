@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build:css": "npx tailwindcss -i src/main.css -o public/assets/main.css",
+    "watch:css": "npm run build:css -- --watch=always",
+    "build:js": "ls"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.11"
+  }
+}
