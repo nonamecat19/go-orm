@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"studio/internal/config"
+	"studio/internal/view/settings"
 	"studio/internal/view/tables"
 )
 
@@ -17,6 +18,10 @@ func Run(ctx context.Context) error {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return Render(c, tables.Index())
+	})
+
+	app.Get("/settings", func(c *fiber.Ctx) error {
+		return Render(c, settings.SettingsPage())
 	})
 
 	app.Use("/assets", filesystem.New(filesystem.Config{
