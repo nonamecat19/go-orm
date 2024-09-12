@@ -1,18 +1,19 @@
 package app
 
 import (
-	"context"
+	"github.com/a-h/templ"
+	_ "github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	"studio/internal/config"
 	"studio/internal/view/tables"
 )
 
-func Run(ctx context.Context) error {
+func Run() error {
 	cfg := config.NewConfig()
 	app := fiber.New(fiber.Config{})
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return tables.Index().Render(context.Background(), c.Response().BodyWriter())
+		return Render(c, tables.Index())
 	})
 
 	err := app.Listen(cfg.ServerAddr)
@@ -21,4 +22,9 @@ func Run(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func Render(c *fiber.Ctx, component templ.Component) error {
+	c.Set("Content-Type", "text/html")
+	return component.Render(c.Context(), c.Response().BodyWriter())
 }

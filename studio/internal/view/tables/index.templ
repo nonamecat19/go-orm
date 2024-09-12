@@ -1,5 +1,10 @@
 package tables
 
+import "studio/internal/view/layout"
+
+
 templ Index() {
-	<h1>Hello, world!</h1>
+	@layout.Base(layout.BaseProps{Title: "Main page"}) {
+		<h1>Hello, world!</h1>
+	}
 }
