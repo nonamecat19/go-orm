@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"github.com/a-h/templ"
 	_ "github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
@@ -8,7 +9,7 @@ import (
 	"studio/internal/view/tables"
 )
 
-func Run() error {
+func Run(ctx context.Context) error {
 	cfg := config.NewConfig()
 	app := fiber.New(fiber.Config{})
 
