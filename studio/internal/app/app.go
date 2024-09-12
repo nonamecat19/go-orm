@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gofiber/fiber/v2"
 	"studio/internal/config"
+	"studio/internal/view/tables"
 )
 
 func Run(ctx context.Context) error {
@@ -11,7 +12,7 @@ func Run(ctx context.Context) error {
 	app := fiber.New(fiber.Config{})
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+		return tables.Index().Render(context.Background(), c.Response().BodyWriter())
 	})
 
 	err := app.Listen(cfg.ServerAddr)
