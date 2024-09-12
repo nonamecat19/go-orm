@@ -2,28 +2,20 @@ package app
 
 import (
 	"context"
-	"errors"
-	"log/slog"
-	"net/http"
+	"github.com/gofiber/fiber/v2"
 	"studio/internal/config"
 )
 
 func Run(ctx context.Context) error {
 	cfg := config.NewConfig()
+	app := fiber.New(fiber.Config{})
 
-	// TODO: to fiber
-	s := http.Server{
-		Addr: cfg.ServerAddr,
-	}
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, World!")
+	})
 
-	go func() {
-		<-ctx.Done()
-		slog.Info("Shutting down server")
-		_ = s.Shutdown(ctx)
-	}()
-
-	slog.Info("Starting server", slog.String("addr", cfg.ServerAddr))
-	if err := s.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+	err := app.Listen(cfg.ServerAddr)
+	if err != nil {
 		return err
 	}
 
