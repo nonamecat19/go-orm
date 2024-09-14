@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
+	"github.com/nonamecat19/go-orm/studio/internal/app"
 	"log"
 	"os"
 	"os/signal"
-	"studio/internal/app"
 )
 
 func main() {

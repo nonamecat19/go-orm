@@ -1,1 +1,0 @@
-<h1 class=\"bg-red-500\">Hello 2world!</h1>

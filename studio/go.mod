@@ -1,4 +1,4 @@
-module studio
+module github.com/nonamecat19/go-orm/studio
 
 go 1.22.4
 
