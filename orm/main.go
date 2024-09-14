@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"orm/cmd"
+	"github.com/nonamecat19/go-orm/orm/cmd"
 )
 
 func main() {

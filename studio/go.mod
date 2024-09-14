@@ -5,7 +5,6 @@ go 1.23.1
 require (
 	github.com/a-h/templ v0.2.778
 	github.com/gobuffalo/packr/v2 v2.8.3
-	github.com/gofiber/embed v0.1.2
 	github.com/gofiber/fiber/v2 v2.52.5
 )
 
@@ -13,10 +12,7 @@ require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/gobuffalo/logger v1.0.6 // indirect
 	github.com/gobuffalo/packd v1.0.1 // indirect
-	github.com/gofiber/fiber v1.13.3 // indirect
-	github.com/gofiber/utils v0.0.9 // indirect
 	github.com/google/uuid v1.5.0 // indirect
-	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/markbates/errx v1.1.0 // indirect

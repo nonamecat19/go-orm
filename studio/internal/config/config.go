@@ -1,6 +1,9 @@
 package config
 
-import "github.com/nonamecat19/go-orm/orm/lib/scheme"
+import (
+	"github.com/nonamecat19/go-orm/core/lib/config"
+	"github.com/nonamecat19/go-orm/core/lib/scheme"
+)
 
 type Config struct {
 	ServerAddr string
@@ -12,7 +15,7 @@ func NewConfig() Config {
 	}
 }
 
-var PostgresConfig = ORMConfig{
+var PostgresConfig = config.ORMConfig{
 	DbDriver: "postgres",
 	Host:     "localhost",
 	Port:     15432,

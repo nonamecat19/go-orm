@@ -1,7 +1,7 @@
 go 1.23.1
 
 use (
-	core
-	orm
-	studio
+	./core
+	./orm
+	./studio
 )
