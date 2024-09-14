@@ -1,6 +1,6 @@
 module github.com/nonamecat19/go-orm/studio
 
-go 1.22.4
+go 1.23.1
 
 require (
 	github.com/a-h/templ v0.2.778
