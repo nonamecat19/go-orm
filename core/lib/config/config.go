@@ -1,6 +1,6 @@
 package config
 
-import "github.com/nonamecat19/go-orm/orm/lib/scheme"
+import "github.com/nonamecat19/go-orm/core/lib/scheme"
 
 type ORMConfig struct {
 	DbDriver string
