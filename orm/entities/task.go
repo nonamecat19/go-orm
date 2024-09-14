@@ -1,7 +1,9 @@
 package entities
 
+import "github.com/nonamecat19/go-orm/core/lib/entities"
+
 type Task struct {
-	Model
+	entities.Model
 	Title       string `db:"name" json:"name"`
 	Description string `db:"description" json:"description"`
 }

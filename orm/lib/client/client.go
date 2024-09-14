@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/nonamecat19/go-orm/core/lib/config"
+	"github.com/nonamecat19/go-orm/core/lib/entities"
 	"github.com/nonamecat19/go-orm/core/lib/scheme"
-	"github.com/nonamecat19/go-orm/orm/entities"
 	"log"
 	"reflect"
 )
