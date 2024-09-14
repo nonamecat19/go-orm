@@ -1,1 +1,9 @@
 .idea
+studio/bin
+studio/tmp/build-errors.log
+studio/web/node_modules
+studio/web/package-lock.json
+studio/web/public/assets/main.css
+studio/web/public/assets/main.js
+studio/internal/view/**/*.go
+studio/internal/view/**/*.txt
