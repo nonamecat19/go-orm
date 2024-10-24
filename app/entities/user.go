@@ -8,6 +8,6 @@ type User struct {
 	Email string `db:"email" json:"email"`
 }
 
-func (user *User) TableName() string {
+func (user User) TableName() string {
 	return "users"
 }

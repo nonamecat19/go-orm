@@ -1,14 +1,41 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
+	_ "github.com/lib/pq"
+	"github.com/nonamecat19/go-orm/orm/lib/client"
+	"github.com/nonamecat19/go-orm/studio/internal/config"
 	"github.com/nonamecat19/go-orm/studio/internal/view/settings"
 	"github.com/nonamecat19/go-orm/studio/internal/view/tables"
 )
 
 func TablesPage(c *fiber.Ctx) error {
 	//config.PostgresConfig
+
+	dbClient := client.CreateClient(config.PostgresConfig)
+	db := dbClient.GetDb()
+
+	rows, err := db.Query(`
+		SELECT table_name
+		FROM information_schema.tables
+		WHERE table_schema = 'public';
+    `)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	var tableName string
+	fmt.Println("Tables in the public schema:")
+	for rows.Next() {
+		err := rows.Scan(&tableName)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(tableName)
+	}
 
 	props := tables.TablePageProps{
 		Tables: []tables.Table{

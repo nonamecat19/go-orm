@@ -1,7 +1,5 @@
 package config
 
-import "github.com/nonamecat19/go-orm/core/lib/scheme"
-
 type ORMConfig struct {
 	DbDriver string
 	Host     string
@@ -10,5 +8,4 @@ type ORMConfig struct {
 	Password string
 	DbName   string
 	SSLMode  bool
-	Tables   []scheme.TableScheme
 }

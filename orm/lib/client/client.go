@@ -10,10 +10,12 @@ import (
 	"reflect"
 )
 
+type Tables = map[string]scheme.TableScheme
+
 type DbClient struct {
 	db     *sql.DB
 	config config.ORMConfig
-	tables map[string]scheme.TableScheme
+	tables Tables
 }
 
 func CreateClient(config config.ORMConfig) DbClient {
@@ -31,7 +33,7 @@ func CreateClient(config config.ORMConfig) DbClient {
 	//	}
 	//}(db)
 
-	tableMap := make(map[string]scheme.TableScheme)
+	tableMap := make(Tables)
 	for _, table := range config.Tables {
 		tableMap[table.Name] = table
 	}
@@ -41,6 +43,18 @@ func CreateClient(config config.ORMConfig) DbClient {
 		config: config,
 		tables: tableMap,
 	}
+}
+
+func (dc DbClient) GetDb() *sql.DB {
+	return dc.db
+}
+
+func (dc DbClient) GetConfig() config.ORMConfig {
+	return dc.config
+}
+
+func (dc DbClient) GetTables() Tables {
+	return dc.tables
 }
 
 func (dc DbClient) Read() ([]map[string]interface{}, error) {
