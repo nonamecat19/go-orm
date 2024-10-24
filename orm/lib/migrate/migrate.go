@@ -5,20 +5,22 @@ import (
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/lib/entities"
 	"github.com/nonamecat19/go-orm/core/lib/scheme"
+	"github.com/nonamecat19/go-orm/core/utils"
+	"github.com/nonamecat19/go-orm/orm/lib/migrate/postgres"
 	"log"
 	"reflect"
 )
 
 func PushEntity(config config.ORMConfig, entities []entities.IEntity) {
-	//tableConfigs := getAllConfigs(entities)
+	tableConfigs := getAllConfigs(entities)
 
 	switch config.DbDriver {
 	case "postgres":
-		log.Fatal("postgres push not implemented")
+		sql := postgres.GeneratePostgresTablesSQL(tableConfigs)
+		println(sql)
 	case "sqlite":
 		log.Fatal("sqlite push not implemented")
 	}
-
 }
 
 func getAllConfigs(entities []entities.IEntity) []scheme.TableScheme {
@@ -44,14 +46,27 @@ func getDbConfig(data entities.IEntity) scheme.TableScheme {
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
-		dbTag := field.Tag.Get("db")
-		if dbTag != "" {
-			continue
+
+		if field.Name == "Model" {
+			fields = append(fields, scheme.Field{
+				//TODO
+				Name:        "id",
+				Type:        "int64",
+				Nullability: false,
+			})
+		} else {
+			dbTag := field.Tag.Get("db")
+			if dbTag == "" {
+				continue
+			}
+			typeTag := field.Tag.Get("type")
+			fields = append(fields, scheme.Field{
+				Name:        dbTag,
+				Type:        utils.If(len(typeTag) > 0, typeTag, field.Type.Name()),
+				Nullability: field.Tag.Get("nullable") == "true",
+			})
 		}
-		fields = append(fields, scheme.Field{
-			Name: dbTag,
-			Type: field.Type.Name(),
-		})
+
 	}
 
 	return scheme.TableScheme{
