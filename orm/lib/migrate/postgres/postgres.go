@@ -19,7 +19,7 @@ func GeneratePostgresTablesSQL(schemes []scheme.TableScheme) string {
 	var sql string
 
 	for _, item := range schemes {
-		sql += fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n", item.Name)
+		sql += `CREATE TABLE "` + utils.ToSnakeCase(item.Name) + `" (` + "\n"
 
 		for _, field := range item.Fields {
 			fieldTypeStr := field.Type
@@ -30,7 +30,7 @@ func GeneratePostgresTablesSQL(schemes []scheme.TableScheme) string {
 			sql += fmt.Sprintf("  %s %s%s,\n", field.Name, fieldTypeStr, utils.If(field.Nullability, " NULL", ""))
 		}
 
-		sql = sql[:len(sql)-2] + "\n);\n\n"
+		sql = sql[:len(sql)-2] + "\n);\n"
 	}
 
 	return sql
