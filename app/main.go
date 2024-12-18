@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"
@@ -9,12 +8,10 @@ import (
 )
 
 func main() {
-	fmt.Print("Start")
-
 	ormConfig := config.ORMConfig{
 		DbDriver: "postgres",
 		Host:     "127.0.0.1",
-		Port:     5432,
+		Port:     15432,
 		User:     "postgres",
 		Password: "root",
 		DbName:   "orm",

@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/nonamecat19/go-orm/core/lib/config"
-	"github.com/nonamecat19/go-orm/core/lib/scheme"
 )
 
 type Config struct {
@@ -23,5 +22,4 @@ var PostgresConfig = config.ORMConfig{
 	Password: "root",
 	DbName:   "orm",
 	SSLMode:  false,
-	Tables:   []scheme.TableScheme{},
 }

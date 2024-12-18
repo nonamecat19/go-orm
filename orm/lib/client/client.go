@@ -34,9 +34,6 @@ func CreateClient(config config.ORMConfig) DbClient {
 	//}(db)
 
 	tableMap := make(Tables)
-	for _, table := range config.Tables {
-		tableMap[table.Name] = table
-	}
 
 	return DbClient{
 		db:     db,
