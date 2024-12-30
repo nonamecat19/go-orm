@@ -26,7 +26,6 @@ var migrationCreateCmd = &cobra.Command{
 		}
 
 		println("Creating migration", name)
-
 	},
 }
 
