@@ -98,6 +98,7 @@ func getDbConfig(data entities.IEntity) scheme.TableScheme {
 				Name:        "id",
 				Type:        "int64",
 				Nullability: false,
+				PrimaryKey:  true,
 			})
 		} else {
 			dbTag := field.Tag.Get("db")
