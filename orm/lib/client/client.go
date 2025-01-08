@@ -2,12 +2,14 @@ package client
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/lib/entities"
 	"github.com/nonamecat19/go-orm/core/lib/scheme"
 	"log"
 	"reflect"
+	"strings"
 )
 
 type Tables = map[string]scheme.TableScheme
@@ -54,25 +56,78 @@ func (dc DbClient) GetTables() Tables {
 	return dc.tables
 }
 
-func (dc DbClient) Read() ([]map[string]interface{}, error) {
-	query := "SELECT * FROM users;"
+//func (dc DbClient) Read() ([]entities2.User, error) {
+//	query := "SELECT name FROM users;"
+//	rows, err := dc.db.Query(query)
+//	if err != nil {
+//		return nil, err
+//	}
+//	defer rows.Close()
+//
+//	var users []entities2.User
+//	for rows.Next() {
+//		var user entities2.User
+//		err = rows.Scan(&user.Name)
+//		if err != nil {
+//			return nil, err
+//		}
+//		users = append(users, user)
+//	}
+//
+//	return users, nil
+//}
+
+func (dc DbClient) Read(entity interface{}) ([]interface{}, error) {
+	entityType := reflect.TypeOf(entity)
+	if entityType.Kind() != reflect.Ptr || entityType.Elem().Kind() != reflect.Struct {
+		return nil, errors.New("entity must be a pointer to a struct")
+	}
+
+	entityType = entityType.Elem()
+	tableName := ""
+	if tableNameMethod, ok := reflect.New(entityType).Interface().(interface{ TableName() string }); ok {
+		tableName = tableNameMethod.TableName()
+	} else {
+		return nil, errors.New("entity struct must implement TableName() string method")
+	}
+
+	var fieldNames []string
+	for i := 0; i < entityType.NumField(); i++ {
+		fieldTag := entityType.Field(i).Tag.Get("db")
+		if fieldTag != "" {
+			fieldNames = append(fieldNames, fieldTag)
+		}
+	}
+
+	query := "SELECT " + joinFields(fieldNames) + " FROM " + tableName
+	println(query)
 	rows, err := dc.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var users []map[string]interface{}
+	var results []interface{}
 	for rows.Next() {
-		var user map[string]interface{}
-		err = rows.Scan(user["id"], user["name"], user["email"])
-		if err != nil {
+		entityValue := reflect.New(entityType).Elem()
+		var fields []interface{}
+		// 1 to avoid id in entity
+		for i := 1; i < entityType.NumField(); i++ {
+			fields = append(fields, entityValue.Field(i).Addr().Interface())
+		}
+
+		if err := rows.Scan(fields...); err != nil {
 			return nil, err
 		}
-		users = append(users, user)
+
+		results = append(results, entityValue.Interface())
 	}
 
-	return users, nil
+	return results, nil
+}
+
+func joinFields(fields []string) string {
+	return "" + strings.Join(fields, ", ") + ""
 }
 
 func (dc DbClient) Update(id int, name string, email string) (*sql.Result, error) {
