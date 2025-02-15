@@ -11,6 +11,7 @@ type QueryBuilder struct {
 	where     []string
 	orderBy   []string
 	limit     int
+	offset    int
 	relations []string
 	args      []interface{}
 }

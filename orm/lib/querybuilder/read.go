@@ -38,6 +38,7 @@ func (qb *QueryBuilder) FindMany(entity interface{}) (*string, error) {
 	query = qb.prepareWhere(query)
 	query = qb.prepareOrderBy(query)
 	query = qb.prepareLimit(query)
+	query = qb.prepareOffset(query)
 
 	qb.query = query
 	return &query, nil

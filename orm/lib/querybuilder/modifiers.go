@@ -19,6 +19,12 @@ func (qb *QueryBuilder) Limit(limit int) *QueryBuilder {
 	return qb
 }
 
+// Offset sets an offset for the query results.
+func (qb *QueryBuilder) Offset(offset int) *QueryBuilder {
+	qb.offset = offset
+	return qb
+}
+
 // WithRelations adds relations to the query (eager loading).
 func (qb *QueryBuilder) WithRelations(relations ...string) *QueryBuilder {
 	qb.relations = append(qb.relations, relations...)

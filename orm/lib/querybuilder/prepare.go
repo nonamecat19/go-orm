@@ -28,3 +28,11 @@ func (qb *QueryBuilder) prepareLimit(query string) string {
 
 	return query + fmt.Sprintf(" LIMIT %d", qb.limit)
 }
+
+func (qb *QueryBuilder) prepareOffset(query string) string {
+	if qb.limit == -1 {
+		return query
+	}
+
+	return query + fmt.Sprintf(" OFFSET %d", qb.offset)
+}

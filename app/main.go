@@ -35,6 +35,7 @@ func main() {
 		Where("name = ?", "John Doe").
 		OrderBy("id DESC").
 		Limit(10).
+		Offset(10).
 		FindMany(user)
 
 	if err != nil {
