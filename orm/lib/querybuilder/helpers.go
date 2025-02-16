@@ -15,8 +15,8 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 
 	entityType = entityType.Elem()
 	tableName := ""
-	if tableNameMethod, ok := reflect.New(entityType).Interface().(interface{ TableName() string }); ok {
-		tableName = tableNameMethod.TableName()
+	if tableNameMethod, ok := reflect.New(entityType).Interface().(interface{ Info() string }); ok {
+		tableName = tableNameMethod.Info()
 	} else {
 		return "", nil, errors.New("entity struct must implement Info() string method")
 	}
