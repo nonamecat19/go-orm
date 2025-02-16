@@ -29,6 +29,6 @@ func (qb *QueryBuilder) execute() error {
 	if qb.query == "" {
 		return errors.New("query not built; call FindMany first")
 	}
-	_, err := qb.client.Query(qb.query, qb.args...)
+	_, err := qb.client.Execute(qb.query, qb.args...)
 	return err
 }
