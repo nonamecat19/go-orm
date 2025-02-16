@@ -5,5 +5,5 @@ type Model struct {
 }
 
 type IEntity interface {
-	TableName() string
+	Info() string
 }
