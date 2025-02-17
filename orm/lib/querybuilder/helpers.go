@@ -22,6 +22,8 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 	}
 
 	var fieldNames []string
+	fieldNames = append(fieldNames, "id")
+
 	for i := 0; i < entityType.NumField(); i++ {
 		fieldTag := entityType.Field(i).Tag.Get("db")
 		if fieldTag != "" {

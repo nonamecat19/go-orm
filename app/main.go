@@ -30,16 +30,19 @@ func main() {
 	client := client2.CreateClient(ormConfig)
 	qb := querybuilder.CreateQueryBuilder(client)
 
-	user := &entities.User{}
+	var users []entities.User
+
 	err := qb.
-		Where("name = ?", "John Doe").
-		OrderBy("id DESC").
-		Limit(10).
-		Offset(10).
-		FindMany(user)
+		//Where("name = ?", "test1").
+		//OrderBy("id DESC").
+		//Limit(10).
+		//Offset(10).
+		FindMany(&users)
 
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
+
+	fmt.Println(users)
 }
