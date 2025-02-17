@@ -31,7 +31,7 @@ func main() {
 	qb := querybuilder.CreateQueryBuilder(client)
 
 	user := &entities.User{}
-	query, err := qb.
+	err := qb.
 		Where("name = ?", "John Doe").
 		OrderBy("id DESC").
 		Limit(10).
@@ -42,6 +42,4 @@ func main() {
 		fmt.Println("Error:", err)
 		return
 	}
-
-	fmt.Println("Built Query:", *query)
 }

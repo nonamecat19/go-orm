@@ -9,11 +9,11 @@ func (qb *QueryBuilder) FindOne() {
 }
 
 // FindMany initializes a SELECT query for the specified entity.
-func (qb *QueryBuilder) FindMany(entity interface{}) (*string, error) {
+func (qb *QueryBuilder) FindMany(entity interface{}) error {
 	tableName, fieldNames, err := qb.extractTableAndFields(entity)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	query := fmt.Sprintf("SELECT %s FROM %s", joinFields(fieldNames), tableName)
@@ -24,5 +24,11 @@ func (qb *QueryBuilder) FindMany(entity interface{}) (*string, error) {
 	query = qb.prepareOffset(query)
 
 	qb.query = query
-	return &query, nil
+
+	println(qb.query)
+	println(qb.args)
+	a, err := qb.client.GetDb().Query(qb.query, qb.args...)
+	println(a)
+
+	return err
 }
