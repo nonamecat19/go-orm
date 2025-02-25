@@ -2,15 +2,29 @@ package querybuilder
 
 import (
 	"errors"
+	"github.com/nonamecat19/go-orm/core/lib/entities"
 	"reflect"
 	"strings"
 )
 
+func extractFields(entity reflect.Type) []string {
+	var fieldNames []string
+
+	for i := 0; i < entity.NumField(); i++ {
+		fieldTag := entity.Field(i).Tag.Get("db")
+		if fieldTag != "" {
+			fieldNames = append(fieldNames, fieldTag)
+		}
+	}
+
+	return fieldNames
+}
+
 // extractTableAndFields: Extracts table name and field names from an entity.
-func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []string, error) {
+func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []string, []string, error) {
 	entityType := reflect.TypeOf(entity)
 	if entityType.Kind() != reflect.Ptr || entityType.Elem().Kind() != reflect.Struct {
-		return "", nil, errors.New("entity must be a pointer to a struct")
+		return "", nil, nil, errors.New("entity must be a pointer to a struct")
 	}
 
 	entityType = entityType.Elem()
@@ -18,20 +32,13 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 	if tableNameMethod, ok := reflect.New(entityType).Interface().(interface{ Info() string }); ok {
 		tableName = tableNameMethod.Info()
 	} else {
-		return "", nil, errors.New("entity struct must implement Info() string method")
+		return "", nil, nil, errors.New("entity struct must implement Info() string method")
 	}
 
-	var fieldNames []string
-	fieldNames = append(fieldNames, "id")
+	entityFieldNames := extractFields(entityType)
+	systemFieldNames := extractFields(reflect.TypeOf(entities.Model{}))
 
-	for i := 0; i < entityType.NumField(); i++ {
-		fieldTag := entityType.Field(i).Tag.Get("db")
-		if fieldTag != "" {
-			fieldNames = append(fieldNames, fieldTag)
-		}
-	}
-
-	return tableName, fieldNames, nil
+	return tableName, entityFieldNames, systemFieldNames, nil
 }
 
 func joinFields(fields []string) string {

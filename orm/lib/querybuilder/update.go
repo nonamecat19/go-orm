@@ -8,7 +8,7 @@ import (
 
 // UpdateMany initializes an UPDATE query for the specified entity.
 func (qb *QueryBuilder) UpdateMany(entity interface{}, updates map[string]interface{}) (*string, error) {
-	tableName, _, err := qb.extractTableAndFields(entity)
+	tableName, _, _, err := qb.extractTableAndFields(entity)
 	if err != nil {
 		return nil, err
 	}
