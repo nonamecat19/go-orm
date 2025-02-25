@@ -27,7 +27,6 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 	fields = append(fields, entityFieldNames...)
 
 	if err != nil {
-		println("Error1:", err)
 		return err
 	}
 
@@ -49,18 +48,25 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	sliceValue.Elem().Set(reflect.MakeSlice(sliceValue.Elem().Type(), 0, 0))
 
+	elem := reflect.New(elemType).Elem()
+
+	model := elem.Field(0).Addr().Interface().(*entities2.Model)
+	systemFieldsMap := map[string]any{
+		"id":         &model.ID,
+		"created_at": &model.CreatedAt,
+		"updated_at": &model.UpdatedAt,
+		"deleted_at": &model.DeletedAt,
+	}
+
 	for rows.Next() {
-		elem := reflect.New(elemType).Elem()
 		var fieldPointers []interface{}
 
-		fmt.Println(entityFieldNames)
-		fmt.Println(systemFieldNames)
-
-		model := elem.Field(0).Addr().Interface().(*entities2.Model)
-		fieldPointers = append(fieldPointers, &model.ID)
-		fieldPointers = append(fieldPointers, &model.CreatedAt)
-		fieldPointers = append(fieldPointers, &model.UpdatedAt)
-		fieldPointers = append(fieldPointers, &model.DeletedAt)
+		for _, name := range systemFieldNames {
+			ptr := systemFieldsMap[name]
+			if ptr != nil {
+				fieldPointers = append(fieldPointers, ptr)
+			}
+		}
 
 		for i := range entityFieldNames {
 			fieldPointers = append(fieldPointers, elem.Field(i+1).Addr().Interface())
@@ -69,7 +75,6 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 		fmt.Println(fieldPointers)
 
 		if err := rows.Scan(fieldPointers...); err != nil {
-			fmt.Println("Error8:", err)
 			return err
 		}
 

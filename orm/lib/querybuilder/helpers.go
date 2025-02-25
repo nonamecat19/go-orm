@@ -44,3 +44,32 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 func joinFields(fields []string) string {
 	return strings.Join(fields, ", ")
 }
+
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
+func getModelFields(model interface{}) map[string]any {
+	v := reflect.ValueOf(model).Elem()
+	t := v.Type()
+
+	fields := make(map[string]any)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		dbTag := field.Tag.Get("db")
+
+		fieldPtr := v.Field(i).Addr().Interface()
+
+		if dbTag != "" {
+			fields[dbTag] = fieldPtr
+		}
+	}
+
+	return fields
+}
