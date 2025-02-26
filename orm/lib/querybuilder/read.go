@@ -22,13 +22,11 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	tempEntity := reflect.New(elemType).Interface()
 	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFields(tempEntity)
-
-	fields := append([]string{}, systemFieldNames...)
-	fields = append(fields, entityFieldNames...)
-
 	if err != nil {
 		return err
 	}
+
+	fields := append(systemFieldNames, entityFieldNames...)
 
 	query := fmt.Sprintf("SELECT %s FROM %s", joinFields(fields), tableName)
 	query = qb.prepareWhere(query)
@@ -38,7 +36,8 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	qb.query = query
 
-	rows, err := qb.client.GetDb().Query(qb.query, qb.args...)
+	rows, err := qb.Query()
+
 	if err != nil {
 		return err
 	}
@@ -71,8 +70,6 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 		for i := range entityFieldNames {
 			fieldPointers = append(fieldPointers, elem.Field(i+1).Addr().Interface())
 		}
-
-		fmt.Println(fieldPointers)
 
 		if err := rows.Scan(fieldPointers...); err != nil {
 			return err

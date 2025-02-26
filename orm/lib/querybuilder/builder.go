@@ -1,7 +1,9 @@
 package querybuilder
 
 import (
+	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/nonamecat19/go-orm/orm/lib/client"
 )
 
@@ -14,6 +16,7 @@ type QueryBuilder struct {
 	offset    int
 	relations []string
 	args      []interface{}
+	debug     bool
 }
 
 // CreateQueryBuilder initializes a new QueryBuilder.
@@ -24,11 +27,14 @@ func CreateQueryBuilder(client client.DbClient) *QueryBuilder {
 	}
 }
 
-// execute runs the built query.
-func (qb *QueryBuilder) execute() error {
-	if qb.query == "" {
-		return errors.New("query not built; call FindMany first")
+// Query runs the built query.
+func (qb *QueryBuilder) Query() (*sql.Rows, error) {
+	if qb.debug {
+		fmt.Println(qb.query, qb.args)
 	}
-	_, err := qb.client.Query(qb.query, qb.args...)
-	return err
+	if qb.query == "" {
+		return nil, errors.New("query not built")
+	}
+
+	return qb.client.GetDb().Query(qb.query, qb.args...)
 }

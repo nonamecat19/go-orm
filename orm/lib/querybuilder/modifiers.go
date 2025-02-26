@@ -37,6 +37,11 @@ func (qb *QueryBuilder) WithRelations(relations ...string) *QueryBuilder {
 	return qb
 }
 
+func (qb *QueryBuilder) Debug() *QueryBuilder {
+	qb.debug = true
+	return qb
+}
+
 // normalizeCondition change "?" to database valid syntax
 func (qb *QueryBuilder) normalizeCondition(condition string) string {
 	placeholderIndex := len(qb.args) + 1
