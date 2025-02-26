@@ -2,6 +2,7 @@ package querybuilder
 
 import (
 	"errors"
+	"fmt"
 	"github.com/nonamecat19/go-orm/core/lib/entities"
 	"reflect"
 	"strings"
@@ -72,4 +73,20 @@ func getModelFields(model interface{}) map[string]any {
 	}
 
 	return fields
+}
+
+// normalizeCondition change "?" to database valid syntax
+func (qb *QueryBuilder) normalizeCondition(condition string) string {
+	placeholderIndex := len(qb.args) + 1
+
+	for {
+		placeholder := fmt.Sprintf("$%d", placeholderIndex)
+		condition = strings.Replace(condition, "?", placeholder, 1) // Replace only the first '?' occurrence
+		if !strings.Contains(condition, "?") {
+			break
+		}
+		placeholderIndex++
+	}
+
+	return condition
 }

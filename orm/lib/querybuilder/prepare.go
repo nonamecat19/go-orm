@@ -18,7 +18,7 @@ func (qb *QueryBuilder) prepareWhere(query string) string {
 		return query
 	}
 
-	return query + " WHERE " + strings.Join(qb.where, ", ")
+	return fmt.Sprintf("%s WHERE %s", query, qb.where)
 }
 
 func (qb *QueryBuilder) prepareLimit(query string) string {

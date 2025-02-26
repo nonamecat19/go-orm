@@ -10,7 +10,7 @@ import (
 type QueryBuilder struct {
 	client    client.DbClient
 	query     string
-	where     []string
+	where     string
 	orderBy   []string
 	limit     int
 	offset    int
