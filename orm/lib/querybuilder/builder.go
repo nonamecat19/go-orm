@@ -8,15 +8,16 @@ import (
 )
 
 type QueryBuilder struct {
-	client    client.DbClient
-	query     string
-	where     string
-	orderBy   []string
-	limit     int
-	offset    int
-	relations []string
-	args      []interface{}
-	debug     bool
+	client       client.DbClient
+	query        string
+	selectFields []string
+	where        string
+	orderBy      []string
+	limit        int
+	offset       int
+	relations    []string
+	args         []interface{}
+	debug        bool
 }
 
 // CreateQueryBuilder initializes a new QueryBuilder.

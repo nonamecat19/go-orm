@@ -32,3 +32,20 @@ func PrintStructSlice(value any) {
 
 	fmt.Println(string(jsonData))
 }
+
+func StringsIntersection(slice1, slice2 []string) []string {
+	var result []string
+	set := make(map[string]struct{})
+
+	for _, v := range slice2 {
+		set[v] = struct{}{}
+	}
+
+	for _, v := range slice1 {
+		if _, found := set[v]; found {
+			result = append(result, v)
+		}
+	}
+
+	return result
+}

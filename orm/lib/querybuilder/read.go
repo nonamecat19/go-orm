@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	entities2 "github.com/nonamecat19/go-orm/core/lib/entities"
+	"github.com/nonamecat19/go-orm/core/utils"
 	"reflect"
 )
 
@@ -27,6 +28,7 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 	}
 
 	fields := append(systemFieldNames, entityFieldNames...)
+	fields = utils.StringsIntersection(fields, qb.selectFields)
 
 	query := fmt.Sprintf("SELECT %s FROM %s", joinFields(fields), tableName)
 	query = qb.prepareWhere(query)
@@ -60,14 +62,14 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 	for rows.Next() {
 		var fieldPointers []interface{}
 
-		for _, name := range systemFieldNames {
+		for _, name := range utils.StringsIntersection(systemFieldNames, qb.selectFields) {
 			ptr := systemFieldsMap[name]
 			if ptr != nil {
 				fieldPointers = append(fieldPointers, ptr)
 			}
 		}
 
-		for i := range entityFieldNames {
+		for i := range utils.StringsIntersection(entityFieldNames, qb.selectFields) {
 			fieldPointers = append(fieldPointers, elem.Field(i+1).Addr().Interface())
 		}
 
