@@ -28,10 +28,27 @@ func CreateQueryBuilder(client client.DbClient) *QueryBuilder {
 	}
 }
 
+func formatSQL(sql string) string {
+	sql = strings.ReplaceAll(sql, "SELECT", "\nSELECT\n\t")
+	sql = strings.ReplaceAll(sql, "FROM", "\nFROM")
+	sql = strings.ReplaceAll(sql, "LEFT JOIN", "\nLEFT JOIN")
+	sql = strings.ReplaceAll(sql, "WHERE", "\nWHERE")
+	sql = strings.ReplaceAll(sql, "AND", "\n\tAND")
+	sql = strings.ReplaceAll(sql, "LIMIT", "\nLIMIT")
+	sql = strings.ReplaceAll(sql, "OFFSET", "\nOFFSET")
+
+	sql = strings.ReplaceAll(sql, "ON", "\n\tON")
+
+	return sql
+}
+
 // Query runs the built query.
 func (qb *QueryBuilder) Query() (*sql.Rows, error) {
 	if qb.debug {
-		fmt.Println(qb.query, qb.args)
+		// Green color for the query
+		fmt.Println("\033[32m" + formatSQL(qb.query) + "\033[0m")
+		// Yellow color for args
+		fmt.Printf("\033[33m%v\033[0m\n", qb.args)
 	}
 	if qb.query == "" {
 		return nil, errors.New("query not built")
