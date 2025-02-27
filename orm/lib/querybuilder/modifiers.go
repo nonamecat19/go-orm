@@ -18,9 +18,15 @@ func (qb *QueryBuilder) Offset(offset int) *QueryBuilder {
 	return qb
 }
 
-// WithRelations adds relations to the query (eager loading)
-func (qb *QueryBuilder) WithRelations(relations ...string) *QueryBuilder {
-	qb.relations = append(qb.relations, relations...)
+// LeftJoinAndSelect adds relations to the query (eager loading)
+func (qb *QueryBuilder) LeftJoinAndSelect(table string, condition string, selectFields ...string) *QueryBuilder {
+	joinClause := JoinClause{
+		JoinType:  "LEFT",
+		Table:     table,
+		Condition: condition,
+		Select:    selectFields,
+	}
+	qb.joins = append(qb.joins, joinClause)
 	return qb
 }
 

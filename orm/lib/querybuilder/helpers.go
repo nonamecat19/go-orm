@@ -8,6 +8,16 @@ import (
 	"strings"
 )
 
+// addPrefix adds a prefix to each string in the slice
+func addPrefix(prefix string, slice []string) []string {
+	result := make([]string, len(slice))
+	for i, s := range slice {
+		result[i] = fmt.Sprintf("%s.%s", prefix, s)
+	}
+	return result
+}
+
+// extractFields extract all field names from entity
 func extractFields(entity reflect.Type) []string {
 	var fieldNames []string
 
@@ -39,7 +49,10 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 	entityFieldNames := extractFields(entityType)
 	systemFieldNames := extractFields(reflect.TypeOf(entities.Model{}))
 
-	return tableName, entityFieldNames, systemFieldNames, nil
+	mappedEntityFields := addPrefix(tableName, entityFieldNames)
+	mappedSystemFields := addPrefix(tableName, systemFieldNames)
+
+	return tableName, mappedEntityFields, mappedSystemFields, nil
 }
 
 func joinFields(fields []string) string {

@@ -5,6 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
+	"github.com/nonamecat19/go-orm/core/utils"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	querybuilder "github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 )
@@ -20,22 +21,20 @@ func main() {
 		SSLMode:  false,
 	}
 
-	//appEntities := []coreEntities.IEntity{
-	//	entities.Task{},
-	//	entities.User{},
-	//}
-
-	//migrate.PushEntity(ormConfig, appEntities)
-
 	client := client2.CreateClient(ormConfig)
-	qb := querybuilder.CreateQueryBuilder(client)
 
 	var users []entities.User
 
-	err := qb.
-		//Where("name = ?", "test1").
+	err := querybuilder.CreateQueryBuilder(client).
+		//Where("name <> ? OR name <> ?", "test1", "User 200").
+		//AndWhere("name <> '2'").
+		//AndWhere("name <> ?", '3').
+		Select("users.id", "users.name", "users.created_at").
+		Debug().
+		//AndWhere("name <> ?", "User 200").
 		//OrderBy("id DESC").
-		//Limit(10).
+		Limit(5).
+		LeftJoinAndSelect("orders", "users.id = orders.user_id", "orders.id", "orders.count").
 		//Offset(10).
 		FindMany(&users)
 
@@ -44,5 +43,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(users)
+	utils.PrintStructSlice(users)
 }

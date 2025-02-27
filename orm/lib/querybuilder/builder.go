@@ -5,7 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/nonamecat19/go-orm/orm/lib/client"
+	"strings"
 )
+
+type JoinClause struct {
+	JoinType  string // "LEFT", "INNER", etc.
+	Table     string
+	Condition string
+	Select    []string
+}
 
 type QueryBuilder struct {
 	client       client.DbClient
@@ -17,6 +25,7 @@ type QueryBuilder struct {
 	offset       int
 	relations    []string
 	args         []interface{}
+	joins        []JoinClause
 	debug        bool
 }
 
