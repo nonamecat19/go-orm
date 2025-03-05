@@ -55,24 +55,3 @@ func (dc DbClient) GetTables() Tables {
 func (dc DbClient) Query(query string, args ...interface{}) (*sql.Rows, error) {
 	return dc.db.Query(query, args)
 }
-
-//func (dc DbClient) Read() ([]entities2.User, error) {
-//	query := "SELECT name FROM users;"
-//	rows, err := dc.db.Query(query)
-//	if err != nil {
-//		return nil, err
-//	}
-//	defer rows.Close()
-//
-//	var users []entities2.User
-//	for rows.Next() {
-//		var user entities2.User
-//		err = rows.Scan(&user.Name)
-//		if err != nil {
-//			return nil, err
-//		}
-//		users = append(users, user)
-//	}
-//
-//	return users, nil
-//}

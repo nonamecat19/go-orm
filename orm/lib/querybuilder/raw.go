@@ -9,5 +9,5 @@ func (qb *QueryBuilder) ExecuteRaw(sql string, args ...interface{}) (*sql.Rows, 
 	normalizedSql := qb.normalizeSqlWithArgs(sql)
 	qb.args = args
 	qb.query = normalizedSql
-	return qb.Query()
+	return qb.ExecuteQuery()
 }

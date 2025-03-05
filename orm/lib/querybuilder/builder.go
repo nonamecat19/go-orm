@@ -51,8 +51,8 @@ func formatSQL(sql string) string {
 	return sql
 }
 
-// Query runs the built query.
-func (qb *QueryBuilder) Query() (*sql.Rows, error) {
+// ExecuteQuery runs the built query.
+func (qb *QueryBuilder) ExecuteQuery() (*sql.Rows, error) {
 	if qb.debug {
 		// Green color for the query
 		fmt.Println("\033[32m" + formatSQL(qb.query) + "\033[0m")

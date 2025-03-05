@@ -57,7 +57,7 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	qb.query = query
 
-	rows, err := qb.Query()
+	rows, err := qb.ExecuteQuery()
 	if err != nil {
 		return err
 	}
