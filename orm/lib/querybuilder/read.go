@@ -32,28 +32,29 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	var query string
 
+	for _, join := range qb.joins {
+		for _, field := range join.Select {
+			fields = append(fields, field)
+		}
+	}
+
 	if len(fields) > 0 {
-		query = fmt.Sprintf("SELECT %s", joinFields(fields))
+		query = fmt.Sprintf("SELECT %s", joinFieldsStrictly(fields))
 	} else {
 		query = "SELECT *"
 	}
 
-	for _, join := range qb.joins {
-		for _, field := range join.Select {
-			query += fmt.Sprintf(", %s", field)
-		}
-	}
+	fromQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
+	fromQuery = qb.prepareWhere(fromQuery)
+	fromQuery = qb.prepareOrderBy(fromQuery)
+	fromQuery = qb.prepareLimit(fromQuery)
+	fromQuery = qb.prepareOffset(fromQuery)
 
-	query += fmt.Sprintf(" FROM %s", tableName)
+	query += fmt.Sprintf(" FROM (%s) AS %s", fromQuery, tableName)
 
 	for _, join := range qb.joins {
 		query += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
 	}
-
-	query = qb.prepareWhere(query)
-	query = qb.prepareOrderBy(query)
-	query = qb.prepareLimit(query)
-	query = qb.prepareOffset(query)
 
 	qb.query = query
 
