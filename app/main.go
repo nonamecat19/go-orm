@@ -38,9 +38,16 @@ func main() {
 	//	//Offset(10).
 	//	FindMany(&users)
 
+	//err := querybuilder.CreateQueryBuilder(client).
+	//	Where("id = ?", 35).
+	//	DeleteMany(&entities.User{})
+
 	err := querybuilder.CreateQueryBuilder(client).
-		Where("id = ?", 35).
-		DeleteMany(&entities.User{})
+		Debug().
+		SetValues(map[string]interface{}{"name": "test"}).
+		Where("id > ?", 32).
+		AndWhere("id < 42").
+		UpdateMany(&entities.User{})
 
 	if err != nil {
 		fmt.Println("Error:", err)

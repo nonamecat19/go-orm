@@ -25,6 +25,7 @@ type QueryBuilder struct {
 	offset       int
 	relations    []string
 	args         []interface{}
+	set          map[string]interface{}
 	joins        []JoinClause
 	debug        bool
 }

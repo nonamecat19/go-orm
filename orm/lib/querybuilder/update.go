@@ -3,30 +3,36 @@ package querybuilder
 import (
 	"errors"
 	"fmt"
-	"strings"
 )
 
 // UpdateMany initializes an UPDATE query for the specified entity.
-func (qb *QueryBuilder) UpdateMany(entity interface{}, updates map[string]interface{}) (*string, error) {
+func (qb *QueryBuilder) UpdateMany(entity interface{}) error {
 	tableName, _, _, err := qb.extractTableAndFields(entity)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	if len(updates) == 0 {
-		return nil, errors.New("no updates provided")
+	if len(qb.where) == 0 {
+		return errors.New("UPDATE query requires at least one WHERE clause to prevent accidental update of all rows")
 	}
 
-	var setClauses []string
-	for column, value := range updates {
-		setClauses = append(setClauses, fmt.Sprintf("%s = ?", column))
-		qb.args = append(qb.args, value)
+	if len(qb.set) == 0 {
+		return errors.New("no updates provided")
 	}
 
-	query := fmt.Sprintf("UPDATE %s SET %s", tableName, strings.Join(setClauses, ", "))
+	query := fmt.Sprintf("UPDATE %s", tableName)
 
+	query = qb.prepareSet(query)
 	query = qb.prepareWhere(query)
 
 	qb.query = query
-	return &query, nil
+
+	_, err = qb.ExecuteQuery()
+
+	return err
+}
+
+func (qb *QueryBuilder) SetValues(values map[string]interface{}) *QueryBuilder {
+	qb.set = values
+	return qb
 }
