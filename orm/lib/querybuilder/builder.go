@@ -46,6 +46,7 @@ func formatSQL(sql string) string {
 	sql = strings.ReplaceAll(sql, "AND", "\n\tAND")
 	sql = strings.ReplaceAll(sql, "LIMIT", "\nLIMIT")
 	sql = strings.ReplaceAll(sql, "OFFSET", "\nOFFSET")
+	sql = strings.ReplaceAll(sql, "ORDER BY", "\nORDER BY")
 
 	sql = strings.ReplaceAll(sql, "ON", "\n\tON")
 
