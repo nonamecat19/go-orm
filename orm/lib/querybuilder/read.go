@@ -21,50 +21,30 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 
 	elemType := sliceValue.Elem().Type().Elem()
 
-	tempEntity := reflect.New(elemType).Interface()
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFields(tempEntity)
+	err := qb.prepareFindQuery(elemType)
 	if err != nil {
 		return err
 	}
-
-	fields := append(systemFieldNames, entityFieldNames...)
-	fields = utils.StringsIntersection(fields, qb.selectFields)
-
-	var query string
-
-	for _, join := range qb.joins {
-		for _, field := range join.Select {
-			fields = append(fields, field)
-		}
-	}
-
-	if len(fields) > 0 {
-		query = fmt.Sprintf("SELECT %s", joinFieldsStrictly(fields))
-	} else {
-		query = "SELECT *"
-	}
-
-	fromQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
-	fromQuery = qb.prepareWhere(fromQuery)
-	fromQuery = qb.prepareOrderBy(fromQuery)
-	fromQuery = qb.prepareLimit(fromQuery)
-	fromQuery = qb.prepareOffset(fromQuery)
-
-	query += fmt.Sprintf(" FROM (%s) AS %s", fromQuery, tableName)
-
-	for _, join := range qb.joins {
-		query += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
-	}
-
-	qb.query = query
 
 	rows, err := qb.ExecuteQuery()
 	if err != nil {
 		return err
 	}
-	defer func(rows *sql.Rows) {
-		_ = rows.Close()
-	}(rows)
+	defer rows.Close()
+
+	err2 := qb.handleFindRows(sliceValue, elemType, rows)
+	if err2 != nil {
+		return err2
+	}
+
+	return rows.Err()
+}
+
+func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflect.Type, rows *sql.Rows) error {
+	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
+	if err != nil {
+		return err
+	}
 
 	sliceValue.Elem().Set(reflect.MakeSlice(sliceValue.Elem().Type(), 0, 0))
 
@@ -77,8 +57,6 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 		tableName + ".updated_at": &model.UpdatedAt,
 		tableName + ".deleted_at": &model.DeletedAt,
 	}
-
-	var rowValues []reflect.Value
 
 	for rows.Next() {
 		var fieldPointers []interface{}
@@ -115,15 +93,49 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 			return err
 		}
 
-		rowValues = append(rowValues, elem)
+		results := reflect.Append(sliceValue.Elem(), elem)
+		sliceValue.Elem().Set(results)
 	}
 
-	var results reflect.Value
-	for _, elem = range rowValues {
-		results = reflect.Append(sliceValue.Elem(), elem)
+	return nil
+}
+
+func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
+	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
+	if err != nil {
+		return err
 	}
 
-	sliceValue.Elem().Set(results)
+	fields := append(systemFieldNames, entityFieldNames...)
+	fields = utils.StringsIntersection(fields, qb.selectFields)
 
-	return rows.Err()
+	var query string
+
+	for _, join := range qb.joins {
+		for _, field := range join.Select {
+			fields = append(fields, field)
+		}
+	}
+
+	if len(fields) > 0 {
+		query = fmt.Sprintf("SELECT %s", joinFieldsStrictly(fields))
+	} else {
+		query = "SELECT *"
+	}
+
+	fromQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
+	fromQuery = qb.prepareWhere(fromQuery)
+	fromQuery = qb.prepareOrderBy(fromQuery)
+	fromQuery = qb.prepareLimit(fromQuery)
+	fromQuery = qb.prepareOffset(fromQuery)
+
+	query += fmt.Sprintf(" FROM (%s) AS %s", fromQuery, tableName)
+
+	for _, join := range qb.joins {
+		query += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
+	}
+
+	qb.query = query
+
+	return nil
 }
