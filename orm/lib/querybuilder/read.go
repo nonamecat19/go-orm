@@ -78,6 +78,8 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 		tableName + ".deleted_at": &model.DeletedAt,
 	}
 
+	var rowValues []reflect.Value
+
 	for rows.Next() {
 		var fieldPointers []interface{}
 
@@ -88,8 +90,19 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 			}
 		}
 
-		for i := range utils.StringsIntersection(entityFieldNames, qb.selectFields) {
-			fieldPointers = append(fieldPointers, elem.Field(i+1).Addr().Interface())
+		fieldMap := make(map[string]int)
+		t := reflect.TypeOf(elem.Interface())
+
+		for i := 0; i < t.NumField(); i++ {
+			if dbTag, ok := t.Field(i).Tag.Lookup("db"); ok {
+				fieldMap[fmt.Sprintf("%s.%s", tableName, dbTag)] = i
+			}
+		}
+
+		for _, fieldName := range utils.StringsIntersection(entityFieldNames, qb.selectFields) {
+			if idx, exists := fieldMap[fieldName]; exists {
+				fieldPointers = append(fieldPointers, elem.Field(idx).Addr().Interface())
+			}
 		}
 
 		for _, join := range qb.joins {
@@ -102,8 +115,15 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 			return err
 		}
 
-		sliceValue.Elem().Set(reflect.Append(sliceValue.Elem(), elem))
+		rowValues = append(rowValues, elem)
 	}
+
+	var results reflect.Value
+	for _, elem = range rowValues {
+		results = reflect.Append(sliceValue.Elem(), elem)
+	}
+
+	sliceValue.Elem().Set(results)
 
 	return rows.Err()
 }
