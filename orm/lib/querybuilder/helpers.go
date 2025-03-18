@@ -55,8 +55,21 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 	return tableName, mappedEntityFields, mappedSystemFields, nil
 }
 
+func (qb *QueryBuilder) extractTableAndFieldsFromType(elemType reflect.Type) (string, []string, []string, error) {
+	tempEntity := reflect.New(elemType).Interface()
+	return qb.extractTableAndFields(tempEntity)
+}
+
 func joinFields(fields []string) string {
 	return strings.Join(fields, ", ")
+}
+
+func joinFieldsStrictly(fields []string) string {
+	mappedFields := make([]string, len(fields))
+	for i, field := range fields {
+		mappedFields[i] = fmt.Sprintf("%s AS \"%s\"", field, field)
+	}
+	return strings.Join(mappedFields, ", ")
 }
 
 func contains(slice []string, item string) bool {
