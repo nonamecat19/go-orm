@@ -58,10 +58,16 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 		tableName + ".deleted_at": &model.DeletedAt,
 	}
 
+	fields := append(systemFieldNames, entityFieldNames...)
+
+	if len(qb.selectFields) > 0 {
+		fields = utils.StringsIntersection(fields, qb.selectFields)
+	}
+
 	for rows.Next() {
 		var fieldPointers []interface{}
 
-		for _, name := range utils.StringsIntersection(systemFieldNames, qb.selectFields) {
+		for _, name := range utils.StringsIntersection(systemFieldNames, fields) {
 			ptr := systemFieldsMap[name]
 			if ptr != nil {
 				fieldPointers = append(fieldPointers, ptr)
@@ -77,7 +83,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 			}
 		}
 
-		for _, fieldName := range utils.StringsIntersection(entityFieldNames, qb.selectFields) {
+		for _, fieldName := range utils.StringsIntersection(entityFieldNames, fields) {
 			if idx, exists := fieldMap[fieldName]; exists {
 				fieldPointers = append(fieldPointers, elem.Field(idx).Addr().Interface())
 			}
@@ -107,7 +113,10 @@ func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
 	}
 
 	fields := append(systemFieldNames, entityFieldNames...)
-	fields = utils.StringsIntersection(fields, qb.selectFields)
+
+	if len(qb.selectFields) > 0 {
+		fields = utils.StringsIntersection(fields, qb.selectFields)
+	}
 
 	var query string
 

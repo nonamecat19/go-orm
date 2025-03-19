@@ -22,9 +22,12 @@ func extractFields(entity reflect.Type) []string {
 	var fieldNames []string
 
 	for i := 0; i < entity.NumField(); i++ {
-		fieldTag := entity.Field(i).Tag.Get("db")
-		if fieldTag != "" {
-			fieldNames = append(fieldNames, fieldTag)
+		fieldTags := entity.Field(i).Tag
+		dbTag := fieldTags.Get("db")
+		relationTag := fieldTags.Get("relation")
+
+		if dbTag != "" && relationTag == "" {
+			fieldNames = append(fieldNames, dbTag)
 		}
 	}
 
