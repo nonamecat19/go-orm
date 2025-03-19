@@ -4,11 +4,11 @@ import "github.com/nonamecat19/go-orm/core/lib/entities"
 
 type User struct {
 	entities.Model
-	Name      string     `db:"name" json:"name"`
-	Email     string     `db:"email" json:"email"`
-	Gender    string     `db:"gender" json:"gender"`
-	Orders    []Order    `db:"orders" json:"orders"`
-	Favorites []Favorite `db:"favorites" json:"favorites"`
+	Name      string     `db:"name" json:"name,omitempty"`
+	Email     string     `db:"email" json:"email,omitempty"`
+	Gender    string     `db:"gender" json:"gender,omitempty"`
+	Orders    []Order    `db:"orders" json:"orders,omitempty"`
+	Favorites []Favorite `db:"favorites" json:"favorites,omitempty"`
 }
 
 func (user User) Info() string {

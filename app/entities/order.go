@@ -7,10 +7,10 @@ import (
 
 type Order struct {
 	entities.Model
-	Count     int       `db:"count" json:"count"`
-	UserId    int64     `db:"user_id" json:"userId"`
-	User      User      `db:"user" json:"user" relation:"foreign-key:id"`
-	OrderDate time.Time `db:"order_date" json:"orderDate"`
+	Count     int       `db:"count" json:"count,omitempty"`
+	UserId    int64     `db:"user_id" json:"userId,omitempty"`
+	User      *User     `db:"user" json:"user,omitempty" relation:"foreign-key:user_id"`
+	OrderDate time.Time `db:"order_date" json:"orderDate,omitempty"`
 }
 
 func (user Order) Info() string {
