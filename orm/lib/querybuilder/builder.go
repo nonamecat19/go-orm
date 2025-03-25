@@ -28,6 +28,7 @@ type QueryBuilder struct {
 	set          map[string]interface{}
 	joins        []JoinClause
 	debug        bool
+	preloads     []string
 }
 
 // CreateQueryBuilder initializes a new QueryBuilder.

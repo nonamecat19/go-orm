@@ -63,11 +63,11 @@ func (qb *QueryBuilder) extractTableAndFieldsFromType(elemType reflect.Type) (st
 	return qb.extractTableAndFields(tempEntity)
 }
 
-func joinFields(fields []string) string {
+func JoinFields(fields []string) string {
 	return strings.Join(fields, ", ")
 }
 
-func joinFieldsStrictly(fields []string) string {
+func JoinFieldsStrictly(fields []string) string {
 	mappedFields := make([]string, len(fields))
 	for i, field := range fields {
 		mappedFields[i] = fmt.Sprintf("%s AS \"%s\"", field, field)

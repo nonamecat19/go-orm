@@ -47,7 +47,7 @@ func (qb *QueryBuilder) prepareSet(query string) string {
 		setClauses = append(setClauses, fmt.Sprintf("%s = ?", column))
 	}
 
-	queryWithSet := fmt.Sprintf("%s SET %s", query, joinFields(setClauses))
+	queryWithSet := fmt.Sprintf("%s SET %s", query, JoinFields(setClauses))
 	normalizedQuery := qb.normalizeSqlWithArgs(queryWithSet)
 	for _, value := range qb.set {
 		qb.args = append(qb.args, value)
