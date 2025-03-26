@@ -236,8 +236,6 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 		}
 	}
 
-	fmt.Println(tableName, relationTag)
-
 	stringUserIDs := make([]string, 0, len(userIDs))
 	for _, id := range userIDs {
 		stringUserIDs = append(stringUserIDs, fmt.Sprintf("%v", id))
@@ -252,11 +250,13 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 	}
 	defer rows.Close()
 
-	data := sliceValue.Elem().Interface()
+	relationStructFieldName, err := utils.GetFieldNameByTagValue(elemType, relationTag)
 
-	fmt.Println(data)
+	if err != nil {
+		return fmt.Errorf("failed to get field name by tag value: %w", err)
+	}
 
-	err = qb.handlePreloadPtr(sliceValue, field.Type.Elem(), rows)
+	err = qb.handlePreloadPtr(sliceValue, field, rows, relationStructFieldName)
 	if err != nil {
 		return fmt.Errorf("failed to preload %s: %w", relationTag, err)
 	}
@@ -264,15 +264,15 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 	return nil
 }
 
-func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, elemType reflect.Type, rows *sql.Rows) error {
+func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect.StructField, rows *sql.Rows, relationFieldName string) error {
+	elemType := field.Type.Elem()
+
 	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(tableName, entityFieldNames, systemFieldNames)
-
-	//sliceValue.Elem().Set(reflect.MakeSlice(sliceValue.Elem().Type(), 0, 0))
+	rowMap := make(map[any]interface{})
 
 	elem := reflect.New(elemType).Elem()
 
@@ -325,10 +325,30 @@ func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, elemType refl
 			return err
 		}
 
-		fmt.Println("Elem: ", elem)
+		rowMap[model.ID] = elem.Interface()
+	}
 
-		//results := reflect.Append(sliceValue.Elem(), elem)
-		//sliceValue.Elem().Set(results)
+	for i := 0; i < sliceValue.Elem().Len(); i++ {
+		currentElem := sliceValue.Elem().Index(i)
+
+		relationId := currentElem.FieldByName(relationFieldName)
+
+		id, ok := relationId.Interface().(int64)
+		if !ok {
+			return fmt.Errorf("relationId is not of type int64")
+		}
+		value := rowMap[id]
+
+		relationField := currentElem.FieldByName(elemType.Name())
+		if relationField.IsValid() && relationField.CanSet() {
+			if reflect.TypeOf(value).Kind() == reflect.Ptr {
+				relationField.Set(reflect.ValueOf(value))
+			} else {
+				userPtr := reflect.New(reflect.TypeOf(value))
+				userPtr.Elem().Set(reflect.ValueOf(value))
+				relationField.Set(userPtr)
+			}
+		}
 	}
 
 	return nil

@@ -2,7 +2,9 @@ package utils
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -48,4 +50,28 @@ func StringsIntersection(slice1, slice2 []string) []string {
 	}
 
 	return result
+}
+
+func GetFieldNameByTagValue(val reflect.Type, dbTagValue string) (string, error) {
+	valType := val
+
+	if valType.Kind() == reflect.Ptr {
+		valType = valType.Elem()
+	}
+
+	if valType.Kind() != reflect.Struct {
+		return "", errors.New("provided value is not a struct or a pointer to a struct")
+	}
+
+	for i := 0; i < valType.NumField(); i++ {
+		field := valType.Field(i)
+		dbTag := field.Tag.Get("db")
+
+		if dbTag == dbTagValue {
+			return field.Name, nil
+		}
+	}
+
+	return "", errors.New("no field with the specified db tag value found")
+
 }
