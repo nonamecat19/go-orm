@@ -5,6 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
+	"github.com/nonamecat19/go-orm/core/utils"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	querybuilder "github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 )
@@ -58,15 +59,15 @@ func main() {
 	var orders []entities.Order
 
 	err := querybuilder.CreateQueryBuilder(client).
-		//Where("name <> ? OR name <> ?", "test1", "User 200").
+		//Where("id = ?", 8).
 		//AndWhere("name <> '2'").
 		//AndWhere("name <> ?", '3').
 		Debug().
 		//AndWhere("name <> ?", "User 200").
 		//OrderBy("id DESC").
 		Preload("user").
-		Limit(5).
-		//Offset(10).
+		Limit(2).
+		Offset(17).
 		FindMany(&orders)
 
 	if err != nil {
@@ -74,5 +75,5 @@ func main() {
 		return
 	}
 
-	//utils.PrintStructSlice(orders)
+	utils.PrintStructSlice(orders)
 }

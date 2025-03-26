@@ -101,6 +101,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 		}
 
 		if err := rows.Scan(fieldPointers...); err != nil {
+			fmt.Println("1")
 			return err
 		}
 
@@ -238,11 +239,19 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 
 	stringUserIDs := make([]string, 0, len(userIDs))
 	for _, id := range userIDs {
-		stringUserIDs = append(stringUserIDs, fmt.Sprintf("%v", id))
+		val := reflect.ValueOf(id)
+
+		if val.Kind() == reflect.Ptr {
+			ptr, _ := id.(*int64)
+			if ptr != nil {
+				stringUserIDs = append(stringUserIDs, fmt.Sprintf("%v", val.Elem().Interface()))
+			}
+		} else {
+			stringUserIDs = append(stringUserIDs, fmt.Sprintf("%v", id))
+		}
 	}
 
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id IN (%s)", tableName, JoinFields(stringUserIDs))
-	println(query)
 
 	rows, err := qb.client.GetDb().Query(query)
 	if err != nil {
@@ -333,14 +342,24 @@ func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect
 
 		relationId := currentElem.FieldByName(relationFieldName)
 
-		id, ok := relationId.Interface().(int64)
-		if !ok {
-			return fmt.Errorf("relationId is not of type int64")
+		var id int64
+		idValue := reflect.ValueOf(relationId.Interface())
+		if idValue.Kind() == reflect.Ptr {
+			if !idValue.IsNil() {
+				id = idValue.Elem().Interface().(int64)
+			}
+		} else {
+			castedId, ok := relationId.Interface().(int64)
+			if !ok {
+				return fmt.Errorf("relationId is not of type int64 or *int64")
+			}
+			id = castedId
 		}
 		value := rowMap[id]
 
 		relationField := currentElem.FieldByName(elemType.Name())
-		if relationField.IsValid() && relationField.CanSet() {
+
+		if value != nil && relationField.IsValid() && relationField.CanSet() {
 			if reflect.TypeOf(value).Kind() == reflect.Ptr {
 				relationField.Set(reflect.ValueOf(value))
 			} else {

@@ -64,6 +64,11 @@ func (qb *QueryBuilder) extractTableAndFieldsFromType(elemType reflect.Type) (st
 }
 
 func JoinFields(fields []string) string {
+	for i, field := range fields {
+		if field == "<nil>" {
+			fields[i] = "NULL"
+		}
+	}
 	return strings.Join(fields, ", ")
 }
 

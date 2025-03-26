@@ -35,7 +35,7 @@ CREATE TABLE orders
 (
     id         SERIAL PRIMARY KEY,
     count      INT       NOT NULL,
-    user_id    BIGINT    NOT NULL,
+    user_id    BIGINT,
     order_date TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     deleted_at TIMESTAMP DEFAULT NOW(),
