@@ -54,17 +54,22 @@ func formatSQL(sql string) string {
 	return sql
 }
 
-// ExecuteQuery runs the built query.
-func (qb *QueryBuilder) ExecuteQuery() (*sql.Rows, error) {
+// ExecuteBuilderQuery runs the built query with builder options.
+func (qb *QueryBuilder) ExecuteBuilderQuery() (*sql.Rows, error) {
+	return qb.ExecuteQuery(qb.query, qb.args...)
+}
+
+// ExecuteQuery runs the query.
+func (qb *QueryBuilder) ExecuteQuery(query string, args ...any) (*sql.Rows, error) {
 	if qb.debug {
 		// Green color for the query
-		fmt.Println("\033[32m" + formatSQL(qb.query) + "\033[0m")
+		fmt.Println("\033[32m" + formatSQL(query) + "\033[0m")
 		// Yellow color for args
-		fmt.Printf("\033[33m%v\033[0m\n", qb.args)
+		fmt.Printf("\033[33m%v\033[0m\n", args)
 	}
-	if qb.query == "" {
+	if query == "" {
 		return nil, errors.New("query not built")
 	}
 
-	return qb.client.GetDb().Query(qb.query, qb.args...)
+	return qb.client.GetDb().Query(query, args...)
 }

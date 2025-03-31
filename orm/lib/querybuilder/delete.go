@@ -22,7 +22,7 @@ func (qb *QueryBuilder) DeleteMany(entity interface{}) error {
 
 	qb.query = query
 
-	_, err = qb.ExecuteQuery()
+	_, err = qb.ExecuteBuilderQuery()
 
 	return err
 }
