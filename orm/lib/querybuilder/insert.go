@@ -33,7 +33,7 @@ func (qb *QueryBuilder) InsertMany(entities interface{}) error {
 func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 	elementType := sliceValue.Type().Elem()
 
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elementType, false)
+	tableName, entityFieldNames, _, err := qb.extractTableAndFieldsFromType(elementType, false)
 
 	var stringRecords []string
 	var queryArgs []interface{}
@@ -61,14 +61,10 @@ func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 			default:
 				queryArgs = append(queryArgs, value.Interface())
 			}
-
-			fmt.Println(entity)
 		}
 
 		stringRecords = append(stringRecords, fmt.Sprintf("(%s)", JoinFields(utils.GenerateParamsSlice(len(entityFieldNames)))))
 	}
-
-	fmt.Println(tableName, entityFieldNames, systemFieldNames, err)
 
 	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES %s;", tableName, JoinFields(entityFieldNames), JoinFields(stringRecords))
 	qb.query = qb.normalizeSqlWithArgs(query)

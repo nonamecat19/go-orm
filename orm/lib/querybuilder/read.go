@@ -99,7 +99,6 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 		}
 
 		if err := rows.Scan(fieldPointers...); err != nil {
-			fmt.Println("1")
 			return err
 		}
 
@@ -170,8 +169,6 @@ func (qb *QueryBuilder) preloadRelations(sliceValue reflect.Value, elemType refl
 			if dbTag == "" || dbTag != preload {
 				continue
 			}
-
-			fmt.Println(preload)
 
 			fieldKind := field.Type.Kind()
 
