@@ -13,15 +13,13 @@ func (qb *QueryBuilder) FindOne() {
 }
 
 // FindMany initializes a SELECT query for the specified entity.
-func (qb *QueryBuilder) FindMany(entities interface{}) error {
+func (qb *QueryBuilder) FindMany(entities []interface{}) error {
 	sliceValue := reflect.ValueOf(entities)
 	if sliceValue.Kind() != reflect.Ptr || sliceValue.Elem().Kind() != reflect.Slice {
 		return fmt.Errorf("entities must be a pointer to a slice")
 	}
 
-	elemType := sliceValue.Elem().Type().Elem()
-
-	err := qb.prepareFindQuery(elemType)
+	err := qb.prepareFindQuery(sliceValue.Elem().Type().Elem())
 	if err != nil {
 		return err
 	}
@@ -32,12 +30,12 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 	}
 	defer rows.Close()
 
-	err = qb.handleFindRows(sliceValue, elemType, rows)
+	err = qb.handleFindRows(sliceValue, sliceValue.Elem().Type().Elem(), rows)
 	if err != nil {
 		return err
 	}
 
-	err = qb.preloadRelations(sliceValue, elemType)
+	err = qb.preloadRelations(sliceValue, sliceValue.Elem().Type().Elem())
 	if err != nil {
 		return err
 	}
@@ -46,7 +44,7 @@ func (qb *QueryBuilder) FindMany(entities interface{}) error {
 }
 
 func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflect.Type, rows *sql.Rows) error {
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
+	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}
@@ -113,7 +111,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 }
 
 func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
+	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}

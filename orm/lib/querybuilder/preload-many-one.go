@@ -91,7 +91,7 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect.StructField, rows *sql.Rows, relationFieldName string) error {
 	elemType := field.Type.Elem()
 
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType)
+	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}

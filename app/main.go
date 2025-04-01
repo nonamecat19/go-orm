@@ -5,7 +5,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
-	"github.com/nonamecat19/go-orm/core/utils"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	querybuilder "github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 )
@@ -23,21 +22,38 @@ func main() {
 
 	client := client2.CreateClient(ormConfig)
 
-	var users []entities.User
+	users := []entities.User{
+		{
+			Name:   "test",
+			Email:  "email@gmail.com",
+			Gender: "male",
+		},
+		{
+			Name:   "test2",
+			Email:  "email2@gmail.com",
+			Gender: "female",
+		},
+	}
 
 	err := querybuilder.CreateQueryBuilder(client).
-		//Where("name <> ? OR name <> ?", "test1", "User 200").
-		//AndWhere("name <> '2'").
-		//AndWhere("name <> ?", '3').
-		//Select("users.id", "users.name", "users.created_at").
 		Debug().
-		Preload("orders").
-		//AndWhere("name <> ?", "User 200").
-		//OrderBy("id DESC").
-		//Limit(3).
-		//LeftJoinAndSelect("orders", "users.id = orders.user_id", "orders.id", "orders.count").
-		//Offset(10).
-		FindMany(&users)
+		InsertMany(&users)
+
+	//var users []entities.User
+
+	//err := querybuilder.CreateQueryBuilder(client).
+	//	//Where("name <> ? OR name <> ?", "test1", "User 200").
+	//	//AndWhere("name <> '2'").
+	//	//AndWhere("name <> ?", '3').
+	//	//Select("users.id", "users.name", "users.created_at").
+	//	Debug().
+	//	Preload("orders").
+	//	//AndWhere("name <> ?", "User 200").
+	//	//OrderBy("id DESC").
+	//	//Limit(3).
+	//	//LeftJoinAndSelect("orders", "users.id = orders.user_id", "orders.id", "orders.count").
+	//	//Offset(10).
+	//	FindMany(&users)
 
 	//err := querybuilder.CreateQueryBuilder(client).
 	//	Where("id = ?", 35).
@@ -55,7 +71,7 @@ func main() {
 		return
 	}
 
-	utils.PrintStructSlice(users)
+	//utils.PrintStructSlice(users)
 
 	//var orders []entities.Order
 	//
