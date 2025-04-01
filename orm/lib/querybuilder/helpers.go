@@ -112,19 +112,3 @@ func getModelFields(model interface{}) map[string]any {
 
 	return fields
 }
-
-// normalizeSqlWithArgs change "?" to database valid syntax
-func (qb *QueryBuilder) normalizeSqlWithArgs(sql string) string {
-	placeholderIndex := len(qb.args) + 1
-
-	for {
-		placeholder := fmt.Sprintf("$%d", placeholderIndex)
-		sql = strings.Replace(sql, "?", placeholder, 1) // Replace only the first '?' occurrence
-		if !strings.Contains(sql, "?") {
-			break
-		}
-		placeholderIndex++
-	}
-
-	return sql
-}

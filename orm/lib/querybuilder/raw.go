@@ -5,9 +5,8 @@ import (
 )
 
 // ExecuteRaw executes raw sql with params
-func (qb *QueryBuilder) ExecuteRaw(sql string, args ...interface{}) (*sql.Rows, error) {
-	normalizedSql := qb.normalizeSqlWithArgs(sql)
+func (qb *QueryBuilder) ExecuteRaw(sql string, args ...any) (*sql.Rows, error) {
 	qb.args = args
-	qb.query = normalizedSql
+	qb.query = qb.adapter.NormalizeSqlWithArgs(sql, args)
 	return qb.ExecuteBuilderQuery()
 }
