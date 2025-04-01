@@ -25,4 +25,6 @@ type Adapter interface {
 	Update(tableName string) string
 	GetReadQuery(tableName string, fields []string, fromSubquery string) string
 	GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+	GetSelectQuery(selectValue string, fromValue string) string
+	GetSelectWhereIn(tableName string, fields []string, fieldName string, fieldValues []string) string
 }

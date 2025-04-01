@@ -11,3 +11,11 @@ func (ap AdapterPostgres) GetFromSubquery(tableName string, where string, orderB
 func (ap AdapterPostgres) GetReadQuery(tableName string, fields []string, fromSubquery string) string {
 	return base.GetReadQuery(tableName, fields, fromSubquery)
 }
+
+func (ap AdapterPostgres) GetSelectQuery(selectValue string, fromValue string) string {
+	return base.GetSelectQuery(selectValue, fromValue)
+}
+
+func (ap AdapterPostgres) GetSelectWhereIn(tableName string, fields []string, fieldName string, fieldValues []string) string {
+	return base.GetSelectWhereIn(tableName, fields, fieldName, fieldValues)
+}
