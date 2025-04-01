@@ -13,7 +13,7 @@ func (qb *QueryBuilder) FindOne() {
 }
 
 // FindMany initializes a SELECT query for the specified entity.
-func (qb *QueryBuilder) FindMany(entities interface{}) error {
+func (qb *QueryBuilder) FindMany(entities any) error {
 	sliceValue := reflect.ValueOf(entities)
 	if sliceValue.Kind() != reflect.Ptr || sliceValue.Elem().Kind() != reflect.Slice {
 		return fmt.Errorf("entities must be a pointer to a slice")
@@ -68,7 +68,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 	}
 
 	for rows.Next() {
-		var fieldPointers []interface{}
+		var fieldPointers []any
 
 		for _, name := range utils.StringsIntersection(systemFieldNames, fields) {
 			ptr := systemFieldsMap[name]
@@ -94,7 +94,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 
 		for _, join := range qb.joins {
 			for range join.Select {
-				fieldPointers = append(fieldPointers, new(interface{}))
+				fieldPointers = append(fieldPointers, new(any))
 			}
 		}
 

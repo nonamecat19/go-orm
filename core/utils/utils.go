@@ -119,7 +119,7 @@ func Contains(slice []string, item string) bool {
 	return false
 }
 
-func GetModelFields(model interface{}) map[string]any {
+func GetModelFields(model any) map[string]any {
 	v := reflect.ValueOf(model).Elem()
 	t := v.Type()
 

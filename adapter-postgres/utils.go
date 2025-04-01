@@ -10,6 +10,6 @@ func (ap AdapterPostgres) JoinFields(fields []string) string {
 	return base.JoinFields(fields)
 }
 
-func (ap AdapterPostgres) NormalizeSqlWithArgs(sql string, args []interface{}) string {
+func (ap AdapterPostgres) NormalizeSqlWithArgs(sql string, args []any) string {
 	return base.NormalizeSqlWithArgs(sql, args)
 }

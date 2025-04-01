@@ -50,6 +50,6 @@ func (dc DbClient) GetAdapter() adapter.Adapter {
 	return dc.adapter
 }
 
-func (dc DbClient) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (dc DbClient) Query(query string, args ...any) (*sql.Rows, error) {
 	return dc.db.Query(query, args)
 }

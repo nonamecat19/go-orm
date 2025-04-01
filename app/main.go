@@ -68,7 +68,7 @@ func main() {
 	//
 	//err := querybuilder.CreateQueryBuilder(client).
 	//	Debug().
-	//	SetValues(map[string]interface{}{"name": "test"}).
+	//	SetValues(map[string]any{"name": "test"}).
 	//	Where("id > ?", 32).
 	//	AndWhere("id < 42").
 	//	UpdateMany(&entities.User{})

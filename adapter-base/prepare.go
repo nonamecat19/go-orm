@@ -34,7 +34,7 @@ func PrepareOffset(query string, offset int) string {
 	return query + fmt.Sprintf(" OFFSET %d", offset)
 }
 
-func PrepareSet(query string, set map[string]interface{}, args []interface{}) (string, []interface{}) {
+func PrepareSet(query string, set map[string]any, args []any) (string, []any) {
 	if len(set) == 0 {
 		return query, args
 	}

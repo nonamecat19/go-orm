@@ -26,8 +26,8 @@ type QueryBuilder struct {
 	limit        int
 	offset       int
 	relations    []string
-	args         []interface{}
-	set          map[string]interface{}
+	args         []any
+	set          map[string]any
 	joins        []JoinClause
 	debug        bool
 	preloads     []string

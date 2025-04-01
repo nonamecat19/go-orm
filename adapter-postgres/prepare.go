@@ -18,6 +18,6 @@ func (ap AdapterPostgres) PrepareOffset(query string, offset int) string {
 	return base.PrepareOffset(query, offset)
 }
 
-func (ap AdapterPostgres) PrepareSet(query string, set map[string]interface{}, args []interface{}) (string, []interface{}) {
+func (ap AdapterPostgres) PrepareSet(query string, set map[string]any, args []any) (string, []any) {
 	return base.PrepareSet(query, set, args)
 }
