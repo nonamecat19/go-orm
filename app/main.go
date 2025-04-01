@@ -1,6 +1,7 @@
 package main
 
 import (
+	adapterpostgres "adapter-postgres"
 	"fmt"
 	_ "github.com/lib/pq"
 	"github.com/nonamecat19/go-orm/app/entities"
@@ -12,7 +13,6 @@ import (
 
 func main() {
 	ormConfig := config.ORMConfig{
-		DbDriver: "postgres",
 		Host:     "127.0.0.1",
 		Port:     15432,
 		User:     "postgres",
@@ -21,7 +21,9 @@ func main() {
 		SSLMode:  false,
 	}
 
-	client := client2.CreateClient(ormConfig)
+	adapter := adapterpostgres.AdapterPostgres{}
+
+	client := client2.CreateClient(ormConfig, adapter)
 
 	//users := []entities.User{
 	//	{

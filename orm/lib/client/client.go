@@ -2,7 +2,7 @@ package client
 
 import (
 	"database/sql"
-	"fmt"
+	"github.com/nonamecat19/go-orm/core/lib/adapter"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/lib/scheme"
 	"log"
@@ -16,20 +16,12 @@ type DbClient struct {
 	tables Tables
 }
 
-func CreateClient(config config.ORMConfig) DbClient {
-	var connStr string
-	connStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		config.Host, config.Port, config.User, config.Password, config.DbName)
-	db, err := sql.Open(config.DbDriver, connStr)
+func CreateClient(config config.ORMConfig, currentAdapter adapter.Adapter) DbClient {
+	connStr := currentAdapter.GetConnString(config)
+	db, err := sql.Open(currentAdapter.GetDbDriver(), connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer func(db *sql.DB) {
-	//	err := db.Close()
-	//	if err != nil {
-	//		log.Panic(err)
-	//	}
-	//}(db)
 
 	tableMap := make(Tables)
 

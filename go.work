@@ -6,4 +6,5 @@ use (
 	./studio
 	./cli
 	./app
+	./adapter-postgres
 )
