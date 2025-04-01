@@ -1,6 +1,9 @@
 package adapter_base
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/nonamecat19/go-orm/core/lib/query"
+)
 
 func PrepareOrderBy(query string, orderBy []string) string {
 	if len(orderBy) == 0 {
@@ -53,4 +56,13 @@ func PrepareSet(query string, set map[string]any, args []any) (string, []any) {
 	}
 
 	return normalizedQuery, newArgs
+}
+
+func PrepareJoins(query string, joins []query.JoinClause) string {
+	newQuery := query
+	for _, join := range joins {
+		newQuery += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
+	}
+
+	return newQuery
 }

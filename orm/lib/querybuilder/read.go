@@ -121,33 +121,16 @@ func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
 		fields = utils.StringsIntersection(fields, qb.selectFields)
 	}
 
-	var query string
-
 	for _, join := range qb.joins {
 		for _, field := range join.Select {
 			fields = append(fields, field)
 		}
 	}
 
-	if len(fields) > 0 {
-		query = fmt.Sprintf("SELECT %s", qb.adapter.JoinFieldsStrictly(fields))
-	} else {
-		query = "SELECT *"
-	}
+	fromSubquery := qb.adapter.GetFromSubquery(tableName, qb.where, qb.orderBy, qb.limit, qb.offset)
+	query := qb.adapter.GetReadQuery(tableName, fields, fromSubquery)
 
-	fromQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
-	fromQuery = qb.prepareWhere(fromQuery)
-	fromQuery = qb.prepareOrderBy(fromQuery)
-	fromQuery = qb.prepareLimit(fromQuery)
-	fromQuery = qb.prepareOffset(fromQuery)
-
-	query += fmt.Sprintf(" FROM (%s) AS %s", fromQuery, tableName)
-
-	for _, join := range qb.joins {
-		query += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
-	}
-
-	qb.query = query
+	qb.query = qb.adapter.PrepareJoins(query, qb.joins)
 
 	return nil
 }

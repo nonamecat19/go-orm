@@ -83,8 +83,9 @@ func main() {
 	var orders []entities.Order
 
 	err := querybuilder.CreateQueryBuilder(client).
-		Where("id <> ?", 8).
-		AndWhere("count <> ?", 7).
+		//Where("id <> ?", 8).
+		//Where("id = ?", 8).
+		//AndWhere("count <> ?", 7).
 		Debug().
 		OrderBy("id ASC").
 		Preload("user").

@@ -1,6 +1,9 @@
 package adapter_postgres
 
-import base "adapter-base"
+import (
+	base "adapter-base"
+	"github.com/nonamecat19/go-orm/core/lib/query"
+)
 
 func (ap AdapterPostgres) PrepareOrderBy(query string, orderBy []string) string {
 	return base.PrepareOrderBy(query, orderBy)
@@ -20,4 +23,8 @@ func (ap AdapterPostgres) PrepareOffset(query string, offset int) string {
 
 func (ap AdapterPostgres) PrepareSet(query string, set map[string]any, args []any) (string, []any) {
 	return base.PrepareSet(query, set, args)
+}
+
+func (ap AdapterPostgres) PrepareJoins(query string, joins []query.JoinClause) string {
+	return base.PrepareJoins(query, joins)
 }
