@@ -14,4 +14,5 @@ type Adapter interface {
 	Where(condition string, where string, args ...interface{}) string
 	AndWhere(condition string, where string, args ...interface{}) string
 	OrWhere(condition string, where string, args ...interface{}) string
+	Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
 }

@@ -85,3 +85,27 @@ func GenerateParamsSlice(n int) []string {
 	}
 	return result
 }
+
+func Map[T any, U any](input []T, transformFunc func(T) U) []U {
+	result := make([]U, len(input))
+	for i, v := range input {
+		result[i] = transformFunc(v)
+	}
+	return result
+}
+
+func Chunk[T any](input []T, size int) [][]T {
+	if size <= 0 {
+		panic("Chunk size must be greater than 0")
+	}
+
+	var result [][]T
+	for i := 0; i < len(input); i += size {
+		end := i + size
+		if end > len(input) {
+			end = len(input)
+		}
+		result = append(result, input[i:end])
+	}
+	return result
+}
