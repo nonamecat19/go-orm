@@ -1,9 +1,10 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres"
+	adaptersqlite "adapter-sqlite"
 	"fmt"
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/utils"
@@ -12,18 +13,26 @@ import (
 )
 
 func main() {
-	ormConfig := config.ORMConfig{
-		Host:     "127.0.0.1",
-		Port:     15432,
-		User:     "postgres",
-		Password: "root",
-		DbName:   "orm",
-		SSLMode:  false,
+	//postgresConfig := config.ORMConfig{
+	//	Host:     "127.0.0.1",
+	//	Port:     15432,
+	//	User:     "postgres",
+	//	Password: "root",
+	//	DbName:   "orm",
+	//	SSLMode:  false,
+	//}
+	//
+	//adapter := adapterpostgres.AdapterPostgres{}
+	//
+	//client := client2.CreateClient(postgresConfig, adapter)
+
+	sqliteConfig := config.ORMConfig{
+		Path: "./sqlite.sqlite",
 	}
 
-	adapter := adapterpostgres.AdapterPostgres{}
+	adapter := adaptersqlite.AdapterSQLite{}
 
-	client := client2.CreateClient(ormConfig, adapter)
+	client := client2.CreateClient(sqliteConfig, adapter)
 
 	//users := []entities.User{
 	//	{
@@ -83,9 +92,8 @@ func main() {
 	var orders []entities.Order
 
 	err := querybuilder.CreateQueryBuilder(client).
-		//Where("id <> ?", 8).
-		//Where("id = ?", 8).
-		//AndWhere("count <> ?", 7).
+		Where("id <> ?", 8).
+		AndWhere("count <> ?", 7).
 		Debug().
 		OrderBy("id ASC").
 		Preload("user").

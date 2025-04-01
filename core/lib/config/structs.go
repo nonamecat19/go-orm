@@ -7,6 +7,7 @@ type ORMConfig struct {
 	Password string
 	DbName   string
 	SSLMode  bool
+	Path     string
 }
 
 type ORMConfigYaml struct {
