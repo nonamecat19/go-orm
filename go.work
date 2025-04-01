@@ -7,4 +7,5 @@ use (
 	./cli
 	./app
 	./adapter-postgres
+	./adapter-base
 )

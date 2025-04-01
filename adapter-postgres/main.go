@@ -1,6 +1,7 @@
 package adapter_postgres
 
 import (
+	base "adapter-base"
 	"fmt"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 )
@@ -14,4 +15,8 @@ func (ap AdapterPostgres) GetConnString(config config.ORMConfig) string {
 
 func (ap AdapterPostgres) GetDbDriver() string {
 	return "postgres"
+}
+
+func (ap AdapterPostgres) DeleteFromTable(tableName string) string {
+	return base.DeleteFromTable(tableName)
 }

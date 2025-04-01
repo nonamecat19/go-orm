@@ -11,9 +11,10 @@ import (
 type Tables = map[string]scheme.TableScheme
 
 type DbClient struct {
-	db     *sql.DB
-	config config.ORMConfig
-	tables Tables
+	db      *sql.DB
+	config  config.ORMConfig
+	tables  Tables
+	adapter adapter.Adapter
 }
 
 func CreateClient(config config.ORMConfig, currentAdapter adapter.Adapter) DbClient {
@@ -26,9 +27,10 @@ func CreateClient(config config.ORMConfig, currentAdapter adapter.Adapter) DbCli
 	tableMap := make(Tables)
 
 	return DbClient{
-		db:     db,
-		config: config,
-		tables: tableMap,
+		db:      db,
+		config:  config,
+		tables:  tableMap,
+		adapter: currentAdapter,
 	}
 }
 
@@ -42,6 +44,10 @@ func (dc DbClient) GetConfig() config.ORMConfig {
 
 func (dc DbClient) GetTables() Tables {
 	return dc.tables
+}
+
+func (dc DbClient) GetAdapter() adapter.Adapter {
+	return dc.adapter
 }
 
 func (dc DbClient) Query(query string, args ...interface{}) (*sql.Rows, error) {
