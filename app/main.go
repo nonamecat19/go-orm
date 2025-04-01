@@ -35,9 +35,13 @@ func main() {
 		},
 	}
 
+	//err := querybuilder.CreateQueryBuilder(client).
+	//	Debug().
+	//	InsertMany(users)
+
 	err := querybuilder.CreateQueryBuilder(client).
 		Debug().
-		InsertMany(&users)
+		InsertOne(users[0])
 
 	//var users []entities.User
 

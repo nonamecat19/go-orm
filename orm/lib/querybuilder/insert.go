@@ -7,28 +7,40 @@ import (
 )
 
 func (qb *QueryBuilder) InsertOne(entity interface{}) error {
+	elementValue := reflect.ValueOf(entity)
+	if elementValue.Kind() != reflect.Struct {
+		return fmt.Errorf("entities must be a struct")
+	}
 
-	return nil
+	elementType := elementValue.Type()
+	sliceType := reflect.SliceOf(elementType)
+	sliceValue := reflect.MakeSlice(sliceType, 0, 1)
+	sliceValue = reflect.Append(sliceValue, elementValue)
+
+	return qb.insertSlice(sliceValue)
+
 }
 
 func (qb *QueryBuilder) InsertMany(entities interface{}) error {
 	sliceValue := reflect.ValueOf(entities)
-	if sliceValue.Kind() != reflect.Ptr || sliceValue.Elem().Kind() != reflect.Slice {
-		return fmt.Errorf("entities must be a pointer to a slice")
+	if sliceValue.Kind() != reflect.Slice {
+		return fmt.Errorf("entities must be a slice")
 	}
 
-	elementType := sliceValue.Elem().Type().Elem()
+	return qb.insertSlice(sliceValue)
+}
+
+func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
+	elementType := sliceValue.Type().Elem()
 
 	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elementType, false)
-
-	slice := sliceValue.Elem()
 
 	var stringRecords []string
 	var queryArgs []interface{}
 
-	for i := 0; i < slice.Len(); i++ {
+	for i := 0; i < sliceValue.Len(); i++ {
 
-		entity := slice.Index(i)
+		entity := sliceValue.Index(i)
 
 		for _, entityFieldName := range entityFieldNames {
 			currentFieldName, err := utils.GetFieldNameByTagValue(entity.Type(), entityFieldName)
