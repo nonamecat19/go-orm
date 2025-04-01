@@ -13,7 +13,7 @@ func (qb *QueryBuilder) FindOne() {
 }
 
 // FindMany initializes a SELECT query for the specified entity.
-func (qb *QueryBuilder) FindMany(entities []interface{}) error {
+func (qb *QueryBuilder) FindMany(entities interface{}) error {
 	sliceValue := reflect.ValueOf(entities)
 	if sliceValue.Kind() != reflect.Ptr || sliceValue.Elem().Kind() != reflect.Slice {
 		return fmt.Errorf("entities must be a pointer to a slice")
