@@ -72,6 +72,16 @@ func GetFieldNameByTagValue(val reflect.Type, dbTagValue string) (string, error)
 		}
 	}
 
-	return "", errors.New("no field with the specified db tag value found")
+	return "", fmt.Errorf("no field with the specified db tag value found: %s", dbTagValue)
+}
 
+func GenerateParamsSlice(n int) []string {
+	if n <= 0 {
+		return []string{}
+	}
+	result := make([]string, n)
+	for i := 0; i < n; i++ {
+		result[i] = "?"
+	}
+	return result
 }

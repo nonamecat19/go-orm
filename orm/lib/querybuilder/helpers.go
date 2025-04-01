@@ -35,7 +35,7 @@ func extractFields(entity reflect.Type) []string {
 }
 
 // extractTableAndFields: Extracts table name and field names from an entity.
-func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []string, []string, error) {
+func (qb *QueryBuilder) extractTableAndFields(entity interface{}, prefix bool) (string, []string, []string, error) {
 	entityType := reflect.TypeOf(entity)
 	if entityType.Kind() != reflect.Ptr || entityType.Elem().Kind() != reflect.Struct {
 		return "", nil, nil, errors.New("entity must be a pointer to a struct")
@@ -52,15 +52,19 @@ func (qb *QueryBuilder) extractTableAndFields(entity interface{}) (string, []str
 	entityFieldNames := extractFields(entityType)
 	systemFieldNames := extractFields(reflect.TypeOf(entities.Model{}))
 
+	if !prefix {
+		return tableName, entityFieldNames, systemFieldNames, nil
+	}
+
 	mappedEntityFields := addPrefix(tableName, entityFieldNames)
 	mappedSystemFields := addPrefix(tableName, systemFieldNames)
 
 	return tableName, mappedEntityFields, mappedSystemFields, nil
 }
 
-func (qb *QueryBuilder) extractTableAndFieldsFromType(elemType reflect.Type) (string, []string, []string, error) {
+func (qb *QueryBuilder) extractTableAndFieldsFromType(elemType reflect.Type, prefix bool) (string, []string, []string, error) {
 	tempEntity := reflect.New(elemType).Interface()
-	return qb.extractTableAndFields(tempEntity)
+	return qb.extractTableAndFields(tempEntity, prefix)
 }
 
 func JoinFields(fields []string) string {

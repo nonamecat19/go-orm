@@ -7,7 +7,7 @@ import (
 
 // DeleteMany initializes a DELETE query for the specified entity.
 func (qb *QueryBuilder) DeleteMany(entity interface{}) error {
-	tableName, _, _, err := qb.extractTableAndFields(entity)
+	tableName, _, _, err := qb.extractTableAndFields(entity, true)
 	if err != nil {
 		return err
 	}
