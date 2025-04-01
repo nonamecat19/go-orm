@@ -66,7 +66,7 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 		}
 	}
 
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id IN (%s)", tableName, JoinFields(stringEntityIDs))
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id IN (%s)", tableName, qb.adapter.JoinFields(stringEntityIDs))
 
 	rows, err := qb.ExecuteQuery(query)
 	if err != nil {

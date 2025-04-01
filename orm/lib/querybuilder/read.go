@@ -130,7 +130,7 @@ func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
 	}
 
 	if len(fields) > 0 {
-		query = fmt.Sprintf("SELECT %s", JoinFieldsStrictly(fields))
+		query = fmt.Sprintf("SELECT %s", qb.adapter.JoinFieldsStrictly(fields))
 	} else {
 		query = "SELECT *"
 	}

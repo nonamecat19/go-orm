@@ -109,3 +109,58 @@ func Chunk[T any](input []T, size int) [][]T {
 	}
 	return result
 }
+
+func Contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
+func GetModelFields(model interface{}) map[string]any {
+	v := reflect.ValueOf(model).Elem()
+	t := v.Type()
+
+	fields := make(map[string]any)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		dbTag := field.Tag.Get("db")
+
+		fieldPtr := v.Field(i).Addr().Interface()
+
+		if dbTag != "" {
+			fields[dbTag] = fieldPtr
+		}
+	}
+
+	return fields
+}
+
+// AddPrefix adds a prefix to each string in the slice
+func AddPrefix(prefix string, slice []string) []string {
+	result := make([]string, len(slice))
+	for i, s := range slice {
+		result[i] = fmt.Sprintf("%s.%s", prefix, s)
+	}
+	return result
+}
+
+// ExtractFields extract all field names from entity
+func ExtractFields(entity reflect.Type) []string {
+	var fieldNames []string
+
+	for i := 0; i < entity.NumField(); i++ {
+		fieldTags := entity.Field(i).Tag
+		dbTag := fieldTags.Get("db")
+		relationTag := fieldTags.Get("relation")
+
+		if dbTag != "" && relationTag == "" {
+			fieldNames = append(fieldNames, dbTag)
+		}
+	}
+
+	return fieldNames
+}

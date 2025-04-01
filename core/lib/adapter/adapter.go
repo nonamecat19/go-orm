@@ -15,5 +15,7 @@ type Adapter interface {
 	AndWhere(condition string, where string, args ...any) string
 	OrWhere(condition string, where string, args ...any) string
 	Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+	JoinFields(fields []string) string
+	JoinFieldsStrictly(fields []string) string
 	NormalizeSqlWithArgs(sql string, args []any) string
 }
