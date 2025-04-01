@@ -85,3 +85,82 @@ func GenerateParamsSlice(n int) []string {
 	}
 	return result
 }
+
+func Map[T any, U any](input []T, transformFunc func(T) U) []U {
+	result := make([]U, len(input))
+	for i, v := range input {
+		result[i] = transformFunc(v)
+	}
+	return result
+}
+
+func Chunk[T any](input []T, size int) [][]T {
+	if size <= 0 {
+		panic("Chunk size must be greater than 0")
+	}
+
+	var result [][]T
+	for i := 0; i < len(input); i += size {
+		end := i + size
+		if end > len(input) {
+			end = len(input)
+		}
+		result = append(result, input[i:end])
+	}
+	return result
+}
+
+func Contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
+func GetModelFields(model any) map[string]any {
+	v := reflect.ValueOf(model).Elem()
+	t := v.Type()
+
+	fields := make(map[string]any)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		dbTag := field.Tag.Get("db")
+
+		fieldPtr := v.Field(i).Addr().Interface()
+
+		if dbTag != "" {
+			fields[dbTag] = fieldPtr
+		}
+	}
+
+	return fields
+}
+
+// AddPrefix adds a prefix to each string in the slice
+func AddPrefix(prefix string, slice []string) []string {
+	result := make([]string, len(slice))
+	for i, s := range slice {
+		result[i] = fmt.Sprintf("%s.%s", prefix, s)
+	}
+	return result
+}
+
+// ExtractFields extract all field names from entity
+func ExtractFields(entity reflect.Type) []string {
+	var fieldNames []string
+
+	for i := 0; i < entity.NumField(); i++ {
+		fieldTags := entity.Field(i).Tag
+		dbTag := fieldTags.Get("db")
+		relationTag := fieldTags.Get("relation")
+
+		if dbTag != "" && relationTag == "" {
+			fieldNames = append(fieldNames, dbTag)
+		}
+	}
+
+	return fieldNames
+}

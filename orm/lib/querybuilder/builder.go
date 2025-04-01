@@ -4,19 +4,15 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/nonamecat19/go-orm/core/lib/adapter"
+	"github.com/nonamecat19/go-orm/core/lib/query"
 	"github.com/nonamecat19/go-orm/orm/lib/client"
 	"strings"
 )
 
-type JoinClause struct {
-	JoinType  string // "LEFT", "INNER", etc.
-	Table     string
-	Condition string
-	Select    []string
-}
-
 type QueryBuilder struct {
 	client       client.DbClient
+	adapter      adapter.Adapter
 	query        string
 	selectFields []string
 	where        string
@@ -24,9 +20,9 @@ type QueryBuilder struct {
 	limit        int
 	offset       int
 	relations    []string
-	args         []interface{}
-	set          map[string]interface{}
-	joins        []JoinClause
+	args         []any
+	set          map[string]any
+	joins        []query.JoinClause
 	debug        bool
 	preloads     []string
 }
@@ -34,8 +30,9 @@ type QueryBuilder struct {
 // CreateQueryBuilder initializes a new QueryBuilder.
 func CreateQueryBuilder(client client.DbClient) *QueryBuilder {
 	return &QueryBuilder{
-		client: client,
-		limit:  -1, // Default to no limit
+		adapter: client.GetAdapter(),
+		client:  client,
+		limit:   -1, // Default to no limit
 	}
 }
 

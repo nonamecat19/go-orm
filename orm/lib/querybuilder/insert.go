@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-func (qb *QueryBuilder) InsertOne(entity interface{}) error {
+func (qb *QueryBuilder) InsertOne(entity any) error {
 	elementValue := reflect.ValueOf(entity)
 	if elementValue.Kind() != reflect.Struct {
 		return fmt.Errorf("entities must be a struct")
@@ -18,10 +18,9 @@ func (qb *QueryBuilder) InsertOne(entity interface{}) error {
 	sliceValue = reflect.Append(sliceValue, elementValue)
 
 	return qb.insertSlice(sliceValue)
-
 }
 
-func (qb *QueryBuilder) InsertMany(entities interface{}) error {
+func (qb *QueryBuilder) InsertMany(entities any) error {
 	sliceValue := reflect.ValueOf(entities)
 	if sliceValue.Kind() != reflect.Slice {
 		return fmt.Errorf("entities must be a slice")
@@ -33,46 +32,34 @@ func (qb *QueryBuilder) InsertMany(entities interface{}) error {
 func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 	elementType := sliceValue.Type().Elem()
 
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elementType, false)
+	tableName, entityFieldNames, _, err := qb.extractTableAndFieldsFromType(elementType, false)
 
-	var stringRecords []string
-	var queryArgs []interface{}
+	var queryArgs []any
 
 	for i := 0; i < sliceValue.Len(); i++ {
-
 		entity := sliceValue.Index(i)
 
 		for _, entityFieldName := range entityFieldNames {
 			currentFieldName, err := utils.GetFieldNameByTagValue(entity.Type(), entityFieldName)
-
 			if err != nil {
 				return err
 			}
 
+			var newArg any
 			value := entity.FieldByName(currentFieldName)
 
 			switch value.Kind() {
 			case reflect.Ptr:
-				if value.IsNil() {
-					queryArgs = append(queryArgs, "NULL")
-				} else {
-					queryArgs = append(queryArgs, value.Elem())
-				}
+				newArg = value.Elem()
 			default:
-				queryArgs = append(queryArgs, value.Interface())
+				newArg = value.Interface()
 			}
 
-			fmt.Println(entity)
+			queryArgs = append(queryArgs, newArg)
 		}
-
-		stringRecords = append(stringRecords, fmt.Sprintf("(%s)", JoinFields(utils.GenerateParamsSlice(len(entityFieldNames)))))
 	}
 
-	fmt.Println(tableName, entityFieldNames, systemFieldNames, err)
-
-	query := fmt.Sprintf("INSERT INTO %s (%s) VALUES %s;", tableName, JoinFields(entityFieldNames), JoinFields(stringRecords))
-	qb.query = qb.normalizeSqlWithArgs(query)
-	qb.args = append(qb.args, queryArgs...)
+	qb.query, qb.args = qb.adapter.Insert(tableName, entityFieldNames, queryArgs, qb.args)
 
 	rows, err := qb.ExecuteBuilderQuery()
 	if err != nil {

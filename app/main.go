@@ -1,17 +1,18 @@
 package main
 
 import (
+	adapterpostgres "adapter-postgres"
 	"fmt"
 	_ "github.com/lib/pq"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
+	"github.com/nonamecat19/go-orm/core/utils"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	querybuilder "github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 )
 
 func main() {
 	ormConfig := config.ORMConfig{
-		DbDriver: "postgres",
 		Host:     "127.0.0.1",
 		Port:     15432,
 		User:     "postgres",
@@ -20,28 +21,30 @@ func main() {
 		SSLMode:  false,
 	}
 
-	client := client2.CreateClient(ormConfig)
+	adapter := adapterpostgres.AdapterPostgres{}
 
-	users := []entities.User{
-		{
-			Name:   "test",
-			Email:  "email@gmail.com",
-			Gender: "male",
-		},
-		{
-			Name:   "test2",
-			Email:  "email2@gmail.com",
-			Gender: "female",
-		},
-	}
+	client := client2.CreateClient(ormConfig, adapter)
 
+	//users := []entities.User{
+	//	{
+	//		Name:   "test",
+	//		Email:  "email@gmail.com",
+	//		Gender: "male",
+	//	},
+	//	{
+	//		Name:   "test2",
+	//		Email:  "email2@gmail.com",
+	//		Gender: "female",
+	//	},
+	//}
+	//
 	//err := querybuilder.CreateQueryBuilder(client).
 	//	Debug().
 	//	InsertMany(users)
 
-	err := querybuilder.CreateQueryBuilder(client).
-		Debug().
-		InsertOne(users[0])
+	//err := querybuilder.CreateQueryBuilder(client).
+	//	Debug().
+	//	InsertOne(users[0])
 
 	//var users []entities.User
 
@@ -65,36 +68,35 @@ func main() {
 	//
 	//err := querybuilder.CreateQueryBuilder(client).
 	//	Debug().
-	//	SetValues(map[string]interface{}{"name": "test"}).
+	//	SetValues(map[string]any{"name": "test"}).
 	//	Where("id > ?", 32).
 	//	AndWhere("id < 42").
 	//	UpdateMany(&entities.User{})
+
+	//if err != nil {
+	//	fmt.Println("Error:", err)
+	//	return
+	//}
+
+	//utils.PrintStructSlice(users)
+
+	var orders []entities.Order
+
+	err := querybuilder.CreateQueryBuilder(client).
+		//Where("id <> ?", 8).
+		//Where("id = ?", 8).
+		//AndWhere("count <> ?", 7).
+		Debug().
+		OrderBy("id ASC").
+		Preload("user").
+		Limit(15).
+		Offset(1).
+		FindMany(&orders)
 
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	//utils.PrintStructSlice(users)
-
-	//var orders []entities.Order
-	//
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	//Where("id = ?", 8).
-	//	//AndWhere("name <> '2'").
-	//	//AndWhere("name <> ?", '3').
-	//	Debug().
-	//	//AndWhere("name <> ?", "User 200").
-	//	//OrderBy("id DESC").
-	//	Preload("user").
-	//	//Limit(2).
-	//	//Offset(17).
-	//	FindMany(&orders)
-	//
-	//if err != nil {
-	//	fmt.Println("Error:", err)
-	//	return
-	//}
-
-	//utils.PrintStructSlice(orders)
+	utils.PrintStructSlice(orders)
 }

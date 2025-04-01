@@ -1,27 +1,22 @@
 package querybuilder
 
-import "fmt"
-
 // Where adds a WHERE condition to the query
-func (qb *QueryBuilder) Where(condition string, args ...interface{}) *QueryBuilder {
-	newCondition := qb.normalizeSqlWithArgs(condition)
-	qb.where = fmt.Sprintf("(%s)", newCondition)
+func (qb *QueryBuilder) Where(condition string, args ...any) *QueryBuilder {
+	qb.where = qb.adapter.Where(condition, qb.args)
 	qb.args = append(qb.args, args...)
 	return qb
 }
 
 // AndWhere adds an AND WHERE to the query
-func (qb *QueryBuilder) AndWhere(condition string, args ...interface{}) *QueryBuilder {
-	newCondition := qb.normalizeSqlWithArgs(condition)
-	qb.where = fmt.Sprintf("%s AND (%s)", qb.where, newCondition)
+func (qb *QueryBuilder) AndWhere(condition string, args ...any) *QueryBuilder {
+	qb.where = qb.adapter.AndWhere(condition, qb.where, qb.args)
 	qb.args = append(qb.args, args...)
 	return qb
 }
 
 // OrWhere adds an OR WHERE to the query
-func (qb *QueryBuilder) OrWhere(condition string, args ...interface{}) *QueryBuilder {
-	newCondition := qb.normalizeSqlWithArgs(condition)
-	qb.where = fmt.Sprintf("%s OR (%s)", qb.where, newCondition)
+func (qb *QueryBuilder) OrWhere(condition string, args ...any) *QueryBuilder {
+	qb.where = qb.adapter.OrWhere(condition, qb.where, qb.args)
 	qb.args = append(qb.args, args...)
 	return qb
 }

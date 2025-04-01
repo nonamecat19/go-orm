@@ -2,17 +2,16 @@ package querybuilder
 
 import (
 	"errors"
-	"fmt"
 )
 
 // DeleteMany initializes a DELETE query for the specified entity.
-func (qb *QueryBuilder) DeleteMany(entity interface{}) error {
+func (qb *QueryBuilder) DeleteMany(entity any) error {
 	tableName, _, _, err := qb.extractTableAndFields(entity, true)
 	if err != nil {
 		return err
 	}
 
-	query := fmt.Sprintf("DELETE FROM %s", tableName)
+	query := qb.adapter.DeleteFromTable(tableName)
 
 	if len(qb.where) == 0 {
 		return errors.New("DELETE query requires at least one WHERE clause to prevent accidental deletion of all rows")

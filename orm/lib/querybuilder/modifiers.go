@@ -1,5 +1,7 @@
 package querybuilder
 
+import "github.com/nonamecat19/go-orm/core/lib/query"
+
 // OrderBy adds order by clauses to the query
 func (qb *QueryBuilder) OrderBy(fields ...string) *QueryBuilder {
 	qb.orderBy = append(qb.orderBy, fields...)
@@ -20,7 +22,7 @@ func (qb *QueryBuilder) Offset(offset int) *QueryBuilder {
 
 // LeftJoinAndSelect adds relations to the query (eager loading)
 func (qb *QueryBuilder) LeftJoinAndSelect(table string, condition string, selectFields ...string) *QueryBuilder {
-	joinClause := JoinClause{
+	joinClause := query.JoinClause{
 		JoinType:  "LEFT",
 		Table:     table,
 		Condition: condition,

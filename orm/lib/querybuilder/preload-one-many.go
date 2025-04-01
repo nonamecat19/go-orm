@@ -62,7 +62,8 @@ func (qb *QueryBuilder) preloadRelationSlice(field reflect.StructField, sliceVal
 	//	fields = utils.StringsIntersection(fields, qb.selectFields)
 	//}
 
-	query := fmt.Sprintf("SELECT %s FROM %s WHERE %s IN (%s)", JoinFieldsStrictly(fields), tableName, relationTag, JoinFields(stringEntityIDs))
+	selectValue := qb.adapter.JoinFieldsStrictly(fields)
+	query := qb.adapter.GetSelectWhereIn(tableName, selectValue, relationTag, stringEntityIDs)
 
 	rows, err := qb.ExecuteQuery(query)
 	if err != nil {
@@ -96,7 +97,7 @@ func (qb *QueryBuilder) handlePreloadSlice(sliceValue reflect.Value, field refle
 		return err
 	}
 
-	rowMap := make(map[any]interface{})
+	rowMap := make(map[any]any)
 
 	elem := reflect.New(elemType).Elem()
 
@@ -115,7 +116,7 @@ func (qb *QueryBuilder) handlePreloadSlice(sliceValue reflect.Value, field refle
 	}
 
 	for rows.Next() {
-		var fieldPointers []interface{}
+		var fieldPointers []any
 
 		systemFields := utils.StringsIntersection(systemFieldNames, fields)
 		for _, name := range systemFields {
@@ -174,9 +175,9 @@ func (qb *QueryBuilder) handlePreloadSlice(sliceValue reflect.Value, field refle
 		}
 
 		if existingSlice, ok := rowMap[key]; ok {
-			rowMap[key] = append(existingSlice.([]interface{}), elem.Interface())
+			rowMap[key] = append(existingSlice.([]any), elem.Interface())
 		} else {
-			rowMap[key] = []interface{}{elem.Interface()}
+			rowMap[key] = []any{elem.Interface()}
 		}
 	}
 
@@ -207,9 +208,9 @@ func (qb *QueryBuilder) handlePreloadSlice(sliceValue reflect.Value, field refle
 			return fmt.Errorf("relationField is not a slice")
 		}
 
-		convertedSlice = reflect.MakeSlice(relationField.Type(), 0, len(value.([]interface{})))
+		convertedSlice = reflect.MakeSlice(relationField.Type(), 0, len(value.([]any)))
 
-		for _, v := range value.([]interface{}) {
+		for _, v := range value.([]any) {
 			entityValue := reflect.ValueOf(v)
 
 			if !entityValue.Type().AssignableTo(relationFieldType) {

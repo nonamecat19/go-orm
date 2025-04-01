@@ -2,7 +2,7 @@ package client
 
 import (
 	"database/sql"
-	"fmt"
+	"github.com/nonamecat19/go-orm/core/lib/adapter"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/lib/scheme"
 	"log"
@@ -11,32 +11,26 @@ import (
 type Tables = map[string]scheme.TableScheme
 
 type DbClient struct {
-	db     *sql.DB
-	config config.ORMConfig
-	tables Tables
+	db      *sql.DB
+	config  config.ORMConfig
+	tables  Tables
+	adapter adapter.Adapter
 }
 
-func CreateClient(config config.ORMConfig) DbClient {
-	var connStr string
-	connStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		config.Host, config.Port, config.User, config.Password, config.DbName)
-	db, err := sql.Open(config.DbDriver, connStr)
+func CreateClient(config config.ORMConfig, currentAdapter adapter.Adapter) DbClient {
+	connStr := currentAdapter.GetConnString(config)
+	db, err := sql.Open(currentAdapter.GetDbDriver(), connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer func(db *sql.DB) {
-	//	err := db.Close()
-	//	if err != nil {
-	//		log.Panic(err)
-	//	}
-	//}(db)
 
 	tableMap := make(Tables)
 
 	return DbClient{
-		db:     db,
-		config: config,
-		tables: tableMap,
+		db:      db,
+		config:  config,
+		tables:  tableMap,
+		adapter: currentAdapter,
 	}
 }
 
@@ -52,6 +46,10 @@ func (dc DbClient) GetTables() Tables {
 	return dc.tables
 }
 
-func (dc DbClient) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (dc DbClient) GetAdapter() adapter.Adapter {
+	return dc.adapter
+}
+
+func (dc DbClient) Query(query string, args ...any) (*sql.Rows, error) {
 	return dc.db.Query(query, args)
 }

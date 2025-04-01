@@ -13,7 +13,7 @@ func (qb *QueryBuilder) FindOne() {
 }
 
 // FindMany initializes a SELECT query for the specified entity.
-func (qb *QueryBuilder) FindMany(entities []interface{}) error {
+func (qb *QueryBuilder) FindMany(entities any) error {
 	sliceValue := reflect.ValueOf(entities)
 	if sliceValue.Kind() != reflect.Ptr || sliceValue.Elem().Kind() != reflect.Slice {
 		return fmt.Errorf("entities must be a pointer to a slice")
@@ -68,7 +68,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 	}
 
 	for rows.Next() {
-		var fieldPointers []interface{}
+		var fieldPointers []any
 
 		for _, name := range utils.StringsIntersection(systemFieldNames, fields) {
 			ptr := systemFieldsMap[name]
@@ -94,12 +94,11 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 
 		for _, join := range qb.joins {
 			for range join.Select {
-				fieldPointers = append(fieldPointers, new(interface{}))
+				fieldPointers = append(fieldPointers, new(any))
 			}
 		}
 
 		if err := rows.Scan(fieldPointers...); err != nil {
-			fmt.Println("1")
 			return err
 		}
 
@@ -122,33 +121,16 @@ func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
 		fields = utils.StringsIntersection(fields, qb.selectFields)
 	}
 
-	var query string
-
 	for _, join := range qb.joins {
 		for _, field := range join.Select {
 			fields = append(fields, field)
 		}
 	}
 
-	if len(fields) > 0 {
-		query = fmt.Sprintf("SELECT %s", JoinFieldsStrictly(fields))
-	} else {
-		query = "SELECT *"
-	}
+	fromSubquery := qb.adapter.GetFromSubquery(tableName, qb.where, qb.orderBy, qb.limit, qb.offset)
+	query := qb.adapter.GetReadQuery(tableName, fields, fromSubquery)
 
-	fromQuery := fmt.Sprintf("SELECT * FROM %s", tableName)
-	fromQuery = qb.prepareWhere(fromQuery)
-	fromQuery = qb.prepareOrderBy(fromQuery)
-	fromQuery = qb.prepareLimit(fromQuery)
-	fromQuery = qb.prepareOffset(fromQuery)
-
-	query += fmt.Sprintf(" FROM (%s) AS %s", fromQuery, tableName)
-
-	for _, join := range qb.joins {
-		query += fmt.Sprintf(" %s JOIN %s ON %s", join.JoinType, join.Table, join.Condition)
-	}
-
-	qb.query = query
+	qb.query = qb.adapter.PrepareJoins(query, qb.joins)
 
 	return nil
 }
@@ -170,8 +152,6 @@ func (qb *QueryBuilder) preloadRelations(sliceValue reflect.Value, elemType refl
 			if dbTag == "" || dbTag != preload {
 				continue
 			}
-
-			fmt.Println(preload)
 
 			fieldKind := field.Type.Kind()
 

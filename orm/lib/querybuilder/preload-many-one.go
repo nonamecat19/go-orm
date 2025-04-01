@@ -66,7 +66,11 @@ func (qb *QueryBuilder) preloadRelationPointer(field reflect.StructField, sliceV
 		}
 	}
 
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id IN (%s)", tableName, JoinFields(stringEntityIDs))
+	if len(stringEntityIDs) == 0 {
+		return nil
+	}
+
+	query := qb.adapter.GetSelectWhereIn(tableName, "*", "id", stringEntityIDs)
 
 	rows, err := qb.ExecuteQuery(query)
 	if err != nil {
@@ -96,7 +100,7 @@ func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect
 		return err
 	}
 
-	rowMap := make(map[any]interface{})
+	rowMap := make(map[any]any)
 
 	elem := reflect.New(elemType).Elem()
 
@@ -115,7 +119,7 @@ func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect
 	}
 
 	for rows.Next() {
-		var fieldPointers []interface{}
+		var fieldPointers []any
 
 		for _, name := range utils.StringsIntersection(systemFieldNames, fields) {
 			ptr := systemFieldsMap[name]
@@ -141,7 +145,7 @@ func (qb *QueryBuilder) handlePreloadPtr(sliceValue reflect.Value, field reflect
 
 		for _, join := range qb.joins {
 			for range join.Select {
-				fieldPointers = append(fieldPointers, new(interface{}))
+				fieldPointers = append(fieldPointers, new(any))
 			}
 		}
 
