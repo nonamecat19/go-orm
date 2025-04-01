@@ -11,9 +11,9 @@ type Adapter interface {
 	PrepareLimit(query string, limit int) string
 	PrepareOffset(query string, offset int) string
 	PrepareSet(query string, set map[string]any, args []any) (string, []any)
-	Where(condition string, where string, args ...any) string
-	AndWhere(condition string, where string, args ...any) string
-	OrWhere(condition string, where string, args ...any) string
+	Where(condition string, args []any) string
+	AndWhere(condition string, where string, args []any) string
+	OrWhere(condition string, where string, args []any) string
 	Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
 	JoinFields(fields []string) string
 	JoinFieldsStrictly(fields []string) string

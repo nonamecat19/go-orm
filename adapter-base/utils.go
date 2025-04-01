@@ -23,7 +23,7 @@ func JoinFieldsStrictly(fields []string) string {
 }
 
 // NormalizeSqlWithArgs change "?" to database valid syntax
-func NormalizeSqlWithArgs(sql string, args []interface{}) string {
+func NormalizeSqlWithArgs(sql string, args []any) string {
 	placeholderIndex := len(args) + 1
 
 	for {
