@@ -62,7 +62,8 @@ func (qb *QueryBuilder) preloadRelationSlice(field reflect.StructField, sliceVal
 	//	fields = utils.StringsIntersection(fields, qb.selectFields)
 	//}
 
-	query := qb.adapter.GetSelectWhereIn(tableName, fields, relationTag, stringEntityIDs)
+	selectValue := qb.adapter.JoinFieldsStrictly(fields)
+	query := qb.adapter.GetSelectWhereIn(tableName, selectValue, relationTag, stringEntityIDs)
 
 	rows, err := qb.ExecuteQuery(query)
 	if err != nil {

@@ -21,7 +21,7 @@ func GetSelectQuery(selectValue string, fromValue string) string {
 	return fmt.Sprintf("SELECT %s FROM %s", selectValue, fromValue)
 }
 
-func GetSelectWhereIn(tableName string, fields []string, fieldName string, fieldValues []string) string {
-	selectQuery := GetSelectQuery(JoinFieldsStrictly(fields), tableName)
+func GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string {
+	selectQuery := GetSelectQuery(selectValue, tableName)
 	return fmt.Sprintf("%s WHERE %s IN (%s)", selectQuery, fieldName, JoinFields(fieldValues))
 }

@@ -16,6 +16,6 @@ func (ap AdapterPostgres) GetSelectQuery(selectValue string, fromValue string) s
 	return base.GetSelectQuery(selectValue, fromValue)
 }
 
-func (ap AdapterPostgres) GetSelectWhereIn(tableName string, fields []string, fieldName string, fieldValues []string) string {
-	return base.GetSelectWhereIn(tableName, fields, fieldName, fieldValues)
+func (ap AdapterPostgres) GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string {
+	return base.GetSelectWhereIn(tableName, selectValue, fieldName, fieldValues)
 }
