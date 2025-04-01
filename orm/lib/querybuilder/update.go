@@ -2,11 +2,10 @@ package querybuilder
 
 import (
 	"errors"
-	"fmt"
 )
 
 // UpdateMany initializes an UPDATE query for the specified entity.
-func (qb *QueryBuilder) UpdateMany(entity interface{}) error {
+func (qb *QueryBuilder) UpdateMany(entity any) error {
 	tableName, _, _, err := qb.extractTableAndFields(entity, true)
 	if err != nil {
 		return err
@@ -20,8 +19,7 @@ func (qb *QueryBuilder) UpdateMany(entity interface{}) error {
 		return errors.New("no updates provided")
 	}
 
-	query := fmt.Sprintf("UPDATE %s", tableName)
-
+	query := qb.adapter.Update(tableName)
 	query = qb.prepareSet(query)
 	query = qb.prepareWhere(query)
 
@@ -32,7 +30,7 @@ func (qb *QueryBuilder) UpdateMany(entity interface{}) error {
 	return err
 }
 
-func (qb *QueryBuilder) SetValues(values map[string]interface{}) *QueryBuilder {
+func (qb *QueryBuilder) SetValues(values map[string]any) *QueryBuilder {
 	qb.set = values
 	return qb
 }

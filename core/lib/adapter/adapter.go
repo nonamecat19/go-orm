@@ -18,4 +18,5 @@ type Adapter interface {
 	JoinFields(fields []string) string
 	JoinFieldsStrictly(fields []string) string
 	NormalizeSqlWithArgs(sql string, args []any) string
+	Update(tableName string) string
 }
