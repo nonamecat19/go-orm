@@ -4,6 +4,6 @@ import (
 	base "adapter-base"
 )
 
-func Update(tableName string) string {
+func (ap AdapterPostgres) Update(tableName string) string {
 	return base.Update(tableName)
 }
