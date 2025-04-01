@@ -11,4 +11,7 @@ type Adapter interface {
 	PrepareLimit(query string, limit int) string
 	PrepareOffset(query string, offset int) string
 	PrepareSet(query string, set map[string]interface{}, args []interface{}) (string, []interface{})
+	Where(condition string, where string, args ...interface{}) string
+	AndWhere(condition string, where string, args ...interface{}) string
+	OrWhere(condition string, where string, args ...interface{}) string
 }
