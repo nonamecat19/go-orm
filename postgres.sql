@@ -1,9 +1,9 @@
 CREATE TABLE users
 (
     id         SERIAL PRIMARY KEY,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NULL,
+    deleted_at TIMESTAMP DEFAULT NULL,
     name       VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL UNIQUE,
     gender     VARCHAR(10)  NOT NULL
@@ -38,8 +38,8 @@ CREATE TABLE orders
     user_id    BIGINT,
     order_date TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    deleted_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    deleted_at TIMESTAMP DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT NULL
 );
 
 INSERT INTO orders (count, user_id, order_date)
