@@ -1,9 +1,10 @@
 package main
 
 import (
-	adaptermssql "adapter-mssql"
+	adaptermysql "adapter-mysql"
 	"fmt"
 	_ "github.com/denisenkom/go-mssqldb"
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/nonamecat19/go-orm/app/entities"
@@ -35,18 +36,30 @@ func main() {
 	//
 	//client := client2.CreateClient(sqliteConfig, sqliteAdapter)
 
-	mssqlConfig := config.ORMConfig{
+	//mssqlConfig := config.ORMConfig{
+	//	Host:     "127.0.0.1",
+	//	Port:     1433,
+	//	User:     "sa",
+	//	Password: "1StrongPwd!!",
+	//	DbName:   "master",
+	//	SSLMode:  false,
+	//}
+	//
+	//mssqlAdapter := adaptermssql.AdapterMSSQL{}
+	//
+	//client := client2.CreateClient(mssqlConfig, mssqlAdapter)
+
+	mysqlConfig := config.ORMConfig{
 		Host:     "127.0.0.1",
-		Port:     1433,
-		User:     "sa",
-		Password: "1StrongPwd!!",
-		DbName:   "master",
-		SSLMode:  false,
+		Port:     3306,
+		User:     "admin",
+		Password: "root",
+		DbName:   "orm",
 	}
 
-	mssqlAdapter := adaptermssql.AdapterMSSQL{}
+	mysqlAdapter := adaptermysql.AdapterMySQL{}
 
-	client := client2.CreateClient(mssqlConfig, mssqlAdapter)
+	client := client2.CreateClient(mysqlConfig, mysqlAdapter)
 
 	//users := []entities.User{
 	//	{

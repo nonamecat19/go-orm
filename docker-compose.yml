@@ -1,7 +1,7 @@
 services:
   postgres:
-    image: postgres:15-alpine
     container_name: postgres_db
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
@@ -9,9 +9,24 @@ services:
     ports:
       - "15432:5432"
     volumes:
-      - data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+
+  mysql:
+    container_name: mysql_db
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orm
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
   sqlserver:
+    container_name: mssql_db
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
@@ -21,7 +36,7 @@ services:
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver_data1:/var/opt/mssql
+      - mssql_data:/var/opt/mssql
     restart: always
     healthcheck:
       test: [ "CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 1StrongPwd!! -C -Q 'SELECT 1' || exit 1" ]
@@ -30,6 +45,7 @@ services:
       start_period: 10s
       timeout: 3s
   sqlserver.configurator:
+    container_name: mssql_configurator
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
     volumes:
@@ -44,5 +60,7 @@ services:
       '
 
 volumes:
-  data:
-  sqlserver_data1:
+  postgres_data:
+  mysql_data:
+  mssql_data:
+

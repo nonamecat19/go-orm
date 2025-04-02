@@ -10,4 +10,5 @@ use (
 	./adapter-sqlite
 	./adapter-base
 	./adapter-mssql
+	./adapter-mysql
 )
