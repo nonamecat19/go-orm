@@ -1,3 +1,35 @@
+DO
+$$
+    BEGIN
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'orders') THEN
+            DROP TABLE orders;
+        END IF;
+
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users') THEN
+            DROP TABLE users;
+        END IF;
+
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'roles') THEN
+            DROP TABLE roles;
+        END IF;
+    END
+$$;
+
+CREATE TABLE roles
+(
+    id         SERIAL PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NULL,
+    deleted_at TIMESTAMP DEFAULT NULL,
+    name       TEXT NOT NULL
+);
+
+INSERT INTO roles (name)
+VALUES ('admin'),
+       ('moderator'),
+       ('user'),
+       ('owner');
+
 CREATE TABLE users
 (
     id         SERIAL PRIMARY KEY,
@@ -6,40 +38,43 @@ CREATE TABLE users
     deleted_at TIMESTAMP DEFAULT NULL,
     name       VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL UNIQUE,
-    gender     VARCHAR(10)  NOT NULL
+    gender     VARCHAR(10)  NOT NULL,
+    role_id    BIGINT,
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
 );
 
-INSERT INTO users (name, email, gender)
-VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female'),
-       ('Bob Smith', 'bob.smith@example.com', 'male'),
-       ('Charlie Brown', 'charlie.brown@example.com', 'male'),
-       ('Diana Prince', 'diana.prince@example.com', 'female'),
-       ('Edward King', 'edward.king@example.com', 'male'),
-       ('Fiona White', 'fiona.white@example.com', 'female'),
-       ('George Hall', 'george.hall@example.com', 'male'),
-       ('Hannah Wright', 'hannah.wright@example.com', 'female'),
-       ('Ivy Green', 'ivy.green@example.com', 'female'),
-       ('Jack Black', 'jack.black@example.com', 'male'),
-       ('Karen Hill', 'karen.hill@example.com', 'female'),
-       ('Liam Adams', 'liam.adams@example.com', 'male'),
-       ('Marie Clark', 'marie.clark@example.com', 'female'),
-       ('Nathan Bell', 'nathan.bell@example.com', 'male'),
-       ('Olivia Wood', 'olivia.wood@example.com', 'female'),
-       ('Patrick Moore', 'patrick.moore@example.com', 'male'),
-       ('Quinn Baker', 'quinn.baker@example.com', 'female'),
-       ('Ruby Fox', 'ruby.fox@example.com', 'female'),
-       ('Sam Hunter', 'sam.hunter@example.com', 'male'),
-       ('Tina Hall', 'tina.hall@example.com', 'female');
+INSERT INTO users (name, email, gender, role_id)
+VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female', 1),
+       ('Bob Smith', 'bob.smith@example.com', 'male', 3),
+       ('Charlie Brown', 'charlie.brown@example.com', 'male', 3),
+       ('Diana Prince', 'diana.prince@example.com', 'female', 3),
+       ('Edward King', 'edward.king@example.com', 'male', 3),
+       ('Fiona White', 'fiona.white@example.com', 'female', 2),
+       ('George Hall', 'george.hall@example.com', 'male', 3),
+       ('Hannah Wright', 'hannah.wright@example.com', 'female', 4),
+       ('Ivy Green', 'ivy.green@example.com', 'female', 2),
+       ('Jack Black', 'jack.black@example.com', 'male', 2),
+       ('Karen Hill', 'karen.hill@example.com', 'female', 3),
+       ('Liam Adams', 'liam.adams@example.com', 'male', 1),
+       ('Marie Clark', 'marie.clark@example.com', 'female', 3),
+       ('Nathan Bell', 'nathan.bell@example.com', 'male', 1),
+       ('Olivia Wood', 'olivia.wood@example.com', 'female', 3),
+       ('Patrick Moore', 'patrick.moore@example.com', 'male', 4),
+       ('Quinn Baker', 'quinn.baker@example.com', 'female', 4),
+       ('Ruby Fox', 'ruby.fox@example.com', 'female', 2),
+       ('Sam Hunter', 'sam.hunter@example.com', 'male', 3),
+       ('Tina Hall', 'tina.hall@example.com', 'female', 2);
 
 CREATE TABLE orders
 (
     id         SERIAL PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP DEFAULT NULL,
+    updated_at TIMESTAMP DEFAULT NULL,
     count      INT       NOT NULL,
     user_id    BIGINT,
     order_date TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    deleted_at TIMESTAMP DEFAULT NULL,
-    updated_at TIMESTAMP DEFAULT NULL
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );
 
 INSERT INTO orders (count, user_id, order_date)

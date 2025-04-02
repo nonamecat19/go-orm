@@ -1,46 +1,85 @@
-CREATE TABLE users
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS drop_tables$$
+CREATE PROCEDURE drop_tables()
+BEGIN
+    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'orders') > 0 THEN
+        DROP TABLE orders;
+    END IF;
+
+    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'users') > 0 THEN
+        DROP TABLE users;
+    END IF;
+
+    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'roles') > 0 THEN
+        DROP TABLE roles;
+    END IF;
+END$$
+
+CALL drop_tables$$
+
+DELIMITER ;
+
+CREATE TABLE roles
 (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id         INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    name       VARCHAR(255) NOT NULL,
-    email      VARCHAR(255) NOT NULL UNIQUE,
-    gender     VARCHAR(10)  NOT NULL
+    updated_at TIMESTAMP    NULL,
+    deleted_at TIMESTAMP    NULL,
+    name       VARCHAR(255) NOT NULL
 );
 
-INSERT INTO users (name, email, gender)
-VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female'),
-       ('Bob Smith', 'bob.smith@example.com', 'male'),
-       ('Charlie Brown', 'charlie.brown@example.com', 'male'),
-       ('Diana Prince', 'diana.prince@example.com', 'female'),
-       ('Edward King', 'edward.king@example.com', 'male'),
-       ('Fiona White', 'fiona.white@example.com', 'female'),
-       ('George Hall', 'george.hall@example.com', 'male'),
-       ('Hannah Wright', 'hannah.wright@example.com', 'female'),
-       ('Ivy Green', 'ivy.green@example.com', 'female'),
-       ('Jack Black', 'jack.black@example.com', 'male'),
-       ('Karen Hill', 'karen.hill@example.com', 'female'),
-       ('Liam Adams', 'liam.adams@example.com', 'male'),
-       ('Marie Clark', 'marie.clark@example.com', 'female'),
-       ('Nathan Bell', 'nathan.bell@example.com', 'male'),
-       ('Olivia Wood', 'olivia.wood@example.com', 'female'),
-       ('Patrick Moore', 'patrick.moore@example.com', 'male'),
-       ('Quinn Baker', 'quinn.baker@example.com', 'female'),
-       ('Ruby Fox', 'ruby.fox@example.com', 'female'),
-       ('Sam Hunter', 'sam.hunter@example.com', 'male'),
-       ('Tina Hall', 'tina.hall@example.com', 'female');
+INSERT INTO roles (name)
+VALUES ('admin'),
+       ('moderator'),
+       ('user'),
+       ('owner');
+
+CREATE TABLE users
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NULL,
+    deleted_at TIMESTAMP    NULL,
+    name       VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL UNIQUE,
+    gender     VARCHAR(10)  NOT NULL,
+    role_id    INT,
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
+);
+
+INSERT INTO users (name, email, gender, role_id)
+VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female', 1),
+       ('Bob Smith', 'bob.smith@example.com', 'male', 3),
+       ('Charlie Brown', 'charlie.brown@example.com', 'male', 3),
+       ('Diana Prince', 'diana.prince@example.com', 'female', 3),
+       ('Edward King', 'edward.king@example.com', 'male', 3),
+       ('Fiona White', 'fiona.white@example.com', 'female', 2),
+       ('George Hall', 'george.hall@example.com', 'male', 3),
+       ('Hannah Wright', 'hannah.wright@example.com', 'female', 4),
+       ('Ivy Green', 'ivy.green@example.com', 'female', 2),
+       ('Jack Black', 'jack.black@example.com', 'male', 2),
+       ('Karen Hill', 'karen.hill@example.com', 'female', 3),
+       ('Liam Adams', 'liam.adams@example.com', 'male', 1),
+       ('Marie Clark', 'marie.clark@example.com', 'female', 3),
+       ('Nathan Bell', 'nathan.bell@example.com', 'male', 1),
+       ('Olivia Wood', 'olivia.wood@example.com', 'female', 3),
+       ('Patrick Moore', 'patrick.moore@example.com', 'male', 4),
+       ('Quinn Baker', 'quinn.baker@example.com', 'female', 4),
+       ('Ruby Fox', 'ruby.fox@example.com', 'female', 2),
+       ('Sam Hunter', 'sam.hunter@example.com', 'male', 3),
+       ('Tina Hall', 'tina.hall@example.com', 'female', 2);
 
 CREATE TABLE orders
 (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    count      INT       NOT NULL,
-    user_id    BIGINT,
-    order_date TIMESTAMP NOT NULL,
+    id         INT AUTO_INCREMENT PRIMARY KEY,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    updated_at TIMESTAMP NULL,
+    count      INT       NOT NULL,
+    user_id    INT,
+    order_date TIMESTAMP NOT NULL,
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );
 
 INSERT INTO orders (count, user_id, order_date)

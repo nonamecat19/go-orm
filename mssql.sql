@@ -1,47 +1,82 @@
+BEGIN TRANSACTION;
+GO
+
+IF OBJECT_ID('orders', 'U') IS NOT NULL
+    DROP TABLE orders;
+GO
+IF OBJECT_ID('users', 'U') IS NOT NULL
+    DROP TABLE users;
+GO
+IF OBJECT_ID('roles', 'U') IS NOT NULL
+    DROP TABLE roles;
+GO
+
+CREATE TABLE roles
+(
+    id         INT IDENTITY (1,1) PRIMARY KEY,
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME      NULL,
+    deleted_at DATETIME      NULL,
+    name       NVARCHAR(255) NOT NULL
+);
+GO
+
+INSERT INTO roles (name)
+VALUES ('admin'),
+       ('moderator'),
+       ('user'),
+       ('owner');
+GO
+
 CREATE TABLE users
 (
-    id         INT IDENTITY(1,1) PRIMARY KEY,
+    id         INT IDENTITY (1,1) PRIMARY KEY,
     created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME NULL,
-    deleted_at DATETIME NULL,
+    updated_at DATETIME      NULL,
+    deleted_at DATETIME      NULL,
     name       NVARCHAR(255) NOT NULL,
     email      NVARCHAR(255) NOT NULL UNIQUE,
-    gender     NVARCHAR(10)  NOT NULL
+    gender     NVARCHAR(10)  NOT NULL,
+    role_id    INT,
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
 );
+GO
 
-INSERT INTO users (name, email, gender)
-VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female'),
-       ('Bob Smith', 'bob.smith@example.com', 'male'),
-       ('Charlie Brown', 'charlie.brown@example.com', 'male'),
-       ('Diana Prince', 'diana.prince@example.com', 'female'),
-       ('Edward King', 'edward.king@example.com', 'male'),
-       ('Fiona White', 'fiona.white@example.com', 'female'),
-       ('George Hall', 'george.hall@example.com', 'male'),
-       ('Hannah Wright', 'hannah.wright@example.com', 'female'),
-       ('Ivy Green', 'ivy.green@example.com', 'female'),
-       ('Jack Black', 'jack.black@example.com', 'male'),
-       ('Karen Hill', 'karen.hill@example.com', 'female'),
-       ('Liam Adams', 'liam.adams@example.com', 'male'),
-       ('Marie Clark', 'marie.clark@example.com', 'female'),
-       ('Nathan Bell', 'nathan.bell@example.com', 'male'),
-       ('Olivia Wood', 'olivia.wood@example.com', 'female'),
-       ('Patrick Moore', 'patrick.moore@example.com', 'male'),
-       ('Quinn Baker', 'quinn.baker@example.com', 'female'),
-       ('Ruby Fox', 'ruby.fox@example.com', 'female'),
-       ('Sam Hunter', 'sam.hunter@example.com', 'male'),
-       ('Tina Hall', 'tina.hall@example.com', 'female');
+INSERT INTO users (name, email, gender, role_id)
+VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female', 1),
+       ('Bob Smith', 'bob.smith@example.com', 'male', 3),
+       ('Charlie Brown', 'charlie.brown@example.com', 'male', 3),
+       ('Diana Prince', 'diana.prince@example.com', 'female', 3),
+       ('Edward King', 'edward.king@example.com', 'male', 3),
+       ('Fiona White', 'fiona.white@example.com', 'female', 2),
+       ('George Hall', 'george.hall@example.com', 'male', 3),
+       ('Hannah Wright', 'hannah.wright@example.com', 'female', 4),
+       ('Ivy Green', 'ivy.green@example.com', 'female', 2),
+       ('Jack Black', 'jack.black@example.com', 'male', 2),
+       ('Karen Hill', 'karen.hill@example.com', 'female', 3),
+       ('Liam Adams', 'liam.adams@example.com', 'male', 1),
+       ('Marie Clark', 'marie.clark@example.com', 'female', 3),
+       ('Nathan Bell', 'nathan.bell@example.com', 'male', 1),
+       ('Olivia Wood', 'olivia.wood@example.com', 'female', 3),
+       ('Patrick Moore', 'patrick.moore@example.com', 'male', 4),
+       ('Quinn Baker', 'quinn.baker@example.com', 'female', 4),
+       ('Ruby Fox', 'ruby.fox@example.com', 'female', 2),
+       ('Sam Hunter', 'sam.hunter@example.com', 'male', 3),
+       ('Tina Hall', 'tina.hall@example.com', 'female', 2);
+GO
 
 CREATE TABLE orders
 (
-    id         INT IDENTITY(1,1) PRIMARY KEY,
-    count      INT NOT NULL,
-    user_id    INT NULL,
-    order_date DATETIME NOT NULL,
+    id         INT IDENTITY (1,1) PRIMARY KEY,
     created_at DATETIME DEFAULT GETDATE(),
     deleted_at DATETIME NULL,
     updated_at DATETIME NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    count      INT      NOT NULL,
+    user_id    INT,
+    order_date DATETIME NOT NULL,
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );
+GO
 
 INSERT INTO orders (count, user_id, order_date)
 VALUES (5, 1, '2023-01-01 10:00:00'),
@@ -64,3 +99,6 @@ VALUES (5, 1, '2023-01-01 10:00:00'),
        (17, 18, '2023-01-18 18:00:00'),
        (13, 19, '2023-01-19 19:00:00'),
        (8, 20, '2023-01-20 20:00:00');
+GO
+
+COMMIT TRANSACTION;

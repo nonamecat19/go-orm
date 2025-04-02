@@ -8,7 +8,8 @@ type User struct {
 	Email  string  `db:"email" json:"email,omitempty"`
 	Gender string  `db:"gender" json:"gender,omitempty"`
 	Orders []Order `db:"orders" json:"orders,omitempty" relation:"user_id"`
-	//Favorites []Favorite `db:"favorites" json:"favorites,omitempty" relation:""`
+	RoleId *int64  `db:"role_id" json:"roleId,omitempty"`
+	Role   *Role   `db:"role" relation:"role_id" json:"role,omitempty"`
 }
 
 func (user User) Info() string {
