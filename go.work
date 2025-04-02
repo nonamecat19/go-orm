@@ -9,4 +9,5 @@ use (
 	./adapter-postgres
 	./adapter-sqlite
 	./adapter-base
+	./adapter-mssql
 )

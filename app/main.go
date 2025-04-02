@@ -1,8 +1,9 @@
 package main
 
 import (
-	adaptersqlite "adapter-sqlite"
+	adaptermssql "adapter-mssql"
 	"fmt"
+	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/nonamecat19/go-orm/app/entities"
@@ -22,17 +23,30 @@ func main() {
 	//	SSLMode:  false,
 	//}
 	//
-	//adapter := adapterpostgres.AdapterPostgres{}
+	//postgresAdapter := adapterpostgres.AdapterPostgres{}
 	//
-	//client := client2.CreateClient(postgresConfig, adapter)
+	//client := client2.CreateClient(postgresConfig, postgresAdapter)
 
-	sqliteConfig := config.ORMConfig{
-		Path: "./sqlite.sqlite",
+	//sqliteConfig := config.ORMConfig{
+	//	Path: "./sqlite.sqlite",
+	//}
+	//
+	//sqliteAdapter := adaptersqlite.AdapterSQLite{}
+	//
+	//client := client2.CreateClient(sqliteConfig, sqliteAdapter)
+
+	mssqlConfig := config.ORMConfig{
+		Host:     "127.0.0.1",
+		Port:     1433,
+		User:     "sa",
+		Password: "1StrongPwd!!",
+		DbName:   "master",
+		SSLMode:  false,
 	}
 
-	adapter := adaptersqlite.AdapterSQLite{}
+	mssqlAdapter := adaptermssql.AdapterMSSQL{}
 
-	client := client2.CreateClient(sqliteConfig, adapter)
+	client := client2.CreateClient(mssqlConfig, mssqlAdapter)
 
 	//users := []entities.User{
 	//	{
