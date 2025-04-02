@@ -26,13 +26,16 @@ func ToSnakeCase(str string) string {
 }
 
 func PrintStructSlice(value any) {
+	fmt.Println(GetStructJSON(value))
+}
+
+func GetStructJSON(value any) string {
 	jsonData, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		return ""
 	}
 
-	fmt.Println(string(jsonData))
+	return string(jsonData)
 }
 
 func StringsIntersection(slice1, slice2 []string) []string {

@@ -15,7 +15,6 @@ func NewConfig() Config {
 }
 
 var PostgresConfig = config.ORMConfig{
-	DbDriver: "postgres",
 	Host:     "localhost",
 	Port:     15432,
 	User:     "postgres",

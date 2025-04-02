@@ -12,7 +12,6 @@ type ORMConfig struct {
 
 type ORMConfigYaml struct {
 	DB struct {
-		DbDriver string `yaml:"driver"`
 		Host     string `yaml:"host"`
 		Port     int    `yaml:"port"`
 		User     string `yaml:"user"`
