@@ -1,12 +1,12 @@
 CREATE TABLE users
 (
-    id         SERIAL PRIMARY KEY,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NULL,
-    deleted_at TIMESTAMP DEFAULT NULL,
-    name       VARCHAR(255) NOT NULL,
-    email      VARCHAR(255) NOT NULL UNIQUE,
-    gender     VARCHAR(10)  NOT NULL
+    id         INT IDENTITY(1,1) PRIMARY KEY,
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
+    name       NVARCHAR(255) NOT NULL,
+    email      NVARCHAR(255) NOT NULL UNIQUE,
+    gender     NVARCHAR(10)  NOT NULL
 );
 
 INSERT INTO users (name, email, gender)
@@ -33,13 +33,14 @@ VALUES ('Alice Johnson', 'alice.johnson@example.com', 'female'),
 
 CREATE TABLE orders
 (
-    id         SERIAL PRIMARY KEY,
-    count      INT       NOT NULL,
-    user_id    BIGINT,
-    order_date TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    deleted_at TIMESTAMP DEFAULT NULL,
-    updated_at TIMESTAMP DEFAULT NULL
+    id         INT IDENTITY(1,1) PRIMARY KEY,
+    count      INT NOT NULL,
+    user_id    INT NULL,
+    order_date DATETIME NOT NULL,
+    created_at DATETIME DEFAULT GETDATE(),
+    deleted_at DATETIME NULL,
+    updated_at DATETIME NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO orders (count, user_id, order_date)
@@ -49,10 +50,10 @@ VALUES (5, 1, '2023-01-01 10:00:00'),
        (7, 4, '2023-01-04 16:00:00'),
        (4, 5, '2023-01-05 18:00:00'),
        (10, 6, '2023-01-06 20:00:00'),
-       (8, null, '2023-01-07 22:00:00'),
+       (8, NULL, '2023-01-07 22:00:00'),
        (6, 8, '2023-01-08 08:00:00'),
        (9, 9, '2023-01-09 09:00:00'),
-       (1, null, '2023-01-10 10:00:00'),
+       (1, NULL, '2023-01-10 10:00:00'),
        (15, 11, '2023-01-11 11:00:00'),
        (12, 12, '2023-01-12 12:00:00'),
        (20, 13, '2023-01-13 13:00:00'),

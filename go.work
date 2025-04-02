@@ -7,5 +7,8 @@ use (
 	./cli
 	./app
 	./adapter-postgres
+	./adapter-sqlite
 	./adapter-base
+	./adapter-mssql
+	./adapter-mysql
 )

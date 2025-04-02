@@ -1,9 +1,12 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres"
+	adaptermysql "adapter-mysql"
 	"fmt"
+	_ "github.com/denisenkom/go-mssqldb"
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	"github.com/nonamecat19/go-orm/core/utils"
@@ -12,18 +15,51 @@ import (
 )
 
 func main() {
-	ormConfig := config.ORMConfig{
+	//postgresConfig := config.ORMConfig{
+	//	Host:     "127.0.0.1",
+	//	Port:     15432,
+	//	User:     "postgres",
+	//	Password: "root",
+	//	DbName:   "orm",
+	//	SSLMode:  false,
+	//}
+	//
+	//postgresAdapter := adapterpostgres.AdapterPostgres{}
+	//
+	//client := client2.CreateClient(postgresConfig, postgresAdapter)
+
+	//sqliteConfig := config.ORMConfig{
+	//	Path: "./sqlite.sqlite",
+	//}
+	//
+	//sqliteAdapter := adaptersqlite.AdapterSQLite{}
+	//
+	//client := client2.CreateClient(sqliteConfig, sqliteAdapter)
+
+	//mssqlConfig := config.ORMConfig{
+	//	Host:     "127.0.0.1",
+	//	Port:     1433,
+	//	User:     "sa",
+	//	Password: "1StrongPwd!!",
+	//	DbName:   "master",
+	//	SSLMode:  false,
+	//}
+	//
+	//mssqlAdapter := adaptermssql.AdapterMSSQL{}
+	//
+	//client := client2.CreateClient(mssqlConfig, mssqlAdapter)
+
+	mysqlConfig := config.ORMConfig{
 		Host:     "127.0.0.1",
-		Port:     15432,
-		User:     "postgres",
+		Port:     3306,
+		User:     "admin",
 		Password: "root",
 		DbName:   "orm",
-		SSLMode:  false,
 	}
 
-	adapter := adapterpostgres.AdapterPostgres{}
+	mysqlAdapter := adaptermysql.AdapterMySQL{}
 
-	client := client2.CreateClient(ormConfig, adapter)
+	client := client2.CreateClient(mysqlConfig, mysqlAdapter)
 
 	//users := []entities.User{
 	//	{
@@ -83,9 +119,8 @@ func main() {
 	var orders []entities.Order
 
 	err := querybuilder.CreateQueryBuilder(client).
-		//Where("id <> ?", 8).
-		//Where("id = ?", 8).
-		//AndWhere("count <> ?", 7).
+		Where("id <> ?", 8).
+		AndWhere("count <> ?", 7).
 		Debug().
 		OrderBy("id ASC").
 		Preload("user").
