@@ -28,3 +28,7 @@ func (ap AdapterMySQL) PrepareSet(query string, set map[string]any, args []any) 
 func (ap AdapterMySQL) PrepareJoins(query string, joins []query.JoinClause) string {
 	return base.PrepareJoins(query, joins)
 }
+
+func (ap AdapterMySQL) PrepareQueryAndArgs(query string, args []any) (string, []any) {
+	return query, args
+}

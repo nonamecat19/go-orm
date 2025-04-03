@@ -97,6 +97,14 @@ func Map[T any, U any](input []T, transformFunc func(T) U) []U {
 	return result
 }
 
+func MapWithIndex[T any, U any](input []T, transformFunc func(T, int) U) []U {
+	result := make([]U, len(input))
+	for i, v := range input {
+		result[i] = transformFunc(v, i)
+	}
+	return result
+}
+
 func Chunk[T any](input []T, size int) [][]T {
 	if size <= 0 {
 		panic("Chunk size must be greater than 0")

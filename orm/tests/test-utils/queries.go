@@ -12,9 +12,8 @@ func FindUsersWithOrdersAndRole(t *testing.T, client client2.DbClient) {
 	var users []entities.User
 
 	err := querybuilder.CreateQueryBuilder(client).
-		Where("name <> ? OR name <> ?", "test1", "User 200").
-		AndWhere("name <> '2'").
-		AndWhere("name <> ?", '3').
+		Where("id > ?", 12).
+		AndWhere("id < ?", 18).
 		Preload("orders").
 		Preload("role").
 		OrderBy("id DESC").

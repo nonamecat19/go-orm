@@ -28,3 +28,7 @@ func (ap AdapterSQLite) PrepareSet(query string, set map[string]any, args []any)
 func (ap AdapterSQLite) PrepareJoins(query string, joins []query.JoinClause) string {
 	return base.PrepareJoins(query, joins)
 }
+
+func (ap AdapterSQLite) PrepareQueryAndArgs(query string, args []any) (string, []any) {
+	return query, args
+}

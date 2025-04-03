@@ -1,6 +1,7 @@
 package test_utils
 
 import (
+	adaptermssql "adapter-mssql"
 	adaptermysql "adapter-mysql"
 	adapterpostgres "adapter-postgres"
 	adaptersqlite "adapter-sqlite"
@@ -44,4 +45,19 @@ func GetSQLiteTestClient() client2.DbClient {
 	sqliteAdapter := adaptersqlite.AdapterSQLite{}
 
 	return client2.CreateClient(sqliteConfig, sqliteAdapter)
+}
+
+func GetMSSQLTestClient() client2.DbClient {
+	mssqlConfig := config.ORMConfig{
+		Host:     "127.0.0.1",
+		Port:     1433,
+		User:     "sa",
+		Password: "1StrongPwd!!",
+		DbName:   "master",
+		SSLMode:  false,
+	}
+
+	mssqlAdapter := adaptermssql.AdapterMSSQL{}
+
+	return client2.CreateClient(mssqlConfig, mssqlAdapter)
 }

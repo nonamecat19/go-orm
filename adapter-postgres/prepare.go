@@ -28,3 +28,7 @@ func (ap AdapterPostgres) PrepareSet(query string, set map[string]any, args []an
 func (ap AdapterPostgres) PrepareJoins(query string, joins []query.JoinClause) string {
 	return base.PrepareJoins(query, joins)
 }
+
+func (ap AdapterPostgres) PrepareQueryAndArgs(query string, args []any) (string, []any) {
+	return query, args
+}

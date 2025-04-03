@@ -59,15 +59,17 @@ func (qb *QueryBuilder) ExecuteBuilderQuery() (*sql.Rows, error) {
 
 // ExecuteQuery runs the query.
 func (qb *QueryBuilder) ExecuteQuery(query string, args ...any) (*sql.Rows, error) {
-	if qb.debug {
-		// Green color for the query
-		fmt.Println("\033[32m" + formatSQL(query) + "\033[0m")
-		// Yellow color for args
-		fmt.Printf("\033[33m%v\033[0m\n", args)
-	}
 	if query == "" {
 		return nil, errors.New("query not built")
 	}
 
-	return qb.client.GetDb().Query(query, args...)
+	preparedQuery, preparedArgs := qb.adapter.PrepareQueryAndArgs(query, args)
+	if qb.debug {
+		// Green color for the query
+		fmt.Println("\033[32m" + formatSQL(preparedQuery) + "\033[0m")
+		// Yellow color for args
+		fmt.Printf("\033[33m%v\033[0m\n", args)
+	}
+
+	return qb.client.GetDb().Query(preparedQuery, preparedArgs...)
 }

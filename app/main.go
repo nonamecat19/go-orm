@@ -1,7 +1,7 @@
 package main
 
 import (
-	adaptermysql "adapter-mysql"
+	adaptermssql "adapter-mssql"
 	"fmt"
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
@@ -33,33 +33,33 @@ func main() {
 	//}
 	//
 	//sqliteAdapter := adaptersqlite.AdapterSQLite{}
-	//
+
 	//client := client2.CreateClient(sqliteConfig, sqliteAdapter)
 
-	//mssqlConfig := config.ORMConfig{
-	//	Host:     "127.0.0.1",
-	//	Port:     1433,
-	//	User:     "sa",
-	//	Password: "1StrongPwd!!",
-	//	DbName:   "master",
-	//	SSLMode:  false,
-	//}
-	//
-	//mssqlAdapter := adaptermssql.AdapterMSSQL{}
-	//
-	//client := client2.CreateClient(mssqlConfig, mssqlAdapter)
-
-	mysqlConfig := config.ORMConfig{
+	mssqlConfig := config.ORMConfig{
 		Host:     "127.0.0.1",
-		Port:     3306,
-		User:     "admin",
-		Password: "root",
-		DbName:   "orm",
+		Port:     1433,
+		User:     "sa",
+		Password: "1StrongPwd!!",
+		DbName:   "master",
+		SSLMode:  false,
 	}
 
-	mysqlAdapter := adaptermysql.AdapterMySQL{}
+	mssqlAdapter := adaptermssql.AdapterMSSQL{}
 
-	client := client2.CreateClient(mysqlConfig, mysqlAdapter)
+	client := client2.CreateClient(mssqlConfig, mssqlAdapter)
+
+	//mysqlConfig := config.ORMConfig{
+	//	Host:     "127.0.0.1",
+	//	Port:     3306,
+	//	User:     "admin",
+	//	Password: "root",
+	//	DbName:   "orm",
+	//}
+	//
+	//mysqlAdapter := adaptermysql.AdapterMySQL{}
+	//
+	//client := client2.CreateClient(mysqlConfig, mysqlAdapter)
 
 	//users := []entities.User{
 	//	{
@@ -82,21 +82,18 @@ func main() {
 	//	Debug().
 	//	InsertOne(users[0])
 
-	//var users []entities.User
+	var users []entities.User
 
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	//Where("name <> ? OR name <> ?", "test1", "User 200").
-	//	//AndWhere("name <> '2'").
-	//	//AndWhere("name <> ?", '3').
-	//	//Select("users.id", "users.name", "users.created_at").
-	//	Debug().
-	//	Preload("orders").
-	//	//AndWhere("name <> ?", "User 200").
-	//	//OrderBy("id DESC").
-	//	//Limit(3).
-	//	//LeftJoinAndSelect("orders", "users.id = orders.user_id", "orders.id", "orders.count").
-	//	//Offset(10).
-	//	FindMany(&users)
+	err := querybuilder.CreateQueryBuilder(client).
+		Where("name <> ? OR name <> ?", "test1", "User 200").
+		AndWhere("name <> '2'").
+		AndWhere("name <> ?", '3').
+		Preload("orders").
+		Preload("role").
+		OrderBy("id DESC").
+		Limit(8).
+		Offset(2).
+		FindMany(&users)
 
 	//err := querybuilder.CreateQueryBuilder(client).
 	//	Where("id = ?", 35).
@@ -109,29 +106,29 @@ func main() {
 	//	AndWhere("id < 42").
 	//	UpdateMany(&entities.User{})
 
-	//if err != nil {
-	//	fmt.Println("Error:", err)
-	//	return
-	//}
-
-	//utils.PrintStructSlice(users)
-
-	var orders []entities.Order
-
-	err := querybuilder.CreateQueryBuilder(client).
-		Where("id <> ?", 8).
-		AndWhere("count <> ?", 7).
-		Debug().
-		OrderBy("id ASC").
-		Preload("user").
-		Limit(15).
-		Offset(1).
-		FindMany(&orders)
-
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	utils.PrintStructSlice(orders)
+	utils.PrintStructSlice(users)
+
+	//var orders []entities.Order
+	//
+	//err := querybuilder.CreateQueryBuilder(client).
+	//	Where("id <> ?", 8).
+	//	AndWhere("count <> ?", 7).
+	//	Debug().
+	//	OrderBy("id ASC").
+	//	Preload("user").
+	//	Limit(15).
+	//	Offset(1).
+	//	FindMany(&orders)
+	//
+	//if err != nil {
+	//	fmt.Println("Error:", err)
+	//	return
+	//}
+	//
+	//utils.PrintStructSlice(orders)
 }
