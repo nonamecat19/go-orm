@@ -5,12 +5,12 @@ import (
 	"testing"
 )
 
-func TestFindUsersWithOrdersAndRole(t *testing.T) {
+func TestPostgresFindUsersWithOrdersAndRole(t *testing.T) {
 	client := GetPostgresTestClient()
 	FindUsersWithOrdersAndRole(t, client)
 }
 
-func TestFindOrdersWithUsers(t *testing.T) {
+func TestPostgresFindOrdersWithUsers(t *testing.T) {
 	client := GetPostgresTestClient()
 	FindOrdersWithUsers(t, client)
 }
