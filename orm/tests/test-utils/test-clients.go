@@ -1,8 +1,9 @@
-package tests
+package test_utils
 
 import (
 	adaptermysql "adapter-mysql"
 	adapterpostgres "adapter-postgres"
+	adaptersqlite "adapter-sqlite"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 )
@@ -33,4 +34,14 @@ func GetMySQLTestClient() client2.DbClient {
 	mysqlAdapter := adaptermysql.AdapterMySQL{}
 
 	return client2.CreateClient(mysqlConfig, mysqlAdapter)
+}
+
+func GetSQLiteTestClient() client2.DbClient {
+	sqliteConfig := config.ORMConfig{
+		Path: "../../../sqlite.sqlite",
+	}
+
+	sqliteAdapter := adaptersqlite.AdapterSQLite{}
+
+	return client2.CreateClient(sqliteConfig, sqliteAdapter)
 }

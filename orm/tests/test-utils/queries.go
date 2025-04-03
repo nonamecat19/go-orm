@@ -1,4 +1,4 @@
-package tests
+package test_utils
 
 import (
 	"github.com/nonamecat19/go-orm/app/entities"
@@ -22,8 +22,8 @@ func FindUsersWithOrdersAndRole(t *testing.T, client client2.DbClient) {
 		Offset(2).
 		FindMany(&users)
 
-	CompareTestOutput(t, users, "./outputs/FindUsersWithOrdersAndRole.json")
 	assert.NoError(t, err, "Expected no error")
+	CompareTestOutput(t, users, "../outputs/FindUsersWithOrdersAndRole.json")
 }
 
 func FindOrdersWithUsers(t *testing.T, client client2.DbClient) {
@@ -38,6 +38,6 @@ func FindOrdersWithUsers(t *testing.T, client client2.DbClient) {
 		Offset(1).
 		FindMany(&orders)
 
-	CompareTestOutput(t, orders, "./outputs/FindOrdersWithUsers.json")
 	assert.NoError(t, err, "Expected no error")
+	CompareTestOutput(t, orders, "../outputs/FindOrdersWithUsers.json")
 }

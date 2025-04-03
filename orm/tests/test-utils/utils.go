@@ -1,4 +1,4 @@
-package tests
+package test_utils
 
 import (
 	"github.com/nonamecat19/go-orm/core/utils"
