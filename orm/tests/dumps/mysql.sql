@@ -29,11 +29,11 @@ CREATE TABLE roles
     name       VARCHAR(255) NOT NULL
 );
 
-INSERT INTO roles (name)
-VALUES ('admin'),
-       ('moderator'),
-       ('user'),
-       ('owner');
+INSERT INTO roles (created_at, name)
+VALUES ('2023-01-01 10:00:00', 'admin'),
+       ('2023-01-01 10:00:00', 'moderator'),
+       ('2023-01-01 10:00:00', 'user'),
+       ('2023-01-01 10:00:00', 'owner');
 
 CREATE TABLE users
 (
@@ -48,27 +48,27 @@ CREATE TABLE users
     CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
 );
 
-INSERT INTO users (users.created_at, name, email, gender, role_id)
-VALUES ('2023-01-01 10:00:00','Alice Johnson', 'alice.johnson@example.com', 'female', 1),
-       ('2023-01-01 10:00:00','Bob Smith', 'bob.smith@example.com', 'male', 3),
-       ('2023-01-01 10:00:00','Charlie Brown', 'charlie.brown@example.com', 'male', 3),
-       ('2023-01-01 10:00:00','Diana Prince', 'diana.prince@example.com', 'female', 3),
-       ('2023-01-01 10:00:00','Edward King', 'edward.king@example.com', 'male', 3),
-       ('2023-01-01 10:00:00','Fiona White', 'fiona.white@example.com', 'female', 2),
-       ('2023-01-01 10:00:00','George Hall', 'george.hall@example.com', 'male', 3),
-       ('2023-01-01 10:00:00','Hannah Wright', 'hannah.wright@example.com', 'female', 4),
-       ('2023-01-01 10:00:00','Ivy Green', 'ivy.green@example.com', 'female', 2),
-       ('2023-01-01 10:00:00','Jack Black', 'jack.black@example.com', 'male', 2),
-       ('2023-01-01 10:00:00','Karen Hill', 'karen.hill@example.com', 'female', 3),
-       ('2023-01-01 10:00:00','Liam Adams', 'liam.adams@example.com', 'male', 1),
-       ('2023-01-01 10:00:00','Marie Clark', 'marie.clark@example.com', 'female', 3),
-       ('2023-01-01 10:00:00','Nathan Bell', 'nathan.bell@example.com', 'male', 1),
-       ('2023-01-01 10:00:00','Olivia Wood', 'olivia.wood@example.com', 'female', 3),
-       ('2023-01-01 10:00:00','Patrick Moore', 'patrick.moore@example.com', 'male', 4),
-       ('2023-01-01 10:00:00','Quinn Baker', 'quinn.baker@example.com', 'female', 4),
-       ('2023-01-01 10:00:00','Ruby Fox', 'ruby.fox@example.com', 'female', 2),
-       ('2023-01-01 10:00:00','Sam Hunter', 'sam.hunter@example.com', 'male', 3),
-       ('2023-01-01 10:00:00','Tina Hall', 'tina.hall@example.com', 'female', 2);
+INSERT INTO users (created_at, name, email, gender, role_id)
+VALUES ('2023-01-01 10:00:00', 'Alice Johnson', 'alice.johnson@example.com', 'female', 1),
+       ('2023-01-01 10:00:00', 'Bob Smith', 'bob.smith@example.com', 'male', 3),
+       ('2023-01-01 10:00:00', 'Charlie Brown', 'charlie.brown@example.com', 'male', 3),
+       ('2023-01-01 10:00:00', 'Diana Prince', 'diana.prince@example.com', 'female', 3),
+       ('2023-01-01 10:00:00', 'Edward King', 'edward.king@example.com', 'male', 3),
+       ('2023-01-01 10:00:00', 'Fiona White', 'fiona.white@example.com', 'female', 2),
+       ('2023-01-01 10:00:00', 'George Hall', 'george.hall@example.com', 'male', 3),
+       ('2023-01-01 10:00:00', 'Hannah Wright', 'hannah.wright@example.com', 'female', 4),
+       ('2023-01-01 10:00:00', 'Ivy Green', 'ivy.green@example.com', 'female', 2),
+       ('2023-01-01 10:00:00', 'Jack Black', 'jack.black@example.com', 'male', 2),
+       ('2023-01-01 10:00:00', 'Karen Hill', 'karen.hill@example.com', 'female', 3),
+       ('2023-01-01 10:00:00', 'Liam Adams', 'liam.adams@example.com', 'male', 1),
+       ('2023-01-01 10:00:00', 'Marie Clark', 'marie.clark@example.com', 'female', 3),
+       ('2023-01-01 10:00:00', 'Nathan Bell', 'nathan.bell@example.com', 'male', 1),
+       ('2023-01-01 10:00:00', 'Olivia Wood', 'olivia.wood@example.com', 'female', 3),
+       ('2023-01-01 10:00:00', 'Patrick Moore', 'patrick.moore@example.com', 'male', 4),
+       ('2023-01-01 10:00:00', 'Quinn Baker', 'quinn.baker@example.com', 'female', 4),
+       ('2023-01-01 10:00:00', 'Ruby Fox', 'ruby.fox@example.com', 'female', 2),
+       ('2023-01-01 10:00:00', 'Sam Hunter', 'sam.hunter@example.com', 'male', 3),
+       ('2023-01-01 10:00:00', 'Tina Hall', 'tina.hall@example.com', 'female', 2);
 
 CREATE TABLE orders
 (
