@@ -1,0 +1,226 @@
+[
+  {
+    "id": 18,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Ruby Fox",
+    "email": "ruby.fox@example.com",
+    "gender": "female",
+    "orders": [
+      {
+        "id": 18,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 17,
+        "userId": 18,
+        "orderDate": "2023-01-18T18:00:00Z"
+      }
+    ],
+    "roleId": 2,
+    "role": {
+      "id": 2,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "moderator"
+    }
+  },
+  {
+    "id": 17,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Quinn Baker",
+    "email": "quinn.baker@example.com",
+    "gender": "female",
+    "orders": [
+      {
+        "id": 17,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 22,
+        "userId": 18,
+        "orderDate": "2023-01-17T17:00:00Z"
+      }
+    ],
+    "roleId": 4,
+    "role": {
+      "id": 4,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "owner"
+    }
+  },
+  {
+    "id": 16,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Patrick Moore",
+    "email": "patrick.moore@example.com",
+    "gender": "male",
+    "orders": [
+      {
+        "id": 16,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 30,
+        "userId": 18,
+        "orderDate": "2023-01-16T16:00:00Z"
+      }
+    ],
+    "roleId": 4,
+    "role": {
+      "id": 4,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "owner"
+    }
+  },
+  {
+    "id": 15,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Olivia Wood",
+    "email": "olivia.wood@example.com",
+    "gender": "female",
+    "orders": [
+      {
+        "id": 15,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 25,
+        "userId": 18,
+        "orderDate": "2023-01-15T15:00:00Z"
+      }
+    ],
+    "roleId": 3,
+    "role": {
+      "id": 3,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "user"
+    }
+  },
+  {
+    "id": 14,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Nathan Bell",
+    "email": "nathan.bell@example.com",
+    "gender": "male",
+    "orders": [
+      {
+        "id": 14,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 18,
+        "userId": 18,
+        "orderDate": "2023-01-14T14:00:00Z"
+      }
+    ],
+    "roleId": 1,
+    "role": {
+      "id": 1,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "admin"
+    }
+  },
+  {
+    "id": 13,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Marie Clark",
+    "email": "marie.clark@example.com",
+    "gender": "female",
+    "orders": [
+      {
+        "id": 13,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 20,
+        "userId": 18,
+        "orderDate": "2023-01-13T13:00:00Z"
+      }
+    ],
+    "roleId": 3,
+    "role": {
+      "id": 3,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "user"
+    }
+  },
+  {
+    "id": 12,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Liam Adams",
+    "email": "liam.adams@example.com",
+    "gender": "male",
+    "orders": [
+      {
+        "id": 12,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 12,
+        "userId": 18,
+        "orderDate": "2023-01-12T12:00:00Z"
+      }
+    ],
+    "roleId": 1,
+    "role": {
+      "id": 1,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "admin"
+    }
+  },
+  {
+    "id": 11,
+    "created_at": "2023-01-01T10:00:00Z",
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "Karen Hill",
+    "email": "karen.hill@example.com",
+    "gender": "female",
+    "orders": [
+      {
+        "id": 11,
+        "created_at": "2023-01-01T10:00:00Z",
+        "updated_at": null,
+        "deleted_at": null,
+        "count": 15,
+        "userId": 18,
+        "orderDate": "2023-01-11T11:00:00Z"
+      }
+    ],
+    "roleId": 3,
+    "role": {
+      "id": 3,
+      "created_at": "2023-01-01T10:00:00Z",
+      "updated_at": null,
+      "deleted_at": null,
+      "name": "user"
+    }
+  }
+]
