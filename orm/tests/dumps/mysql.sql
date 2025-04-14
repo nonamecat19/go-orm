@@ -1,24 +1,6 @@
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS drop_tables$$
-CREATE PROCEDURE drop_tables()
-BEGIN
-    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'orders') > 0 THEN
-        DROP TABLE orders;
-    END IF;
-
-    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'users') > 0 THEN
-        DROP TABLE users;
-    END IF;
-
-    IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'roles') > 0 THEN
-        DROP TABLE roles;
-    END IF;
-END$$
-
-CALL drop_tables$$
-
-DELIMITER ;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS orders;
 
 CREATE TABLE roles
 (
@@ -44,8 +26,7 @@ CREATE TABLE users
     name       VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL UNIQUE,
     gender     VARCHAR(10)  NOT NULL,
-    role_id    INT,
-    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
+    role_id    INT
 );
 
 INSERT INTO users (created_at, name, email, gender, role_id)
@@ -78,8 +59,7 @@ CREATE TABLE orders
     updated_at TIMESTAMP NULL,
     count      INT       NOT NULL,
     user_id    INT,
-    order_date TIMESTAMP NOT NULL,
-    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+    order_date TIMESTAMP NOT NULL
 );
 
 INSERT INTO orders (created_at, count, user_id, order_date)

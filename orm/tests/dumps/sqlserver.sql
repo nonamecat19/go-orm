@@ -1,15 +1,11 @@
-BEGIN TRANSACTION;
-GO
-
 IF OBJECT_ID('orders', 'U') IS NOT NULL
     DROP TABLE orders;
-GO
+
 IF OBJECT_ID('users', 'U') IS NOT NULL
     DROP TABLE users;
-GO
+
 IF OBJECT_ID('roles', 'U') IS NOT NULL
     DROP TABLE roles;
-GO
 
 CREATE TABLE roles
 (
@@ -19,14 +15,12 @@ CREATE TABLE roles
     deleted_at DATETIME      NULL,
     name       NVARCHAR(255) NOT NULL
 );
-GO
 
 INSERT INTO roles (created_at, name)
 VALUES ('2023-01-01 10:00:00', 'admin'),
        ('2023-01-01 10:00:00', 'moderator'),
        ('2023-01-01 10:00:00', 'user'),
        ('2023-01-01 10:00:00', 'owner');
-GO
 
 CREATE TABLE users
 (
@@ -40,7 +34,6 @@ CREATE TABLE users
     role_id    INT,
     CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE SET NULL
 );
-GO
 
 INSERT INTO users (created_at, name, email, gender, role_id)
 VALUES ('2023-01-01 10:00:00', 'Alice Johnson', 'alice.johnson@example.com', 'female', 1),
@@ -63,7 +56,6 @@ VALUES ('2023-01-01 10:00:00', 'Alice Johnson', 'alice.johnson@example.com', 'fe
        ('2023-01-01 10:00:00', 'Ruby Fox', 'ruby.fox@example.com', 'female', 2),
        ('2023-01-01 10:00:00', 'Sam Hunter', 'sam.hunter@example.com', 'male', 3),
        ('2023-01-01 10:00:00', 'Tina Hall', 'tina.hall@example.com', 'female', 2);
-GO
 
 CREATE TABLE orders
 (
@@ -76,7 +68,6 @@ CREATE TABLE orders
     order_date DATETIME NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
 );
-GO
 
 INSERT INTO orders (created_at, count, user_id, order_date)
 VALUES ('2023-01-01 10:00:00', 5, 1, '2023-01-01 10:00:00'),
@@ -99,6 +90,3 @@ VALUES ('2023-01-01 10:00:00', 5, 1, '2023-01-01 10:00:00'),
        ('2023-01-01 10:00:00', 17, 18, '2023-01-18 18:00:00'),
        ('2023-01-01 10:00:00', 13, 19, '2023-01-19 19:00:00'),
        ('2023-01-01 10:00:00', 8, 20, '2023-01-20 20:00:00');
-GO
-
-COMMIT TRANSACTION;

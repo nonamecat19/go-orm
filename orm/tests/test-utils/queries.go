@@ -9,6 +9,7 @@ import (
 )
 
 func FindUsersWithOrdersAndRole(t *testing.T, client client2.DbClient) {
+	PrepareDB(t, client)
 	var users []entities.User
 
 	err := querybuilder.CreateQueryBuilder(client).
@@ -22,10 +23,11 @@ func FindUsersWithOrdersAndRole(t *testing.T, client client2.DbClient) {
 		FindMany(&users)
 
 	assert.NoError(t, err, "Expected no error")
-	CompareTestOutput(t, users, "../outputs/FindUsersWithOrdersAndRole.json")
+	CompareTestOutput(t, users, "../outputs/FindUsersWithOrdersAndRole")
 }
 
 func FindOrdersWithUsers(t *testing.T, client client2.DbClient) {
+	PrepareDB(t, client)
 	var orders []entities.Order
 
 	err := querybuilder.CreateQueryBuilder(client).
@@ -38,5 +40,5 @@ func FindOrdersWithUsers(t *testing.T, client client2.DbClient) {
 		FindMany(&orders)
 
 	assert.NoError(t, err, "Expected no error")
-	CompareTestOutput(t, orders, "../outputs/FindOrdersWithUsers.json")
+	CompareTestOutput(t, orders, "../outputs/FindOrdersWithUsers")
 }
