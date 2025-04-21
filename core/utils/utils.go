@@ -25,6 +25,14 @@ func ToSnakeCase(str string) string {
 	return strings.ToLower(snake)
 }
 
+func ToHumanCase(str string) string {
+	words := strings.Split(str, "_")
+	for i := range words {
+		words[i] = strings.Title(words[i])
+	}
+	return strings.Join(words, " ")
+}
+
 func PrintStructSlice(value any) {
 	fmt.Println(GetStructJSON(value))
 }

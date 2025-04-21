@@ -1,51 +1,31 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
-	_ "github.com/lib/pq"
-	"github.com/nonamecat19/go-orm/orm/lib/client"
-	"github.com/nonamecat19/go-orm/studio/internal/config"
+	appUtils "github.com/nonamecat19/go-orm/core/utils"
+	"github.com/nonamecat19/go-orm/studio/internal/utils"
 	"github.com/nonamecat19/go-orm/studio/internal/view/settings"
-	"github.com/nonamecat19/go-orm/studio/internal/view/tables"
+	tablesView "github.com/nonamecat19/go-orm/studio/internal/view/tables"
 )
 
 func TablesPage(c *fiber.Ctx) error {
-	//config.PostgresConfig
+	sharedData := utils.GetSharedData(c)
 
-	dbClient := client.CreateClient(config.PostgresConfig)
-	db := dbClient.GetDb()
-
-	rows, err := db.Query(`
-		SELECT table_name
-		FROM information_schema.tables
-		WHERE table_schema = 'public';
-    `)
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-
-	var tableName string
-	fmt.Println("Tables in the public schema:")
-	for rows.Next() {
-		err := rows.Scan(&tableName)
-		if err != nil {
-			panic(err)
+	tables := make([]tablesView.Table, len(sharedData.Tables))
+	for i, table := range sharedData.Tables {
+		name := table.Info()
+		tables[i] = tablesView.Table{
+			Title: appUtils.ToHumanCase(name),
+			ID:    name,
 		}
-		fmt.Println(tableName)
 	}
 
-	props := tables.TablePageProps{
-		Tables: []tables.Table{
-			{Title: "Users", ID: "1"},
-			{Title: "Orders", ID: "2"},
-			{Title: "Products", ID: "3"},
-		},
+	props := tablesView.TablePageProps{
+		Tables: tables,
 	}
 
-	return Render(c, tables.TablesPage(props))
+	return Render(c, tablesView.TablesPage(props))
 }
 
 func SettingsPage(c *fiber.Ctx) error {

@@ -1,24 +1,11 @@
 package config
 
-import (
-	"github.com/nonamecat19/go-orm/core/lib/config"
-)
-
-type Config struct {
+type StudioConfig struct {
 	ServerAddr string
 }
 
-func NewConfig() Config {
-	return Config{
+func NewConfig() StudioConfig {
+	return StudioConfig{
 		ServerAddr: ":8080",
 	}
-}
-
-var PostgresConfig = config.ORMConfig{
-	Host:     "localhost",
-	Port:     15432,
-	User:     "postgres",
-	Password: "root",
-	DbName:   "orm",
-	SSLMode:  false,
 }
