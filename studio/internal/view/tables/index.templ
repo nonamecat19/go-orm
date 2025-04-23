@@ -17,7 +17,9 @@ templ TablesPage(props TablePageProps) {
 		<ul>
             for _, table := range props.Tables {
                 <li>
-                    <strong>{table.Title}</strong> - ID: {table.ID}
+                    <a href={"/tables/" + table.ID}>
+                        <strong>{table.Title}</strong> - ID: {table.ID}
+                    </a>
                 </li>
             }
 		</ul>

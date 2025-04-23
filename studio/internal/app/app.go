@@ -28,6 +28,7 @@ func Run(ctx context.Context, tables []coreEntities.IEntity, client client.DbCli
 	})
 
 	app.Get("/", handlers.TablesPage)
+	app.Get("/tables/:id", handlers.TableDetailPage)
 	app.Get("/settings", handlers.SettingsPage)
 
 	app.Use("/assets", filesystem.New(filesystem.Config{

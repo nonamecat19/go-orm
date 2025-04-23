@@ -28,6 +28,24 @@ func TablesPage(c *fiber.Ctx) error {
 	return Render(c, tablesView.TablesPage(props))
 }
 
+func TableDetailPage(c *fiber.Ctx) error {
+	sharedData := utils.GetSharedData(c)
+	tableID := c.Params("id")
+
+	if _, ok := sharedData.TableMap[tableID]; !ok {
+		// TODO: not found page
+		//return Render(c, tablesView.TableDetailPage(props))
+	}
+
+	props := tablesView.TableDetailProps{
+		Table: tablesView.Table{
+			Title: appUtils.ToHumanCase(tableID),
+			ID:    tableID,
+		},
+	}
+	return Render(c, tablesView.TableDetailPage(props))
+}
+
 func SettingsPage(c *fiber.Ctx) error {
 	return Render(c, settings.SettingsPage())
 }

@@ -1,0 +1,15 @@
+package tables
+
+import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
+
+type TableDetailProps struct {
+	Table Table
+}
+
+templ TableDetailPage(props TableDetailProps) {
+	@layout.Base(layout.BaseProps{Title: props.Table.Title}) {
+		<h1>{props.Table.Title}</h1>
+		<p>ID: {props.Table.ID}</p>
+		<a href="/">Back to tables</a>
+	}
+}
