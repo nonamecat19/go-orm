@@ -167,7 +167,7 @@ func AddPrefix(prefix string, slice []string) []string {
 	return result
 }
 
-// ExtractFields extract all field names from entity
+// ExtractFields extract all field names from an entity
 func ExtractFields(entity reflect.Type) []string {
 	var fieldNames []string
 

@@ -51,7 +51,7 @@ func (qb *QueryBuilder) preloadRelationSlice(field reflect.StructField, sliceVal
 		}
 	}
 
-	_, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(field.Type.Elem(), true)
+	_, entityFieldNames, systemFieldNames, err := utils.ExtractTableAndFieldsFromType(field.Type.Elem(), true)
 	if err != nil {
 		return err
 	}
@@ -92,7 +92,7 @@ func (qb *QueryBuilder) preloadRelationSlice(field reflect.StructField, sliceVal
 func (qb *QueryBuilder) handlePreloadSlice(sliceValue reflect.Value, field reflect.StructField, rows *sql.Rows, relationFieldName string, relationFieldTag string) error {
 	elemType := field.Type.Elem()
 
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
+	tableName, entityFieldNames, systemFieldNames, err := utils.ExtractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}

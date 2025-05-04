@@ -2,11 +2,12 @@ package querybuilder
 
 import (
 	"errors"
+	"github.com/nonamecat19/go-orm/core/utils"
 )
 
 // DeleteMany initializes a DELETE query for the specified entity.
 func (qb *QueryBuilder) DeleteMany(entity any) error {
-	tableName, _, _, err := qb.extractTableAndFields(entity, true)
+	tableName, _, _, err := utils.ExtractTableAndFields(entity, true)
 	if err != nil {
 		return err
 	}

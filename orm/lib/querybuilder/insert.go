@@ -32,7 +32,7 @@ func (qb *QueryBuilder) InsertMany(entities any) error {
 func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 	elementType := sliceValue.Type().Elem()
 
-	tableName, entityFieldNames, _, err := qb.extractTableAndFieldsFromType(elementType, false)
+	tableName, entityFieldNames, _, err := utils.ExtractTableAndFieldsFromType(elementType, false)
 
 	var queryArgs []any
 
