@@ -1,6 +1,8 @@
 package tables
 
 import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
+import "github.com/nonamecat19/go-orm/studio/internal/view/components"
+import "fmt"
 
 type TableDetailProps struct {
 	Table  Table
@@ -23,10 +25,18 @@ templ TableDetailPage(props TableDetailProps) {
 					</tr>
 				</thead>
 				<tbody>
-					for _, row := range props.Data {
+					for rowIndex, row := range props.Data {
 						<tr>
-							for _, field := range row {
-								<td>{ field }</td>
+							for fieldIndex, field := range row {
+								<td>
+									@components.Modal(components.ModalProps{
+										TriggerTitle: field,
+										ModalTitle: "Hello",
+										Key: fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
+									}) {
+										<p class="py-4">Press ESC key or click the button below to close</p>
+									}
+								</td>
 							}
 						</tr>
 					}
