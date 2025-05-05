@@ -3,13 +3,35 @@ package tables
 import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
 
 type TableDetailProps struct {
-	Table Table
+	Table  Table
+	Data   [][]string
+	Fields []string
 }
 
 templ TableDetailPage(props TableDetailProps) {
 	@layout.Base(layout.BaseProps{Title: props.Table.Title}) {
-		<h1>{props.Table.Title}</h1>
-		<p>ID: {props.Table.ID}</p>
+		<h1>{ props.Table.Title }</h1>
+		<p>ID: { props.Table.ID }</p>
 		<a href="/">Back to tables</a>
+		<div class="overflow-x-auto">
+			<table class="table table-zebra">
+				<thead>
+					<tr>
+						for _, field := range props.Fields {
+							<th>{ field }</th>
+						}
+					</tr>
+				</thead>
+				<tbody>
+					for _, row := range props.Data {
+						<tr>
+							for _, field := range row {
+								<td>{ field }</td>
+							}
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
 	}
 }

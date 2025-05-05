@@ -15,13 +15,13 @@ templ TablesPage(props TablePageProps) {
 	@layout.Base(layout.BaseProps{Title: "Main page"}) {
 		<h1 class="bg-red-500">Hello 2world!</h1>
 		<ul>
-            for _, table := range props.Tables {
-                <li>
-                    <a href={"/tables/" + table.ID}>
-                        <strong>{table.Title}</strong> - ID: {table.ID}
-                    </a>
-                </li>
-            }
+			for _, table := range props.Tables {
+				<li>
+					<a href={ "/tables/" + templ.SafeURL(table.ID) }>
+						<strong>{ table.Title }</strong> - ID: { table.ID }
+					</a>
+				</li>
+			}
 		</ul>
 	}
 }
