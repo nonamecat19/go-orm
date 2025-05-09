@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
-	"github.com/nonamecat19/go-orm/app/entities"
 	entities2 "github.com/nonamecat19/go-orm/core/lib/entities"
 	coreUtils "github.com/nonamecat19/go-orm/core/utils"
 	"github.com/nonamecat19/go-orm/orm/lib/querybuilder"
@@ -37,32 +36,36 @@ func TableDetailPage(c *fiber.Ctx) error {
 	sharedData := utils.GetSharedData(c)
 	tableID := c.Params("id")
 
-	if _, ok := sharedData.TableMap[tableID]; !ok {
+	currentTable := sharedData.TableMap[tableID]
+
+	if currentTable == nil {
 		// TODO: not found page
 		//return Render(c, tablesView.TableDetailPage(props))
 	}
 
-	var orders []entities.Order
-	_ = querybuilder.CreateQueryBuilder(sharedData.DbClient).FindMany(&orders)
+	entityType := reflect.TypeOf(currentTable)
+	sliceType := reflect.SliceOf(entityType)
+	records := reflect.New(sliceType).Interface()
+	_ = querybuilder.CreateQueryBuilder(sharedData.DbClient).FindMany(records)
 
-	entityFields, _ := coreUtils.GetEntityFields(&entities.Order{})
+	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
 	systemFields := coreUtils.GetSystemFields()
 	fields := append(systemFields, entityFields...)
 
-	dataSlice := make([][]string, len(orders))
-	for i, record := range orders {
+	dataSlice := make([][]string, reflect.ValueOf(records).Elem().Len())
+	for i := 0; i < reflect.ValueOf(records).Elem().Len(); i++ {
 		var values []string
+		record := reflect.ValueOf(records).Elem().Index(i)
 
 		for _, field := range systemFields {
-			v := reflect.ValueOf(record)
 			fieldName, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(entities2.Model{}), field)
-			value := coreUtils.StringifyReflectValue(v.FieldByName(fieldName))
+			value := coreUtils.StringifyReflectValue(record.FieldByName(fieldName))
 			values = append(values, fmt.Sprint(value))
 		}
 
 		for _, field := range entityFields {
-			fieldName, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(record), field)
-			value := coreUtils.StringifyReflectValue(reflect.ValueOf(record).FieldByName(fieldName))
+			fieldName, _ := coreUtils.GetFieldNameByTagValue(record.Type(), field)
+			value := coreUtils.StringifyReflectValue(record.FieldByName(fieldName))
 			values = append(values, fmt.Sprint(value))
 		}
 
