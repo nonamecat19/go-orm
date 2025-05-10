@@ -1,0 +1,46 @@
+package themes
+
+var themesList = []string{
+	"light", "dark", "cupcake", "bumblebee",
+	"emerald", "corporate", "synthwave", "retro",
+	"cyberpunk", "valentine", "halloween", "garden",
+	"forest", "aqua", "lofi", "pastel",
+	"fantasy", "wireframe", "black", "luxury",
+	"dracula", "cmyk", "autumn", "business",
+	"acid", "lemonade", "night", "coffee",
+	"winter", "dim", "nord", "sunset",
+}
+
+templ ThemeChangeSection() {
+	<div id="themeContainer" class="rounded-box grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+		for _, theme := range themesList {
+			@ThemeItem(theme)
+		}
+	</div>
+	<script>
+		function applyTheme(theme) {
+			document.documentElement.setAttribute("data-theme", theme);
+			localStorage.setItem("selectedTheme", theme);
+		}
+
+		function initThemeHandling() {
+			const savedTheme = localStorage.getItem("selectedTheme");
+			if (savedTheme) {
+				applyTheme(savedTheme);
+				const radio = document.querySelector(`input[name="theme"][value="${savedTheme}"]`);
+				if (radio) radio.checked = true;
+			}
+
+			document.querySelectorAll('input[name="theme"]').forEach(radio => {
+				radio.addEventListener("change", () => {
+					if (radio.checked) {
+						applyTheme(radio.value);
+					}
+				});
+			});
+		}
+
+		document.addEventListener("DOMContentLoaded", initThemeHandling);
+		document.body.addEventListener("htmx:afterSettle", initThemeHandling);
+	</script>
+}

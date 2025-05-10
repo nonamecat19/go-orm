@@ -1,0 +1,19 @@
+package themes
+
+templ Example(background string) {
+	<div class={background + " flex aspect-square w-5 items-center justify-center rounded lg:w-6"}>
+		<div class="text-primary-content text-sm font-bold">A</div>
+	</div>
+}
+
+var exampleColorsList = []string{
+	"bg-primary", "bg-secondary", "bg-accent", "bg-neutral",
+}
+
+templ ColorExamples() {
+	<div class="flex flex-wrap gap-1">
+		for _, color := range exampleColorsList {
+			@Example(color)
+		}
+	</div>
+}

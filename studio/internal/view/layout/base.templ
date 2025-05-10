@@ -5,18 +5,19 @@ type BaseProps struct {
 }
 
 templ Base(props BaseProps) {
-	<!doctype html>
-		<html lang="en">
+	<!DOCTYPE html>
+	<html lang="en">
 		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+			<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 			<link rel="stylesheet" href="/assets/web/public/assets/main.css"/>
-			<title>{props.Title}</title>
+			<title>{ props.Title }</title>
 		</head>
 		<body hx-boost="true">
 			@header()
 			{ children... }
+			@ThemeInit()
 			<script src="/assets/web/public/assets/main.js"></script>
 		</body>
 	</html>
@@ -34,4 +35,14 @@ templ header() {
 			</ul>
 		</div>
 	</header>
+}
+
+templ ThemeInit() {
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const theme = localStorage.getItem("selectedTheme") || "nord"
+			document.documentElement.setAttribute("data-theme", theme);
+			localStorage.setItem("selectedTheme", theme);
+		});
+	</script>
 }
