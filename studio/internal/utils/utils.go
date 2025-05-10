@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"
 	"github.com/nonamecat19/go-orm/orm/lib/client"
@@ -32,4 +33,9 @@ func GetSharedData(c *fiber.Ctx) SharedData {
 		Tables:   tables,
 		DbClient: dbClient,
 	}
+}
+
+func Render(c *fiber.Ctx, component templ.Component) error {
+	c.Set("Content-Type", "text/html")
+	return component.Render(c.Context(), c.Response().BodyWriter())
 }

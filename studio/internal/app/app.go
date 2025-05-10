@@ -9,7 +9,8 @@ import (
 	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"
 	"github.com/nonamecat19/go-orm/orm/lib/client"
 	"github.com/nonamecat19/go-orm/studio/internal/config"
-	"github.com/nonamecat19/go-orm/studio/internal/handlers"
+	"github.com/nonamecat19/go-orm/studio/internal/handlers/settingsGroup"
+	"github.com/nonamecat19/go-orm/studio/internal/handlers/tablesGroup"
 	"github.com/nonamecat19/go-orm/studio/internal/utils"
 )
 
@@ -27,11 +28,11 @@ func Run(ctx context.Context, tables []coreEntities.IEntity, client client.DbCli
 		return c.Next()
 	})
 
-	app.Get("/", handlers.TablesPage)
-	app.Get("/tables/:id", handlers.TableDetailPage)
-	app.Get("/settings", handlers.SettingsPage)
+	app.Get("/", tablesGroup.TablesPage)
+	app.Get("/tables/:id", tablesGroup.TableDetailPage)
+	app.Get("/settings", settingsGroup.SettingsPage)
 
-	app.Post("/api/tables/:id/records", handlers.AddTableRecord)
+	app.Post("/api/tables/:id/records", tablesGroup.AddTableRecord)
 
 	app.Use("/assets", filesystem.New(filesystem.Config{
 		Root: packr.New("Assets Box", "."),

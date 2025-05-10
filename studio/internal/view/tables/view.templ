@@ -3,18 +3,19 @@ package tables
 import (
 	"context"
 	"fmt"
+	"github.com/nonamecat19/go-orm/studio/internal/model"
 	"github.com/nonamecat19/go-orm/studio/internal/view/components"
 	"github.com/nonamecat19/go-orm/studio/internal/view/layout"
 	"io"
 )
 
-templ TableViewSection(fields []FieldInfo, data [][]string) {
+templ TableViewSection(fields []model.FieldInfo, data [][]string) {
 	@layout.SectionContainer() {
 		@TableViewContent(fields, data)
 	}
 }
 
-templ TableViewContent(fields []FieldInfo, data [][]string) {
+templ TableViewContent(fields []model.FieldInfo, data [][]string) {
 	<div class="overflow-x-auto" id="table-container">
 		<table class="table table-zebra">
 			@TableViewHeading(fields)
@@ -23,7 +24,7 @@ templ TableViewContent(fields []FieldInfo, data [][]string) {
 	</div>
 }
 
-templ TableViewHeading(fields []FieldInfo) {
+templ TableViewHeading(fields []model.FieldInfo) {
 	<thead>
 		<tr>
 			for _, field := range fields {
@@ -31,8 +32,8 @@ templ TableViewHeading(fields []FieldInfo) {
 					<a
 						hx-get={ "?sort=" + field.Name + "&dir=" + getSortDirection(field) }
 						hx-target="#table-container"
-					   	hx-swap="outerHTML"
-					   	class="flex items-center cursor-pointer"
+						hx-swap="outerHTML"
+						class="flex items-center cursor-pointer"
 					>
 						<div>
 							<div>{ field.Name }</div>
@@ -53,7 +54,7 @@ templ TableViewHeading(fields []FieldInfo) {
 	</thead>
 }
 
-func getSortDirection(field FieldInfo) string {
+func getSortDirection(field model.FieldInfo) string {
 	if field.IsSorted && field.SortDirection == "asc" {
 		return "desc"
 	}
@@ -72,7 +73,7 @@ templ TableViewBody(data [][]string) {
 									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
 								})
 							}()),
-
+						
 							ModalTitle: "Hello",
 							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
 						}) {

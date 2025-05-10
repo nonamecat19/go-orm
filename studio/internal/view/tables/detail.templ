@@ -1,14 +1,13 @@
 package tables
 
-import (
-	"github.com/nonamecat19/go-orm/studio/internal/view/components"
-	"github.com/nonamecat19/go-orm/studio/internal/view/layout"
-)
+import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
+import "github.com/nonamecat19/go-orm/studio/internal/view/components"
+import "github.com/nonamecat19/go-orm/studio/internal/model"
 
 type TableDetailProps struct {
 	Table  Table
 	Data   [][]string
-	Fields []FieldInfo
+	Fields []model.FieldInfo
 }
 
 templ TableDetailPage(props TableDetailProps) {
@@ -36,22 +35,14 @@ templ TableInfoSection(title string, id string) {
 	}
 }
 
-templ TableEditSection(fields []FieldInfo, tableID string) {
+templ TableEditSection(fields []model.FieldInfo, tableID string) {
 	@layout.SectionContainer() {
 		@layout.HorizontalContainer() {
 			@components.AddRecord(components.AddRecordProps{
-				Fields:  getFieldNames(fields),
+				Fields:  fields,
 				TableID: tableID,
 			})
 			@components.RefreshButton()
 		}
 	}
-}
-
-func getFieldNames(fields []FieldInfo) []string {
-	names := make([]string, len(fields))
-	for i, field := range fields {
-		names[i] = field.Name
-	}
-	return names
 }
