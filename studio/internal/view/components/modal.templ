@@ -1,7 +1,7 @@
 package components
 
 type ModalProps struct {
-	TriggerTitle string
+	Trigger templ.Component
 	ModalTitle   string
 	Key          string
 }
@@ -9,7 +9,7 @@ type ModalProps struct {
 templ Modal(props ModalProps) {
 	<div>
 		<button onclick={ templ.JSFuncCall("tableEdit_showModal", props.Key) }>
-			{ props.TriggerTitle }
+			@props.Trigger
 		</button>
 		<dialog id={ props.Key } class="modal">
 			<div class="modal-box">

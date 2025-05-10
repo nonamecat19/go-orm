@@ -5,7 +5,6 @@ import "github.com/nonamecat19/go-orm/studio/internal/view/settings/themes"
 
 templ SettingsPage() {
 	@layout.Base(layout.BaseProps{Title: "Settings"}) {
-		<h1>Settings</h1>
 		@themes.ThemeChangeSection()
 	}
 }

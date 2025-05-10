@@ -1,5 +1,7 @@
 package themes
 
+import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
+
 var themesList = []string{
 	"light", "dark", "cupcake", "bumblebee",
 	"emerald", "corporate", "synthwave", "retro",
@@ -12,11 +14,14 @@ var themesList = []string{
 }
 
 templ ThemeChangeSection() {
-	<div id="themeContainer" class="rounded-box grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-		for _, theme := range themesList {
-			@ThemeItem(theme)
-		}
-	</div>
+	@layout.SectionContainer() {
+		@layout.SectionHeading("Обрати тему")
+		<div id="themeContainer" class="rounded-box grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+			for _, theme := range themesList {
+				@ThemeItem(theme)
+			}
+		</div>
+	}
 	<script>
 		function applyTheme(theme) {
 			document.documentElement.setAttribute("data-theme", theme);

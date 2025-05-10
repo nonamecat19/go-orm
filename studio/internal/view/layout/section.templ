@@ -1,0 +1,13 @@
+package layout
+
+templ SectionContainer() {
+	<div class="border border-neutral rounded-md p-4">
+		@VerticalContainer() {
+			{ children... }
+		}
+	</div>
+}
+
+templ SectionHeading(text string) {
+	<h1 class="text-lg font-bold">{text}</h1>
+}

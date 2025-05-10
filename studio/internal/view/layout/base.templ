@@ -15,23 +15,24 @@ templ Base(props BaseProps) {
 			<title>{ props.Title }</title>
 		</head>
 		<body hx-boost="true">
-			@header()
-			{ children... }
+			@BaseHeader()
+			<div class="px-10 py-4">
+				{ children... }
+			</div>
 			@ThemeInit()
 			<script src="/assets/web/public/assets/main.js"></script>
 		</body>
 	</html>
 }
 
-templ header() {
+templ BaseHeader() {
 	<header class="navbar bg-primary text-primary-content">
-		<div class="flex-1">
-			<a href="/" class="btn btn-ghost text-xl">My App</a>
-		</div>
+		<ul class="flex-1 menu menu-horizontal">
+			<li><a href="/">На головну</a></li>
+		</ul>
 		<div class="flex-none">
 			<ul class="menu menu-horizontal">
-				<li><a href="/">Home</a></li>
-				<li><a href="/settings">Settings</a></li>
+				<li><a href="/settings">Налаштування</a></li>
 			</ul>
 		</div>
 	</header>
