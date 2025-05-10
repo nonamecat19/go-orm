@@ -50,8 +50,11 @@ templ TableViewBody(data [][]string) {
 						}
 					</td>
 				}
-				<td>
-					@DeleteRowButton()
+				<td class="flex justify-end">
+					@layout.HorizontalContainer() {
+						@EditRowButton()
+						@DeleteRowButton()
+					}
 				</td>
 			</tr>
 		}
