@@ -18,7 +18,7 @@ templ TableDetailPage(props TableDetailProps) {
 				@TableInfoSection(props.Table.Title, props.Table.ID)
 				@TableEditSection(props.Fields, props.Table.ID)
 			}
-			@TableViewSection(props.Fields, props.Data)
+			@TableViewSectionWithTableID(props.Fields, props.Data, props.Table.ID)
 		}
 	}
 }

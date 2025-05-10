@@ -1,26 +1,142 @@
 package recordForm
 
+import (
+	"github.com/nonamecat19/go-orm/studio/internal/model"
+	"strings"
+)
+
 type AddNewRecordFormProps struct {
-	Fields  []string
+	Fields  []model.FieldInfo
 	TableID string
 }
 
+type EditRecordFormProps struct {
+	Fields  []model.FieldInfo
+	TableID string
+	RowID   string
+	Row     []string
+}
+
+templ renderFieldInput(field model.FieldInfo) {
+	if strings.Contains(field.Type, "int") {
+		@IntegerInput(field)
+	} else if strings.Contains(field.Type, "float") {
+		@FloatInput(field)
+	} else if strings.Contains(field.Type, "bool") {
+		@BooleanInput(field)
+	} else if strings.Contains(field.Type, "time.Time") {
+		@DateTimeInput(field)
+	} else if strings.Contains(field.Type, "string") {
+		@StringInput(field)
+	} else {
+		@DefaultInput(field)
+	}
+}
+
 templ baseRecordForm(props AddNewRecordFormProps) {
-	<form id="add-record-form" hx-post={ "/api/tables/" + props.TableID + "/records" } hx-swap="none">
-		for _, field := range props.Fields {
-			<div class="form-control w-full max-w-xs mb-4">
-				<label class="label">
-					<span class="label-text">{ field }</span>
-				</label>
-				<input type="text" name={ field } placeholder={ "Enter " + field } class="input input-bordered w-full max-w-xs" />
+	<div class="p-4 bg-base-200 rounded-lg">
+		<div id="success-message" class="alert alert-success mb-4 hidden">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+			<span>Record saved successfully!</span>
+		</div>
+		<form
+			id="add-record-form"
+			hx-post={ "/api/tables/" + props.TableID + "/records" }
+			hx-swap="none"
+			hx-indicator="#form-spinner"
+			hx-target="#success-message"
+			hx-on-success="document.getElementById('success-message').classList.remove('hidden'); document.getElementById('add-record-form').reset();"
+		>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				for _, field := range props.Fields {
+					<div class="form-control w-full mb-4">
+						<label class="label">
+							<span class="label-text font-medium">{ field.Name }</span>
+							<span class="label-text-alt text-xs text-gray-500">{ field.Type }</span>
+						</label>
+						@renderFieldInput(field)
+					</div>
+				}
 			</div>
-		}
-		<button type="submit" class="btn btn-primary mt-4">Save</button>
-	</form>
+			<div class="flex items-center gap-4 mt-6">
+				<button type="submit" class="btn btn-primary">
+					Save Record
+				</button>
+				<div id="form-spinner" class="htmx-indicator flex items-center">
+					<span class="loading loading-spinner loading-md mr-2"></span>
+					Saving...
+				</div>
+			</div>
+		</form>
+	</div>
 }
 
 templ AddNewRecordForm(props AddNewRecordFormProps) {
 	<div>
 		@baseRecordForm(props)
+	</div>
+}
+
+templ renderFieldInputWithValue(field model.FieldInfo, value string) {
+	if strings.Contains(field.Type, "int") {
+		@IntegerInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "float") {
+		@FloatInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "bool") {
+		@BooleanInputWithValue(field, value == "true")
+	} else if strings.Contains(field.Type, "time.Time") {
+		@DateTimeInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "string") {
+		@StringInputWithValue(field, value)
+	} else {
+		@DefaultInputWithValue(field, value)
+	}
+}
+
+templ editRecordForm(props EditRecordFormProps) {
+	<div class="p-4 bg-base-200 rounded-lg">
+		<div id="edit-success-message" class="alert alert-success mb-4 hidden">
+			<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+			<span>Record updated successfully!</span>
+		</div>
+		<form
+			id="edit-record-form"
+			hx-put={ "/api/tables/" + props.TableID + "/records/" + props.RowID }
+			hx-swap="none"
+			hx-indicator="#edit-form-spinner"
+			hx-target="#edit-success-message"
+			hx-on-success="document.getElementById('edit-success-message').classList.remove('hidden');"
+		>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				for i, field := range props.Fields {
+					<div class="form-control w-full mb-4">
+						<label class="label">
+							<span class="label-text font-medium">{ field.Name }</span>
+							<span class="label-text-alt text-xs text-gray-500">{ field.Type }</span>
+						</label>
+						if i < len(props.Row) {
+							@renderFieldInputWithValue(field, props.Row[i])
+						} else {
+							@renderFieldInput(field)
+						}
+					</div>
+				}
+			</div>
+			<div class="flex items-center gap-4 mt-6">
+				<button type="submit" class="btn btn-primary">
+					Update Record
+				</button>
+				<div id="edit-form-spinner" class="htmx-indicator flex items-center">
+					<span class="loading loading-spinner loading-md mr-2"></span>
+					Updating...
+				</div>
+			</div>
+		</form>
+	</div>
+}
+
+templ EditRecordForm(props EditRecordFormProps) {
+	<div>
+		@editRecordForm(props)
 	</div>
 }

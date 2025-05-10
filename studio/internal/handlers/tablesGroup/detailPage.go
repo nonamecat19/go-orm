@@ -92,7 +92,7 @@ func TableDetailPage(c *fiber.Ctx) error {
 	}
 
 	if c.Get("HX-Request") == "true" {
-		return utils.Render(c, tablesView.TableViewContent(props.Fields, props.Data))
+		return utils.Render(c, tablesView.TableViewContent(props.Fields, props.Data, tableID))
 	}
 
 	return utils.Render(c, tablesView.TableDetailPage(props))

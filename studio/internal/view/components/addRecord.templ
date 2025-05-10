@@ -9,7 +9,7 @@ type AddRecordProps struct {
 	TableID string
 }
 
-templ addRecordButton() {
+templ addRecordTrigger() {
 	<div class="btn btn-primary">
 		@icons.Plus()
 		<span class="ml-1">Додати запис</span>
@@ -18,7 +18,7 @@ templ addRecordButton() {
 
 templ AddRecord(props AddRecordProps) {
 	@Modal(ModalProps{
-		Trigger: addRecordButton(), 
+		Trigger: addRecordTrigger(),
 		ModalTitle: "Додати запис", 
 		Key: "add_record",
 	}) {

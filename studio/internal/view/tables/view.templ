@@ -11,15 +11,21 @@ import (
 
 templ TableViewSection(fields []model.FieldInfo, data [][]string) {
 	@layout.SectionContainer() {
-		@TableViewContent(fields, data)
+		@TableViewContent(fields, data, "")
 	}
 }
 
-templ TableViewContent(fields []model.FieldInfo, data [][]string) {
+templ TableViewSectionWithTableID(fields []model.FieldInfo, data [][]string, tableID string) {
+	@layout.SectionContainer() {
+		@TableViewContent(fields, data, tableID)
+	}
+}
+
+templ TableViewContent(fields []model.FieldInfo, data [][]string, tableID string) {
 	<div class="overflow-x-auto" id="table-container">
 		<table class="table table-zebra">
 			@TableViewHeading(fields)
-			@TableViewBody(data)
+			@TableViewBody(data, tableID, fields)
 		</table>
 	</div>
 }
@@ -61,7 +67,7 @@ func getSortDirection(field model.FieldInfo) string {
 	return "asc"
 }
 
-templ TableViewBody(data [][]string) {
+templ TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) {
 	<tbody>
 		for rowIndex, row := range data {
 			<tr>
@@ -83,11 +89,22 @@ templ TableViewBody(data [][]string) {
 				}
 				<td class="flex justify-end">
 					@layout.HorizontalContainer() {
-						@EditRowButton()
-						@DeleteRowButton()
+						@EditRowButtonWithProps(EditRowButtonProps{
+							TableID: tableID,
+							RowID:   fmt.Sprintf("%d", rowIndex),
+							Row:     row,
+							Fields:  fields,
+						})
+						@DeleteRowButtonWithProps(DeleteRowButtonProps{
+							TableID: tableID,
+							RowID:   fmt.Sprintf("%d", rowIndex),
+						})
 					}
 				</td>
 			</tr>
 		}
 	</tbody>
+}
+
+templ TemplateName() {
 }

@@ -1,9 +1,39 @@
 package tables
 
-import "github.com/nonamecat19/go-orm/studio/internal/view/icons"
+import (
+	"github.com/nonamecat19/go-orm/studio/internal/view/icons"
+	"github.com/nonamecat19/go-orm/studio/internal/view/components"
+	"github.com/nonamecat19/go-orm/studio/internal/view/recordForm"
+	"github.com/nonamecat19/go-orm/studio/internal/model"
+	"fmt"
+)
 
-templ EditRowButton() {
-	<button class="btn btn-neutral btn-sm btn-square">
+type EditRowButtonProps struct {
+	TableID string
+	RowID   string
+	Row     []string
+	Fields  []model.FieldInfo
+}
+
+templ EditRowButtonTrigger(text string) {
+	<div class="btn btn-neutral btn-sm btn-square">
 		@icons.Pencil()
-	</button>
+	</div>
+}
+
+templ EditRowButtonWithProps(props EditRowButtonProps) {
+	@components.Modal(components.ModalProps{
+		Trigger:    EditRowButtonTrigger(fmt.Sprintf("edit_row_%s", props.RowID)),
+		ModalTitle: "Редагувати запис",
+		Key:        fmt.Sprintf("edit_row_%s", props.RowID),
+	}) {
+		<div class="p-2 max-w-4xl mx-auto">
+			@recordForm.EditRecordForm(recordForm.EditRecordFormProps{
+				Fields:  props.Fields,
+				TableID: props.TableID,
+				RowID:   props.RowID,
+				Row:     props.Row,
+			})
+		</div>
+	}
 }
