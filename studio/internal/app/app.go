@@ -31,6 +31,8 @@ func Run(ctx context.Context, tables []coreEntities.IEntity, client client.DbCli
 	app.Get("/tables/:id", handlers.TableDetailPage)
 	app.Get("/settings", handlers.SettingsPage)
 
+	app.Post("/api/tables/:id/records", handlers.AddTableRecord)
+
 	app.Use("/assets", filesystem.New(filesystem.Config{
 		Root: packr.New("Assets Box", "."),
 	}))

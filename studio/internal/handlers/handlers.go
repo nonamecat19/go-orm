@@ -87,6 +87,30 @@ func SettingsPage(c *fiber.Ctx) error {
 	return Render(c, settings.SettingsPage())
 }
 
+func AddTableRecord(c *fiber.Ctx) error {
+	sharedData := utils.GetSharedData(c)
+	tableID := c.Params("id")
+
+	currentTable := sharedData.TableMap[tableID]
+	if currentTable == nil {
+		return c.Status(fiber.StatusNotFound).SendString("Table not found")
+	}
+
+	entityType := reflect.TypeOf(currentTable)
+
+	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
+
+	fmt.Println("Received form data for table:", tableID)
+	for _, field := range entityFields {
+		fieldValue := c.FormValue(field)
+		fmt.Printf("Field: %s, Value: %s\n", field, fieldValue)
+	}
+
+	// TODO: Implement record creation using the appropriate querybuilder method
+	c.Set("HX-Redirect", "/tables/"+tableID)
+	return c.SendString("Record added successfully")
+}
+
 func Render(c *fiber.Ctx, component templ.Component) error {
 	c.Set("Content-Type", "text/html")
 	return component.Render(c.Context(), c.Response().BodyWriter())

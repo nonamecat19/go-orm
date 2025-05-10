@@ -1,8 +1,11 @@
 package components
 
 import "github.com/nonamecat19/go-orm/studio/internal/view/icons"
+import "github.com/nonamecat19/go-orm/studio/internal/view/recordForm"
 
 type AddRecordProps struct {
+	Fields  []string
+	TableID string
 }
 
 templ addRecordButton() {
@@ -15,7 +18,10 @@ templ addRecordButton() {
 templ AddRecord(props AddRecordProps) {
 	@Modal(ModalProps{Trigger: addRecordButton(), ModalTitle: "Додати запис", Key: "add_record"}) {
 		<div>
-			asdfasdf
+			@recordForm.AddNewRecordForm(recordForm.AddNewRecordFormProps{
+				Fields:  props.Fields,
+				TableID: props.TableID,
+			})
 		</div>
 	}
 }

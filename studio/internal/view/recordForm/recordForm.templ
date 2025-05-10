@@ -1,11 +1,26 @@
 package recordForm
 
-templ baseRecordForm() {
-
+type AddNewRecordFormProps struct {
+	Fields  []string
+	TableID string
 }
 
-templ AddNewRecordForm() {
+templ baseRecordForm(props AddNewRecordFormProps) {
+	<form id="add-record-form" hx-post={ "/api/tables/" + props.TableID + "/records" } hx-swap="none">
+		for _, field := range props.Fields {
+			<div class="form-control w-full max-w-xs mb-4">
+				<label class="label">
+					<span class="label-text">{ field }</span>
+				</label>
+				<input type="text" name={ field } placeholder={ "Enter " + field } class="input input-bordered w-full max-w-xs" />
+			</div>
+		}
+		<button type="submit" class="btn btn-primary mt-4">Save</button>
+	</form>
+}
+
+templ AddNewRecordForm(props AddNewRecordFormProps) {
 	<div>
-		@baseRecordForm()
+		@baseRecordForm(props)
 	</div>
 }
