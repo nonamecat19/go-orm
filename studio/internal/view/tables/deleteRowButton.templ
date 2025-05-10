@@ -15,7 +15,7 @@ templ DeleteRowButton() {
 }
 
 templ DeleteRowButtonWithProps(props DeleteRowButtonProps) {
-	<button 
+	<button
 		class="btn btn-error btn-sm btn-square"
 		hx-delete={ "/api/tables/" + props.TableID + "/records/" + props.RowID }
 		hx-confirm="Are you sure you want to delete this record? This action cannot be undone."

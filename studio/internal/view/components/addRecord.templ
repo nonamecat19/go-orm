@@ -18,9 +18,9 @@ templ addRecordTrigger() {
 
 templ AddRecord(props AddRecordProps) {
 	@Modal(ModalProps{
-		Trigger: addRecordTrigger(),
-		ModalTitle: "Додати запис", 
-		Key: "add_record",
+		Trigger:    addRecordTrigger(),
+		ModalTitle: "Додати запис",
+		Key:        "add_record",
 	}) {
 		<div class="p-2 max-w-4xl mx-auto">
 			@recordForm.AddNewRecordForm(recordForm.AddNewRecordFormProps{

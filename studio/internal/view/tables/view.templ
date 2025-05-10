@@ -85,7 +85,7 @@ templ TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) {
 									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
 								})
 							}()),
-
+						
 							ModalTitle: "Hello",
 							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
 						}) {
