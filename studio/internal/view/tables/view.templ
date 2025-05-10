@@ -1,0 +1,59 @@
+package tables
+
+import (
+	"context"
+	"fmt"
+	"github.com/nonamecat19/go-orm/studio/internal/view/components"
+	"github.com/nonamecat19/go-orm/studio/internal/view/layout"
+	"io"
+)
+
+templ TableViewSection(fields []string, data [][]string) {
+	@layout.SectionContainer() {
+		<div class="overflow-x-auto">
+			<table class="table table-zebra">
+				@TableViewHeading(fields)
+				@TableViewBody(data)
+			</table>
+		</div>
+	}
+}
+
+templ TableViewHeading(fields []string) {
+	<thead>
+		<tr>
+			for _, field := range fields {
+				<th>{ field }</th>
+			}
+			<th></th>
+		</tr>
+	</thead>
+}
+
+templ TableViewBody(data [][]string) {
+	<tbody>
+		for rowIndex, row := range data {
+			<tr>
+				for fieldIndex, field := range row {
+					<td>
+						@components.Modal(components.ModalProps{
+							Trigger: templ.Component(func() templ.Component {
+								return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
+								})
+							}()),
+						
+							ModalTitle: "Hello",
+							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
+						}) {
+							<p class="py-4">Press ESC key or click the button below to close</p>
+						}
+					</td>
+				}
+				<td>
+					@DeleteRowButton()
+				</td>
+			</tr>
+		}
+	</tbody>
+}
