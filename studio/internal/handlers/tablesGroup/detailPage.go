@@ -10,20 +10,19 @@ import (
 	"github.com/nonamecat19/go-orm/studio/internal/utils"
 	tablesView "github.com/nonamecat19/go-orm/studio/internal/view/tables"
 	"reflect"
+	"strings"
 )
 
-func TableDetailPage(c *fiber.Ctx) error {
-	sharedData := utils.GetSharedData(c)
-	tableID := c.Params("id")
+func isFieldNullable(fieldType string) bool {
+	return strings.Contains(fieldType, "*")
+}
 
+func getTableRecords(sharedData utils.SharedData, tableID, sortField, sortDir string) (interface{}, reflect.Type) {
 	currentTable := sharedData.TableMap[tableID]
 
 	if currentTable == nil {
-		// TODO: not found page
+		return nil, nil
 	}
-
-	sortField := c.Query("sort", "id")
-	sortDir := c.Query("dir", "asc")
 
 	entityType := reflect.TypeOf(currentTable)
 	sliceType := reflect.SliceOf(entityType)
@@ -33,9 +32,10 @@ func TableDetailPage(c *fiber.Ctx) error {
 		OrderBy(fmt.Sprintf("%s %s", sortField, sortDir)).
 		FindMany(records)
 
-	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
-	systemFields := coreUtils.GetSystemFields()
+	return records, entityType
+}
 
+func buildFieldInfo(entityType reflect.Type, systemFields, entityFields []string, sortField, sortDir string) []model.FieldInfo {
 	fields := make([]model.FieldInfo, len(systemFields)+len(entityFields))
 
 	for i, fieldName := range systemFields {
@@ -47,6 +47,7 @@ func TableDetailPage(c *fiber.Ctx) error {
 			Type:          fieldType,
 			IsSorted:      sortField == fieldName,
 			SortDirection: sortDir,
+			IsNullable:    isFieldNullable(fieldType),
 		}
 	}
 
@@ -59,13 +60,20 @@ func TableDetailPage(c *fiber.Ctx) error {
 			Type:          fieldType,
 			IsSorted:      sortField == fieldName,
 			SortDirection: sortDir,
+			IsNullable:    isFieldNullable(fieldType),
 		}
 	}
 
-	dataSlice := make([][]string, reflect.ValueOf(records).Elem().Len())
-	for i := 0; i < reflect.ValueOf(records).Elem().Len(); i++ {
+	return fields
+}
+
+func buildDataSlice(records interface{}, systemFields, entityFields []string) [][]string {
+	recordsValue := reflect.ValueOf(records).Elem()
+	dataSlice := make([][]string, recordsValue.Len())
+
+	for i := 0; i < recordsValue.Len(); i++ {
 		var values []string
-		record := reflect.ValueOf(records).Elem().Index(i)
+		record := recordsValue.Index(i)
 
 		for _, field := range systemFields {
 			fieldName, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(entities2.Model{}), field)
@@ -81,6 +89,28 @@ func TableDetailPage(c *fiber.Ctx) error {
 
 		dataSlice[i] = values
 	}
+
+	return dataSlice
+}
+
+func TableDetailPage(c *fiber.Ctx) error {
+	sharedData := utils.GetSharedData(c)
+	tableID := c.Params("id")
+
+	sortField := c.Query("sort", "id")
+	sortDir := c.Query("dir", "asc")
+
+	records, entityType := getTableRecords(sharedData, tableID, sortField, sortDir)
+	if entityType == nil {
+		// TODO: not found page
+		return c.Status(fiber.StatusNotFound).SendString("Table not found")
+	}
+
+	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
+	systemFields := coreUtils.GetSystemFields()
+
+	fields := buildFieldInfo(entityType, systemFields, entityFields, sortField, sortDir)
+	dataSlice := buildDataSlice(records, systemFields, entityFields)
 
 	props := tablesView.TableDetailProps{
 		Table: tablesView.Table{

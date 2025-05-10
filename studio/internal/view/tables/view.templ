@@ -39,10 +39,16 @@ templ TableViewHeading(fields []model.FieldInfo) {
 						hx-get={ "?sort=" + field.Name + "&dir=" + getSortDirection(field) }
 						hx-target="#table-container"
 						hx-swap="outerHTML"
+						hx-push-url="true"
 						class="flex items-center cursor-pointer"
 					>
 						<div>
-							<div>{ field.Name }</div>
+							<div class="flex items-center">
+								{ field.Name }
+								if field.IsNullable {
+									<span class="ml-1 badge badge-sm badge-ghost">nullable</span>
+								}
+							</div>
 							<div class="text-xs text-gray-500">{ field.Type }</div>
 						</div>
 						if field.IsSorted {
@@ -79,7 +85,7 @@ templ TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) {
 									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
 								})
 							}()),
-						
+
 							ModalTitle: "Hello",
 							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
 						}) {
