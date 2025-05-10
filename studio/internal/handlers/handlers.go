@@ -40,13 +40,18 @@ func TableDetailPage(c *fiber.Ctx) error {
 
 	if currentTable == nil {
 		// TODO: not found page
-		//return Render(c, tablesView.TableDetailPage(props))
 	}
+
+	sortField := c.Query("sort", "id")
+	sortDir := c.Query("dir", "asc")
 
 	entityType := reflect.TypeOf(currentTable)
 	sliceType := reflect.SliceOf(entityType)
 	records := reflect.New(sliceType).Interface()
-	_ = querybuilder.CreateQueryBuilder(sharedData.DbClient).FindMany(records)
+
+	_ = querybuilder.CreateQueryBuilder(sharedData.DbClient).
+		OrderBy(fmt.Sprintf("%s %s", sortField, sortDir)).
+		FindMany(records)
 
 	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
 	systemFields := coreUtils.GetSystemFields()
@@ -58,8 +63,10 @@ func TableDetailPage(c *fiber.Ctx) error {
 		field, _ := reflect.TypeOf(entities2.Model{}).FieldByName(fieldNameStr)
 		fieldType := field.Type.String()
 		fields[i] = tablesView.FieldInfo{
-			Name: fieldName,
-			Type: fieldType,
+			Name:          fieldName,
+			Type:          fieldType,
+			IsSorted:      sortField == fieldName,
+			SortDirection: sortDir,
 		}
 	}
 
@@ -68,8 +75,10 @@ func TableDetailPage(c *fiber.Ctx) error {
 		field, _ := entityType.FieldByName(fieldNameStr)
 		fieldType := field.Type.String()
 		fields[len(systemFields)+i] = tablesView.FieldInfo{
-			Name: fieldName,
-			Type: fieldType,
+			Name:          fieldName,
+			Type:          fieldType,
+			IsSorted:      sortField == fieldName,
+			SortDirection: sortDir,
 		}
 	}
 
@@ -101,6 +110,11 @@ func TableDetailPage(c *fiber.Ctx) error {
 		Data:   dataSlice,
 		Fields: fields,
 	}
+
+	if c.Get("HX-Request") == "true" {
+		return Render(c, tablesView.TableViewContent(props.Fields, props.Data))
+	}
+
 	return Render(c, tablesView.TableDetailPage(props))
 }
 

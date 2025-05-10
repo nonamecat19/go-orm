@@ -1,8 +1,10 @@
 package tables
 
 type FieldInfo struct {
-	Name string
-	Type string
+	Name          string
+	Type          string
+	IsSorted      bool
+	SortDirection string
 }
 
 func GetFieldNames(fields []FieldInfo) []string {

@@ -19,6 +19,9 @@ templ RefreshButton() {
 		<button
 			class="btn"
 			aria-label="Оновити дані"
+			hx-get="javascript:window.location.href"
+			hx-target="#table-container"
+			hx-swap="outerHTML"
 		>
 			@icons.Rotate()
 		</button>
