@@ -5,4 +5,5 @@ type FieldInfo struct {
 	Type          string
 	IsSorted      bool
 	SortDirection string
+	IsNullable    bool
 }
