@@ -8,7 +8,7 @@ import (
 	"io"
 )
 
-templ TableViewSection(fields []string, data [][]string) {
+templ TableViewSection(fields []FieldInfo, data [][]string) {
 	@layout.SectionContainer() {
 		<div class="overflow-x-auto">
 			<table class="table table-zebra">
@@ -19,11 +19,14 @@ templ TableViewSection(fields []string, data [][]string) {
 	}
 }
 
-templ TableViewHeading(fields []string) {
+templ TableViewHeading(fields []FieldInfo) {
 	<thead>
 		<tr>
 			for _, field := range fields {
-				<th>{ field }</th>
+				<th>
+					<div>{ field.Name }</div>
+					<div class="text-xs text-gray-500">{ field.Type }</div>
+				</th>
 			}
 			<th></th>
 		</tr>
@@ -42,7 +45,7 @@ templ TableViewBody(data [][]string) {
 									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
 								})
 							}()),
-						
+
 							ModalTitle: "Hello",
 							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
 						}) {

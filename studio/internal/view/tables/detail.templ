@@ -8,7 +8,7 @@ import (
 type TableDetailProps struct {
 	Table  Table
 	Data   [][]string
-	Fields []string
+	Fields []FieldInfo
 }
 
 templ TableDetailPage(props TableDetailProps) {
@@ -36,14 +36,22 @@ templ TableInfoSection(title string, id string) {
 	}
 }
 
-templ TableEditSection(fields []string, tableID string) {
+templ TableEditSection(fields []FieldInfo, tableID string) {
 	@layout.SectionContainer() {
 		@layout.HorizontalContainer() {
 			@components.AddRecord(components.AddRecordProps{
-				Fields:  fields,
+				Fields:  getFieldNames(fields),
 				TableID: tableID,
 			})
 			@components.RefreshButton()
 		}
 	}
+}
+
+func getFieldNames(fields []FieldInfo) []string {
+	names := make([]string, len(fields))
+	for i, field := range fields {
+		names[i] = field.Name
+	}
+	return names
 }

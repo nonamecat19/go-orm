@@ -50,7 +50,28 @@ func TableDetailPage(c *fiber.Ctx) error {
 
 	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
 	systemFields := coreUtils.GetSystemFields()
-	fields := append(systemFields, entityFields...)
+
+	fields := make([]tablesView.FieldInfo, len(systemFields)+len(entityFields))
+
+	for i, fieldName := range systemFields {
+		fieldNameStr, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(entities2.Model{}), fieldName)
+		field, _ := reflect.TypeOf(entities2.Model{}).FieldByName(fieldNameStr)
+		fieldType := field.Type.String()
+		fields[i] = tablesView.FieldInfo{
+			Name: fieldName,
+			Type: fieldType,
+		}
+	}
+
+	for i, fieldName := range entityFields {
+		fieldNameStr, _ := coreUtils.GetFieldNameByTagValue(entityType, fieldName)
+		field, _ := entityType.FieldByName(fieldNameStr)
+		fieldType := field.Type.String()
+		fields[len(systemFields)+i] = tablesView.FieldInfo{
+			Name: fieldName,
+			Type: fieldType,
+		}
+	}
 
 	dataSlice := make([][]string, reflect.ValueOf(records).Elem().Len())
 	for i := 0; i < reflect.ValueOf(records).Elem().Len(); i++ {
