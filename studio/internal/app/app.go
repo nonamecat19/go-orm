@@ -33,6 +33,7 @@ func Run(ctx context.Context, tables []coreEntities.IEntity, client client.DbCli
 	app.Get("/settings", settingsGroup.SettingsPage)
 
 	app.Post("/api/tables/:id/records", tablesGroup.AddTableRecord)
+	app.Put("/api/tables/:id/records", tablesGroup.UpdateTableRecord)
 
 	app.Use("/assets", filesystem.New(filesystem.Config{
 		Root: packr.New("Assets Box", "."),

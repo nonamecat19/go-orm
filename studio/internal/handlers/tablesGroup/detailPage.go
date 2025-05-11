@@ -102,7 +102,6 @@ func TableDetailPage(c *fiber.Ctx) error {
 
 	records, entityType := getTableRecords(sharedData, tableID, sortField, sortDir)
 	if entityType == nil {
-		// Redirect to home page if table not found
 		c.Set("HX-Redirect", "/")
 		return c.Redirect("/")
 	}
@@ -122,17 +121,13 @@ func TableDetailPage(c *fiber.Ctx) error {
 		Fields: fields,
 	}
 
-	// Check if this is an HTMX request
 	if c.Get("HX-Request") == "true" {
-		// If the request is targeting the table container (sorting or refresh), return only the table content
 		if c.Get("HX-Target") == "table-container" {
 			return utils.Render(c, tablesView.TableViewContent(props.Fields, props.Data, tableID))
 		}
 
-		// For navigation requests or other HTMX requests, render the full page
 		return utils.Render(c, tablesView.TableDetailPage(props))
 	}
 
-	// For regular (non-HTMX) requests, render the full page
 	return utils.Render(c, tablesView.TableDetailPage(props))
 }

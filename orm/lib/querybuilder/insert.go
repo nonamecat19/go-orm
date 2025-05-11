@@ -6,6 +6,43 @@ import (
 	"reflect"
 )
 
+func (qb *QueryBuilder) InsertMap(entity any, mapFields map[string]any) error {
+	elementType := reflect.TypeOf(entity)
+	if elementType.Kind() != reflect.Struct {
+		return fmt.Errorf("entity must be a struct")
+	}
+
+	tableName, entityFieldNames, _, err := utils.ExtractTableAndFieldsFromType(elementType, false)
+	if err != nil {
+		return err
+	}
+
+	var fieldNames []string
+	var queryArgs []any
+
+	for key, value := range mapFields {
+		if !utils.Contains(entityFieldNames, key) {
+			return fmt.Errorf("field %s does not exist in entity", key)
+		}
+		fieldNames = append(fieldNames, key)
+		queryArgs = append(queryArgs, value)
+	}
+
+	if len(fieldNames) == 0 {
+		return fmt.Errorf("no valid fields provided in mapFields")
+	}
+
+	qb.query, qb.args = qb.adapter.Insert(tableName, fieldNames, queryArgs, qb.args)
+
+	rows, err := qb.ExecuteBuilderQuery()
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	return nil
+}
+
 func (qb *QueryBuilder) InsertOne(entity any) error {
 	elementValue := reflect.ValueOf(entity)
 	if elementValue.Kind() != reflect.Struct {
