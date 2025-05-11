@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v2"
 	coreUtils "github.com/nonamecat19/go-orm/core/utils"
+	"github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 	"github.com/nonamecat19/go-orm/studio/internal/utils"
 	"reflect"
 )
@@ -21,13 +22,25 @@ func AddTableRecord(c *fiber.Ctx) error {
 
 	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
 
-	fmt.Println("Received form data for table:", tableID)
+	mapFields := make(map[string]any)
+
 	for _, field := range entityFields {
 		fieldValue := c.FormValue(field)
-		fmt.Printf("Field: %s, Value: %s\n", field, fieldValue)
+		if fieldValue != "" {
+			mapFields[field] = fieldValue
+		}
 	}
 
-	// TODO: Implement record creation using the appropriate querybuilder method
+	err := querybuilder.CreateQueryBuilder(sharedData.DbClient).
+		Debug().
+		InsertMap(currentTable, mapFields)
+
+	fmt.Println(err)
+
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error adding record: %v", err))
+	}
+
 	c.Set("HX-Redirect", "/tables/"+tableID)
 	return c.SendString("Record added successfully")
 }
