@@ -1,0 +1,292 @@
+@startuml
+
+namespace core {
+    namespace adapter {
+        interface Adapter  {
+            + GetConnString(config config.ORMConfig) string
+            + GetDbDriver() string
+            + DeleteFromTable(tableName string) string
+            + PrepareOrderBy(query string, orderBy []string) string
+            + PrepareWhere(query string, where string) string
+            + PrepareLimit(query string, limit int) string
+            + PrepareOffset(query string, offset int) string
+            + PrepareSet(query string, set map[string]any, args []any) (string, []any)
+            + PrepareJoins(query string, joins []query.JoinClause) string
+            + Where(condition string, args []any) string
+            + AndWhere(condition string, where string, args []any) string
+            + OrWhere(condition string, where string, args []any) string
+            + Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+            + JoinFields(fields []string) string
+            + JoinFieldsStrictly(fields []string) string
+            + NormalizeSqlWithArgs(sql string, args []any) string
+            + Update(tableName string) string
+            + GetReadQuery(tableName string, fields []string, fromSubquery string) string
+            + GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+            + GetSelectQuery(selectValue string, fromValue string) string
+            + GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string
+            + PrepareQueryAndArgs(query string, args []any) (string, []any)
+        }
+    }
+    core.adapter.Adapter ..> core.config.ORMConfig : uses
+
+    namespace config {
+        class ORMConfig << (S,Aquamarine) >> {
+            + Host string
+            + Port int
+            + User string
+            + Password string
+            + DbName string
+            + SSLMode bool
+            + Path string
+        }
+        class ORMConfigYaml << (S,Aquamarine) >> {
+            + DB struct{string, int, string, string, string, bool}
+            + Migrations struct{string, bool}
+        }
+    }
+
+    namespace entities {
+        interface IEntity  {
+            + Info() string
+        }
+        class Model << (S,Aquamarine) >> {
+            + ID int64
+            + CreatedAt *time.Time
+            + UpdatedAt *time.Time
+            + DeletedAt *time.Time
+        }
+    }
+
+    namespace query {
+        class JoinClause << (S,Aquamarine) >> {
+            + JoinType string
+            + Table string
+            + Condition string
+            + Select []string
+        }
+    }
+
+
+    namespace scheme {
+        class Field << (S,Aquamarine) >> {
+            + Name string
+            + Type string
+            + Nullability bool
+            + Unique bool
+            + PrimaryKey bool
+        }
+        class TableScheme << (S,Aquamarine) >> {
+            + Name string
+            + Fields []Field
+        }
+    }
+    core.scheme.TableScheme ..> core.scheme.Field
+}
+
+namespace adapter_mssql {
+    class AdapterMSSQL << (S,Aquamarine) >> {
+        + DeleteFromTable(tableName string) string
+        + Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+        + GetConnString(config config.ORMConfig) string
+        + GetDbDriver() string
+        + PrepareOrderBy(query string, orderBy []string) string
+        + PrepareWhere(query string, where string) string
+        + PrepareLimit(query string, limit int) string
+        + PrepareOffset(query string, offset int) string
+        + PrepareSet(query string, set map[string]any, args []any) (string, []any)
+        + PrepareJoins(query string, joins []query.JoinClause) string
+        + PrepareQueryAndArgs(query string, args []any) (string, []any)
+        + GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+        + GetReadQuery(tableName string, fields []string, fromSubquery string) string
+        + GetSelectQuery(selectValue string, fromValue string) string
+        + GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string
+        + Update(tableName string) string
+        + JoinFieldsStrictly(fields []string) string
+        + JoinFields(fields []string) string
+        + NormalizeSqlWithArgs(sql string, args []any) string
+        + Where(condition string, args []any) string
+        + AndWhere(condition string, where string, args []any) string
+        + OrWhere(condition string, where string, args []any) string
+    }
+    adapter_mssql.AdapterMSSQL ..> core.config.ORMConfig : uses
+    adapter_mssql.AdapterMSSQL ..> core.query.JoinClause : uses
+    adapter_mssql.AdapterMSSQL ..|> core.adapter.Adapter : uses
+}
+
+namespace adapter_mysql {
+    class AdapterMySQL << (S,Aquamarine) >> {
+        + DeleteFromTable(tableName string) string
+        + Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+        + GetConnString(config config.ORMConfig) string
+        + GetDbDriver() string
+        + PrepareOrderBy(query string, orderBy []string) string
+        + PrepareWhere(query string, where string) string
+        + PrepareLimit(query string, limit int) string
+        + PrepareOffset(query string, offset int) string
+        + PrepareSet(query string, set map[string]any, args []any) (string, []any)
+        + PrepareJoins(query string, joins []query.JoinClause) string
+        + PrepareQueryAndArgs(query string, args []any) (string, []any)
+        + GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+        + GetReadQuery(tableName string, fields []string, fromSubquery string) string
+        + GetSelectQuery(selectValue string, fromValue string) string
+        + GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string
+        + Update(tableName string) string
+        + JoinFieldsStrictly(fields []string) string
+        + JoinFields(fields []string) string
+        + NormalizeSqlWithArgs(sql string, args []any) string
+        + Where(condition string, args []any) string
+        + AndWhere(condition string, where string, args []any) string
+        + OrWhere(condition string, where string, args []any) string
+    }
+    adapter_mysql.AdapterMySQL ..> core.config.ORMConfig : uses
+    adapter_mysql.AdapterMySQL ..> core.query.JoinClause : uses
+    adapter_mssql.AdapterMSSQL ..|> core.adapter.Adapter : uses
+}
+
+namespace adapter_postgres {
+    class AdapterPostgres << (S,Aquamarine) >> {
+        + DeleteFromTable(tableName string) string
+        + Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+        + GetConnString(config config.ORMConfig) string
+        + GetDbDriver() string
+        + PrepareOrderBy(query string, orderBy []string) string
+        + PrepareWhere(query string, where string) string
+        + PrepareLimit(query string, limit int) string
+        + PrepareOffset(query string, offset int) string
+        + PrepareSet(query string, set map[string]any, args []any) (string, []any)
+        + PrepareJoins(query string, joins []query.JoinClause) string
+        + PrepareQueryAndArgs(query string, args []any) (string, []any)
+        + GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+        + GetReadQuery(tableName string, fields []string, fromSubquery string) string
+        + GetSelectQuery(selectValue string, fromValue string) string
+        + GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string
+        + Update(tableName string) string
+        + JoinFieldsStrictly(fields []string) string
+        + JoinFields(fields []string) string
+        + NormalizeSqlWithArgs(sql string, args []any) string
+        + Where(condition string, args []any) string
+        + AndWhere(condition string, where string, args []any) string
+        + OrWhere(condition string, where string, args []any) string
+    }
+    adapter_postgres.AdapterPostgres ..> core.config.ORMConfig : uses
+    adapter_postgres.AdapterPostgres ..> core.query.JoinClause : uses
+    adapter_postgres.AdapterPostgres ..|> core.adapter.Adapter : uses
+}
+
+namespace adapter_sqlite {
+    class AdapterSQLite << (S,Aquamarine) >> {
+        + DeleteFromTable(tableName string) string
+        + Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any)
+        + GetConnString(config config.ORMConfig) string
+        + GetDbDriver() string
+        + PrepareOrderBy(query string, orderBy []string) string
+        + PrepareWhere(query string, where string) string
+        + PrepareLimit(query string, limit int) string
+        + PrepareOffset(query string, offset int) string
+        + PrepareSet(query string, set map[string]any, args []any) (string, []any)
+        + PrepareJoins(query string, joins []query.JoinClause) string
+        + PrepareQueryAndArgs(query string, args []any) (string, []any)
+        + GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string
+        + GetReadQuery(tableName string, fields []string, fromSubquery string) string
+        + GetSelectQuery(selectValue string, fromValue string) string
+        + GetSelectWhereIn(tableName string, selectValue string, fieldName string, fieldValues []string) string
+        + Update(tableName string) string
+        + JoinFieldsStrictly(fields []string) string
+        + JoinFields(fields []string) string
+        + NormalizeSqlWithArgs(sql string, args []any) string
+        + Where(condition string, args []any) string
+        + AndWhere(condition string, where string, args []any) string
+        + OrWhere(condition string, where string, args []any) string
+    }
+    adapter_sqlite.AdapterSQLite ..> core.config.ORMConfig : uses
+    adapter_sqlite.AdapterSQLite ..> core.query.JoinClause : uses
+    adapter_sqlite.AdapterSQLite ..|> core.adapter.Adapter : uses
+}
+
+namespace orm {
+    namespace client {
+        class DbClient << (S,Aquamarine) >> {
+            - db *sql.DB
+            - config config.ORMConfig
+            - tables Tables
+            - adapter adapter.Adapter
+
+            + GetDb() *sql.DB
+            + GetConfig() config.ORMConfig
+            + GetTables() Tables
+            + GetAdapter() adapter.Adapter
+            + Query(query string, args ...any) (*sql.Rows, error)
+        }
+        orm.client.DbClient ..> core.config.ORMConfig : uses
+        orm.client.DbClient ..> core.adapter.Adapter : uses
+        orm.client.DbClient ..> orm.client.Tables : uses
+
+        class client.Tables << (T, #FF7700) >>  {
+        }
+        class "map[string]scheme.TableScheme" as fontcolorbluemapfontstringschemeTableScheme {
+            'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+        }
+    }
+
+    namespace querybuilder {
+        class QueryBuilder << (S,Aquamarine) >> {
+            - client client.DbClient
+            - adapter adapter.Adapter
+            - query string
+            - selectFields []string
+            - where string
+            - orderBy []string
+            - limit int
+            - offset int
+            - relations []string
+            - args []any
+            - set map[string]any
+            - joins []query.JoinClause
+            - debug bool
+            - preloads []string
+
+            - insertSlice(sliceValue reflect.Value) error
+            - preloadRelationPointer(field reflect.StructField, sliceValue reflect.Value, elemType reflect.Type) error
+            - handlePreloadPtr(sliceValue reflect.Value, field reflect.StructField, rows *sql.Rows, relationFieldName string) error
+            - preloadRelationSlice(field reflect.StructField, sliceValue reflect.Value, elemType reflect.Type) error
+            - handlePreloadSlice(sliceValue reflect.Value, field reflect.StructField, rows *sql.Rows, relationFieldName string, relationFieldTag string) error
+            - prepareOrderBy(query string) string
+            - prepareWhere(query string) string
+            - prepareLimit(query string) string
+            - prepareOffset(query string) string
+            - prepareSet(query string) string
+            - handleFindRows(sliceValue reflect.Value, elemType reflect.Type, rows *sql.Rows) error
+            - prepareFindQuery(elemType reflect.Type) error
+            - preloadRelations(sliceValue reflect.Value, elemType reflect.Type) error
+
+            + ExecuteBuilderQuery() (*sql.Rows, error)
+            + ExecuteQuery(query string, args ...any) (*sql.Rows, error)
+            + DeleteMany(entity any) error
+            + InsertMap(entity any, mapFields map[string]any) error
+            + InsertOne(entity any) error
+            + InsertMany(entities any) error
+            + OrderBy(fields ...string) *QueryBuilder
+            + Limit(limit int) *QueryBuilder
+            + Offset(offset int) *QueryBuilder
+            + LeftJoinAndSelect(table string, condition string, selectFields ...string) *QueryBuilder
+            + Debug() *QueryBuilder
+            + Preload(column ...string) *QueryBuilder
+            + ExecuteRaw(sql string, args ...any) (*sql.Rows, error)
+            + FindOne()
+            + FindMany(entities any) error
+            + Select(column ...string) *QueryBuilder
+            + UpdateMany(entity any) error
+            + SetValues(values map[string]any) *QueryBuilder
+            + UpdateMap(entity any, mapFields map[string]any) error
+            + Where(condition string, args ...any) *QueryBuilder
+            + AndWhere(condition string, args ...any) *QueryBuilder
+            + OrWhere(condition string, args ...any) *QueryBuilder
+        }
+        orm.querybuilder.QueryBuilder ..> orm.client.DbClient : uses
+        orm.querybuilder.QueryBuilder ..> core.adapter.Adapter : uses
+        orm.querybuilder.QueryBuilder ..> orm.querybuilder.QueryBuilder : uses
+        orm.querybuilder.QueryBuilder ..> core.query.JoinClause : uses
+    }
+}
+
+@enduml
