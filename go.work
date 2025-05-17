@@ -1,14 +1,14 @@
 go 1.23.1
 
 use (
-	./core
-	./orm
-	./studio
-	./cli
-	./app
-	./adapter-postgres
-	./adapter-sqlite
 	./adapter-base
 	./adapter-mssql
 	./adapter-mysql
+	./adapter-postgres
+	./adapter-sqlite
+	./app
+	./cli
+	./core
+	./orm
+	./studio
 )

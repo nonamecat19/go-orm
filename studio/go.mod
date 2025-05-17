@@ -6,6 +6,7 @@ require (
 	github.com/a-h/templ v0.3.865
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/lib/pq v1.10.9
 )
 
 require (
@@ -23,9 +24,10 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+	golang.org/x/term v0.31.0 // indirect
 )
