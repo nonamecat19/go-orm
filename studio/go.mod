@@ -6,6 +6,10 @@ require (
 	github.com/a-h/templ v0.3.865
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/lib/pq v1.10.9
+	github.com/nonamecat19/go-orm/app v0.0.0-20250517165903-97e4fe84d3d7
+	github.com/nonamecat19/go-orm/core v0.0.1
+	github.com/nonamecat19/go-orm/orm v0.0.1
 )
 
 require (
@@ -27,5 +31,12 @@ require (
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+	golang.org/x/term v0.31.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
 )
+
+replace github.com/nonamecat19/go-orm/studio => ./
+
+replace github.com/nonamecat19/go-orm/orm => ../orm
+
+replace github.com/nonamecat19/go-orm/core => ../core

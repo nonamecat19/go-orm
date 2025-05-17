@@ -1,0 +1,43 @@
+name: Build Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.1'
+          cache: false
+
+      - name: Set up Go workspace
+        run: |
+          # Ensure Go workspace is properly configured
+          go work sync
+
+      - name: Build all modules
+        run: |
+          # Get all directories from go.work
+          modules="adapter-base adapter-mysql adapter-mssql adapter-postgres adapter-sqlite core cli orm"
+          
+          # Build each module
+          for module in $modules; do
+            echo "Building $module"
+            cd $module
+            go build -v ./...
+            if [ $? -ne 0 ]; then
+              echo "Build failed for $module"
+              exit 1
+            fi
+            cd - > /dev/null
+          done

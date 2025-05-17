@@ -122,9 +122,7 @@ func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
 	}
 
 	for _, join := range qb.joins {
-		for _, field := range join.Select {
-			fields = append(fields, field)
-		}
+		fields = append(fields, join.Select...)
 	}
 
 	fromSubquery := qb.adapter.GetFromSubquery(tableName, qb.where, qb.orderBy, qb.limit, qb.offset)

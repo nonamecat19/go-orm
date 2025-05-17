@@ -21,7 +21,7 @@ func StringifyReflectValue(v reflect.Value) string {
 	case reflect.Float32, reflect.Float64:
 		return strconv.FormatFloat(v.Float(), 'f', -1, 64)
 	case reflect.Bool:
-		if v.Bool() == true {
+		if v.Bool() {
 			return "true"
 		}
 		return "false"

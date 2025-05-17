@@ -70,6 +70,9 @@ func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 	elementType := sliceValue.Type().Elem()
 
 	tableName, entityFieldNames, _, err := utils.ExtractTableAndFieldsFromType(elementType, false)
+	if err != nil {
+		return err
+	}
 
 	var queryArgs []any
 
