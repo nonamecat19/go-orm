@@ -1,0 +1,32 @@
+package components
+
+import "github.com/nonamecat19/go-orm/studio/internal/view/icons"
+import "github.com/nonamecat19/go-orm/studio/internal/view/recordForm"
+import "github.com/nonamecat19/go-orm/studio/internal/model"
+
+type AddRecordProps struct {
+	Fields  []model.FieldInfo
+	TableID string
+}
+
+templ addRecordTrigger() {
+	<div class="btn btn-primary">
+		@icons.Plus()
+		<span class="ml-1">Додати запис</span>
+	</div>
+}
+
+templ AddRecord(props AddRecordProps) {
+	@Modal(ModalProps{
+		Trigger:    addRecordTrigger(),
+		ModalTitle: "Додати запис",
+		Key:        "add_record",
+	}) {
+		<div class="p-2 max-w-4xl mx-auto">
+			@recordForm.AddNewRecordForm(recordForm.AddNewRecordFormProps{
+				Fields:  props.Fields,
+				TableID: props.TableID,
+			})
+		</div>
+	}
+}

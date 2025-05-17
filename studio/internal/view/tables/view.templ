@@ -1,0 +1,116 @@
+package tables
+
+import (
+	"context"
+	"fmt"
+	"github.com/nonamecat19/go-orm/studio/internal/model"
+	"github.com/nonamecat19/go-orm/studio/internal/view/components"
+	"github.com/nonamecat19/go-orm/studio/internal/view/layout"
+	"io"
+)
+
+templ TableViewSection(fields []model.FieldInfo, data [][]string) {
+	@layout.SectionContainer() {
+		@TableViewContent(fields, data, "")
+	}
+}
+
+templ TableViewSectionWithTableID(fields []model.FieldInfo, data [][]string, tableID string) {
+	@layout.SectionContainer() {
+		@TableViewContent(fields, data, tableID)
+	}
+}
+
+templ TableViewContent(fields []model.FieldInfo, data [][]string, tableID string) {
+	<div class="overflow-x-auto" id="table-container">
+		<table class="table table-zebra">
+			@TableViewHeading(fields)
+			@TableViewBody(data, tableID, fields)
+		</table>
+	</div>
+}
+
+templ TableViewHeading(fields []model.FieldInfo) {
+	<thead>
+		<tr>
+			for _, field := range fields {
+				<th>
+					<a
+						hx-get={ "?sort=" + field.Name + "&dir=" + getSortDirection(field) }
+						hx-target="#table-container"
+						hx-swap="outerHTML"
+						hx-push-url="true"
+						class="flex items-center cursor-pointer"
+					>
+						<div>
+							<div class="flex items-center">
+								{ field.Name }
+								if field.IsNullable {
+									<span class="ml-1 badge badge-sm badge-ghost">nullable</span>
+								}
+							</div>
+							<div class="text-xs text-gray-500">{ field.Type }</div>
+						</div>
+						if field.IsSorted {
+							if field.SortDirection == "asc" {
+								<span class="ml-1">↑</span>
+							} else {
+								<span class="ml-1">↓</span>
+							}
+						}
+					</a>
+				</th>
+			}
+			<th></th>
+		</tr>
+	</thead>
+}
+
+func getSortDirection(field model.FieldInfo) string {
+	if field.IsSorted && field.SortDirection == "asc" {
+		return "desc"
+	}
+	return "asc"
+}
+
+templ TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) {
+	<tbody>
+		for rowIndex, row := range data {
+			<tr>
+				for fieldIndex, field := range row {
+					<td>
+						@components.Modal(components.ModalProps{
+							Trigger: templ.Component(func() templ.Component {
+								return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+									return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
+								})
+							}()),
+						
+							ModalTitle: "Hello",
+							Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
+						}) {
+							<p class="py-4">Press ESC key or click the button below to close</p>
+						}
+					</td>
+				}
+				<td class="flex justify-end">
+					@layout.HorizontalContainer() {
+						@EditRowButtonWithProps(EditRowButtonProps{
+							TableID: tableID,
+							RowID:   fmt.Sprintf("%d", rowIndex),
+							Row:     row,
+							Fields:  fields,
+						})
+						@DeleteRowButtonWithProps(DeleteRowButtonProps{
+							TableID: tableID,
+							RowID:   row[0],
+						})
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+}
+
+templ TemplateName() {
+}

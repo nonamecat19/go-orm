@@ -3,7 +3,7 @@ module github.com/nonamecat19/go-orm/studio
 go 1.23.1
 
 require (
-	github.com/a-h/templ v0.2.778
+	github.com/a-h/templ v0.3.865
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/gofiber/fiber/v2 v2.52.5
 )
@@ -26,6 +26,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 )

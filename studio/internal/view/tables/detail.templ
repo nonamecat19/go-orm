@@ -1,0 +1,48 @@
+package tables
+
+import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
+import "github.com/nonamecat19/go-orm/studio/internal/view/components"
+import "github.com/nonamecat19/go-orm/studio/internal/model"
+
+type TableDetailProps struct {
+	Table  Table
+	Data   [][]string
+	Fields []model.FieldInfo
+}
+
+templ TableDetailPage(props TableDetailProps) {
+	@layout.Base(layout.BaseProps{Title: props.Table.Title}) {
+		@layout.VerticalContainer() {
+			@layout.HorizontalContainer() {
+				@TableNavigationSection()
+				@TableInfoSection(props.Table.Title, props.Table.ID)
+				@TableEditSection(props.Fields, props.Table.ID)
+			}
+			@TableViewSectionWithTableID(props.Fields, props.Data, props.Table.ID)
+		}
+	}
+}
+
+templ TableNavigationSection() {
+	@layout.SectionContainer() {
+		@components.ReturnBack()
+	}
+}
+
+templ TableInfoSection(title string, id string) {
+	@layout.SectionContainer() {
+		<h1>{ title } ID: { id }</h1>
+	}
+}
+
+templ TableEditSection(fields []model.FieldInfo, tableID string) {
+	@layout.SectionContainer() {
+		@layout.HorizontalContainer() {
+			@components.AddRecord(components.AddRecordProps{
+				Fields:  fields,
+				TableID: tableID,
+			})
+			@components.RefreshButton()
+		}
+	}
+}

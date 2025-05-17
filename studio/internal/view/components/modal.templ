@@ -1,0 +1,34 @@
+package components
+
+type ModalProps struct {
+	Trigger    templ.Component
+	ModalTitle string
+	Key        string
+}
+
+templ Modal(props ModalProps) {
+	<div>
+		<button onclick={ templ.JSFuncCall("tableEdit_showModal", props.Key) }>
+			@props.Trigger
+		</button>
+		<dialog id={ props.Key } class="modal">
+			<div class="modal-box">
+				<h3 class="text-lg font-bold">
+					{ props.ModalTitle }
+				</h3>
+				{ children... }
+				<div class="modal-action">
+					<form method="dialog">
+						<!-- if there is a button in form, it will close the modal -->
+						<button class="btn">Close</button>
+					</form>
+				</div>
+			</div>
+		</dialog>
+		<script>
+		  function tableEdit_showModal(key) {
+			document.getElementById(key).showModal();
+		  }
+		</script>
+	</div>
+}

@@ -1,10 +1,10 @@
 package settings
 
 import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
-
+import "github.com/nonamecat19/go-orm/studio/internal/view/settings/themes"
 
 templ SettingsPage() {
 	@layout.Base(layout.BaseProps{Title: "Settings"}) {
-		<h1 class="bg-red-500">Settings</h1>
+		@themes.ThemeChangeSection()
 	}
 }

@@ -44,7 +44,7 @@ func (qb *QueryBuilder) FindMany(entities any) error {
 }
 
 func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflect.Type, rows *sql.Rows) error {
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
+	tableName, entityFieldNames, systemFieldNames, err := utils.ExtractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}
@@ -110,7 +110,7 @@ func (qb *QueryBuilder) handleFindRows(sliceValue reflect.Value, elemType reflec
 }
 
 func (qb *QueryBuilder) prepareFindQuery(elemType reflect.Type) error {
-	tableName, entityFieldNames, systemFieldNames, err := qb.extractTableAndFieldsFromType(elemType, true)
+	tableName, entityFieldNames, systemFieldNames, err := utils.ExtractTableAndFieldsFromType(elemType, true)
 	if err != nil {
 		return err
 	}

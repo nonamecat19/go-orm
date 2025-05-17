@@ -1,0 +1,99 @@
+package recordForm
+
+import "github.com/nonamecat19/go-orm/studio/internal/model"
+
+templ IntegerInput(field model.FieldInfo) {
+	<input
+		type="number"
+		name={ field.Name }
+		placeholder={ "Enter " + field.Name }
+		class="input input-bordered w-full"
+		step="1"
+		required
+		min="0"
+		oninvalid="this.setCustomValidity('Please enter a valid integer')"
+		oninput="this.setCustomValidity('')"
+	/>
+	<div class="label">
+		<span class="label-text-alt text-error validation-message" id={ field.Name + "-error" }></span>
+	</div>
+}
+
+templ FloatInput(field model.FieldInfo) {
+	<input
+		type="number"
+		name={ field.Name }
+		placeholder={ "Enter " + field.Name }
+		class="input input-bordered w-full"
+		step="0.01"
+		required
+		oninvalid="this.setCustomValidity('Please enter a valid number')"
+		oninput="this.setCustomValidity('')"
+	/>
+	<div class="label">
+		<span class="label-text-alt text-error validation-message" id={ field.Name + "-error" }></span>
+	</div>
+}
+
+templ BooleanInput(field model.FieldInfo) {
+	<div class="form-control w-full">
+		<label class="label cursor-pointer justify-start gap-4">
+			<span class="label-text">No</span>
+			<input
+				type="checkbox"
+				name={ field.Name }
+				class="toggle toggle-primary"
+			/>
+			<span class="label-text">Yes</span>
+		</label>
+	</div>
+}
+
+templ DateTimeInput(field model.FieldInfo) {
+	<div class="flex flex-col gap-2">
+		<input
+			type="datetime-local"
+			name={ field.Name }
+			class="input input-bordered w-full"
+			required
+			oninvalid="this.setCustomValidity('Please select a valid date and time')"
+			oninput="this.setCustomValidity('')"
+		/>
+		<div class="text-xs text-gray-500">
+			Format: YYYY-MM-DDTHH:MM:SS
+		</div>
+	</div>
+	<div class="label">
+		<span class="label-text-alt text-error validation-message" id={ field.Name + "-error" }></span>
+	</div>
+}
+
+templ StringInput(field model.FieldInfo) {
+	<input
+		type="text"
+		name={ field.Name }
+		placeholder={ "Enter " + field.Name }
+		class="input input-bordered w-full"
+		required
+		oninvalid="this.setCustomValidity('This field is required')"
+		oninput="this.setCustomValidity('')"
+	/>
+	<div class="label">
+		<span class="label-text-alt text-error validation-message" id={ field.Name + "-error" }></span>
+	</div>
+}
+
+templ DefaultInput(field model.FieldInfo) {
+	<input
+		type="text"
+		name={ field.Name }
+		placeholder={ "Enter " + field.Name }
+		class="input input-bordered w-full"
+		required
+		oninvalid="this.setCustomValidity('This field is required')"
+		oninput="this.setCustomValidity('')"
+	/>
+	<div class="label">
+		<span class="label-text-alt text-error validation-message" id={ field.Name + "-error" }></span>
+	</div>
+}

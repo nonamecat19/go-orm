@@ -13,13 +13,25 @@ type TablePageProps struct {
 
 templ TablesPage(props TablePageProps) {
 	@layout.Base(layout.BaseProps{Title: "Main page"}) {
-		<h1 class="bg-red-500">Hello 2world!</h1>
-		<ul>
-            for _, table := range props.Tables {
-                <li>
-                    <strong>{table.Title}</strong> - ID: {table.ID}
-                </li>
-            }
+		@TablesList(props.Tables)
+	}
+}
+
+templ TablesList(tables []Table) {
+	@layout.SectionContainer() {
+		@layout.SectionHeading("Список таблиць")
+		<ul class="flex flex-col gap-2">
+			for _, table := range tables {
+				@TableItem(table.ID, table.Title)
+			}
 		</ul>
 	}
+}
+
+templ TableItem(id string, title string) {
+	<a href={ "/tables/" + templ.SafeURL(id) } class="bg-base-200 hover:bg-base-300 w-72 transition duration-200 p-2 rounded-md border border-neutral">
+		<li>
+			<strong>{ title }</strong>
+		</li>
+	</a>
 }

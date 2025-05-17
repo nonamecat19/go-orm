@@ -1,0 +1,65 @@
+package recordForm
+
+import (
+	"github.com/nonamecat19/go-orm/studio/internal/model"
+	"strings"
+	"time"
+)
+
+func formatDateTimeForInput(dateStr string) string {
+	formats := []string{
+		"01/02/2006 15:04:05", // MM/DD/YYYY HH:MM:SS
+		"02/01/2006 15:04:05", // DD/MM/YYYY HH:MM:SS
+		"2006/01/02 15:04:05", // YYYY/MM/DD HH:MM:SS
+		"2006-01-02 15:04:05", // YYYY-MM-DD HH:MM:SS
+		time.RFC3339,          // YYYY-MM-DDTHH:MM:SSZ
+	}
+
+	var t time.Time
+	var err error
+
+	for _, format := range formats {
+		t, err = time.Parse(format, dateStr)
+		if err == nil {
+			break
+		}
+	}
+
+	if err != nil {
+		return ""
+	}
+
+	return t.Format("2006-01-02T15:04:05")
+}
+
+templ renderFieldInputWithValue(field model.FieldInfo, value string) {
+	if strings.Contains(field.Type, "int") {
+		@IntegerInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "float") {
+		@FloatInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "bool") {
+		@BooleanInputWithValue(field, value == "true")
+	} else if strings.Contains(field.Type, "time.Time") {
+		@DateTimeInputWithValue(field, value)
+	} else if strings.Contains(field.Type, "string") {
+		@StringInputWithValue(field, value)
+	} else {
+		@DefaultInputWithValue(field, value)
+	}
+}
+
+templ renderFieldInput(field model.FieldInfo) {
+	if strings.Contains(field.Type, "int") {
+		@IntegerInput(field)
+	} else if strings.Contains(field.Type, "float") {
+		@FloatInput(field)
+	} else if strings.Contains(field.Type, "bool") {
+		@BooleanInput(field)
+	} else if strings.Contains(field.Type, "time.Time") {
+		@DateTimeInput(field)
+	} else if strings.Contains(field.Type, "string") {
+		@StringInput(field)
+	} else {
+		@DefaultInput(field)
+	}
+}

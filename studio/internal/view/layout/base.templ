@@ -5,33 +5,45 @@ type BaseProps struct {
 }
 
 templ Base(props BaseProps) {
-	<!doctype html>
-		<html lang="en">
+	<!DOCTYPE html>
+	<html lang="en">
 		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-			<meta http-equiv="X-UA-Compatible" content="ie=edge">
-			<link rel="stylesheet" href="./assets/web/public/assets/main.css"/>
-			<title>{props.Title}</title>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+			<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+			<link rel="stylesheet" href="/assets/web/public/assets/main.css"/>
+			<title>{ props.Title }</title>
 		</head>
-		<body>
-			@header()
-			{ children... }
+		<body hx-boost="true">
+			@BaseHeader()
+			<div class="px-10 py-4">
+				{ children... }
+			</div>
+			@ThemeInit()
 			<script src="/assets/web/public/assets/main.js"></script>
 		</body>
 	</html>
 }
 
-templ header() {
-	<header class="navbar bg-primary text-primary-content" hx-boost="true">
-		<div class="flex-1">
-			<a href="/" class="btn btn-ghost text-xl">My App</a>
-		</div>
+templ BaseHeader() {
+	<header class="navbar bg-primary text-primary-content">
+		<ul class="flex-1 menu menu-horizontal">
+			<li><a href="/">На головну</a></li>
+		</ul>
 		<div class="flex-none">
 			<ul class="menu menu-horizontal">
-				<li><a href="/">Home</a></li>
-				<li><a href="/settings">Settings</a></li>
+				<li><a href="/settings">Налаштування</a></li>
 			</ul>
 		</div>
 	</header>
+}
+
+templ ThemeInit() {
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const theme = localStorage.getItem("selectedTheme") || "nord"
+			document.documentElement.setAttribute("data-theme", theme);
+			localStorage.setItem("selectedTheme", theme);
+		});
+	</script>
 }

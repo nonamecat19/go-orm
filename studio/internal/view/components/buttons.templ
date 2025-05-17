@@ -1,0 +1,31 @@
+package components
+
+import "github.com/nonamecat19/go-orm/studio/internal/view/icons"
+
+templ ReturnBack() {
+	<div title="Повернутись назад">
+		<button
+			onclick="window.location.href='/'"
+			class="btn"
+			aria-label="Повернутись назад"
+		>
+			@icons.ArrowLeftCircle()
+		</button>
+	</div>
+}
+
+templ RefreshButton() {
+	<div title="Оновити дані">
+		<button
+			class="btn"
+			aria-label="Оновити дані"
+			hx-get=""
+			hx-trigger="click"
+			onclick="this.setAttribute('hx-get', window.location.pathname + window.location.search)"
+			hx-target="#table-container"
+			hx-swap="outerHTML"
+		>
+			@icons.Rotate()
+		</button>
+	</div>
+}
