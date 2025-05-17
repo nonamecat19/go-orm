@@ -28,7 +28,7 @@ jobs:
       - name: Build all modules
         run: |
           # Get all directories from go.work
-          modules=$(grep -v '^#' go.work | grep '^\s*\.' | tr -d ' \t')
+          modules=".adapter-base .adapter-mysql .adapter-mssql .adapter-postgres .adapter-sqlite .core .cli .orm"
           
           # Build each module
           for module in $modules; do
