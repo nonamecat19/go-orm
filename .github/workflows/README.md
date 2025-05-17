@@ -27,6 +27,18 @@ This directory contains GitHub Actions workflows for continuous integration of t
 
 All workflows are designed to work with Go workspaces. They parse the `go.work` file to identify all modules and run the checks on each module separately.
 
+### Workspace Configuration
+
+Each workflow includes a step that runs `go work sync` before executing its tasks. This ensures that the workspace configuration is properly set up in the CI environment, which is essential for resolving import dependencies between modules in the workspace.
+
+Without this step, you might encounter errors like:
+
+```
+no required module provides package github.com/nonamecat19/go-orm/studio/internal/view/settings
+```
+
+These errors occur because the CI environment needs to be explicitly told to use the workspace configuration.
+
 ## Running Locally
 
 You can run these checks locally before pushing your changes:

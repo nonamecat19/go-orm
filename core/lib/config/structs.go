@@ -9,18 +9,3 @@ type ORMConfig struct {
 	SSLMode  bool
 	Path     string
 }
-
-type ORMConfigYaml struct {
-	DB struct {
-		Host     string `yaml:"host"`
-		Port     int    `yaml:"port"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-		DbName   string `yaml:"db"`
-		SSLMode  bool   `yaml:"ssl_mode"`
-	} `yaml:"db"`
-	Migrations struct {
-		Path         string `yaml:"path"`
-		AddTimestamp bool   `yaml:"add_timestamp"`
-	} `yaml:"migrations"`
-}

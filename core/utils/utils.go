@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"reflect"
 	"regexp"
 	"strings"
 )
+
+var titleCaser = cases.Title(language.English)
 
 func If[T any](cond bool, vTrue, vFalse T) T {
 	if cond {
@@ -28,7 +32,7 @@ func ToSnakeCase(str string) string {
 func ToHumanCase(str string) string {
 	words := strings.Split(str, "_")
 	for i := range words {
-		words[i] = strings.Title(words[i])
+		words[i] = titleCaser.String(words[i])
 	}
 	return strings.Join(words, " ")
 }
