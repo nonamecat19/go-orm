@@ -19,7 +19,7 @@ VALUES ('2023-01-01 10:00:00', 'admin'),
 
 CREATE TABLE users
 (
-    id         SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NULL,
     deleted_at TIMESTAMP DEFAULT NULL,

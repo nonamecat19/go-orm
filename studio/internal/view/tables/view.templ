@@ -103,7 +103,7 @@ templ TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) {
 						})
 						@DeleteRowButtonWithProps(DeleteRowButtonProps{
 							TableID: tableID,
-							RowID:   fmt.Sprintf("%d", rowIndex),
+							RowID:   row[0],
 						})
 					}
 				</td>

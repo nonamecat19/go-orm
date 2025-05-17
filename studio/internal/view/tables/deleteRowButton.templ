@@ -7,13 +7,6 @@ type DeleteRowButtonProps struct {
 	RowID   string
 }
 
-templ DeleteRowButton() {
-	@DeleteRowButtonWithProps(DeleteRowButtonProps{
-		TableID: "",
-		RowID:   "",
-	})
-}
-
 templ DeleteRowButtonWithProps(props DeleteRowButtonProps) {
 	<button
 		class="btn btn-error btn-sm btn-square"

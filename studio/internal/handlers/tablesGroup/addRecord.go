@@ -11,7 +11,7 @@ import (
 
 func AddTableRecord(c *fiber.Ctx) error {
 	sharedData := utils.GetSharedData(c)
-	tableID := c.Params("id")
+	tableID := c.Params("table_id")
 
 	currentTable := sharedData.TableMap[tableID]
 	if currentTable == nil {

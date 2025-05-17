@@ -32,8 +32,9 @@ func Run(ctx context.Context, tables []coreEntities.IEntity, client client.DbCli
 	app.Get("/tables/:id", tablesGroup.TableDetailPage)
 	app.Get("/settings", settingsGroup.SettingsPage)
 
-	app.Post("/api/tables/:id/records", tablesGroup.AddTableRecord)
-	app.Put("/api/tables/:id/records", tablesGroup.UpdateTableRecord)
+	app.Post("/api/tables/:table_id/records", tablesGroup.AddTableRecord)
+	app.Put("/api/tables/:table_id/records/:record_id", tablesGroup.UpdateTableRecord)
+	app.Delete("/api/tables/:table_id/records/:record_id", tablesGroup.DeleteTableRecord)
 
 	app.Use("/assets", filesystem.New(filesystem.Config{
 		Root: packr.New("Assets Box", "."),
