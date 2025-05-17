@@ -1,0 +1,102 @@
+@startuml
+namespace components {
+    class AddRecordProps << (S,Aquamarine) >> {
+        + Fields []model.FieldInfo
+        + TableID string
+
+    }
+    class ModalProps << (S,Aquamarine) >> {
+        + Trigger templ.Component
+        + ModalTitle string
+        + Key string
+
+    }
+}
+
+
+namespace config {
+    class StudioConfig << (S,Aquamarine) >> {
+        + ServerAddr string
+
+    }
+}
+
+
+namespace layout {
+    class BaseProps << (S,Aquamarine) >> {
+        + Title string
+
+    }
+}
+
+
+namespace model {
+    class FieldInfo << (S,Aquamarine) >> {
+        + Name string
+        + Type string
+        + IsSorted bool
+        + SortDirection string
+        + IsNullable bool
+
+    }
+}
+
+
+namespace recordForm {
+    class AddNewRecordFormProps << (S,Aquamarine) >> {
+        + Fields []model.FieldInfo
+        + TableID string
+
+    }
+    class EditRecordFormProps << (S,Aquamarine) >> {
+        + Fields []model.FieldInfo
+        + TableID string
+        + RowID string
+        + Row []string
+
+    }
+}
+
+
+namespace tables {
+    class DeleteRowButtonProps << (S,Aquamarine) >> {
+        + TableID string
+        + RowID string
+
+    }
+    class EditRowButtonProps << (S,Aquamarine) >> {
+        + TableID string
+        + RowID string
+        + Row []string
+        + Fields []model.FieldInfo
+
+    }
+    class Table << (S,Aquamarine) >> {
+        + Title string
+        + ID string
+
+    }
+    class TableDetailProps << (S,Aquamarine) >> {
+        + Table Table
+        + Data [][]string
+        + Fields []model.FieldInfo
+
+    }
+    class TablePageProps << (S,Aquamarine) >> {
+        + Tables []Table
+
+    }
+}
+
+
+namespace utils {
+    class SharedData << (S,Aquamarine) >> {
+        + TableMap <font color=blue>map</font>[string]entities.IEntity
+        + Tables []entities.IEntity
+        + DbClient client.DbClient
+
+    }
+}
+
+
+@enduml
