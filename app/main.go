@@ -87,7 +87,7 @@ func main() {
 	err := querybuilder.CreateQueryBuilder(client).
 		Where("name <> ? OR name <> ?", "test1", "User 200").
 		AndWhere("name <> '2'").
-		AndWhere("name <> ?", '3').
+		//AndWhere("name <> ?", '3').
 		Preload("orders").
 		Preload("role").
 		OrderBy("id DESC").

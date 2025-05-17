@@ -19,7 +19,6 @@ type QueryBuilder struct {
 	orderBy      []string
 	limit        int
 	offset       int
-	relations    []string
 	args         []any
 	set          map[string]any
 	joins        []query.JoinClause
