@@ -1,7 +1,9 @@
 package layout
 
 type BaseProps struct {
-	Title string
+	Title  string
+	Prefix string
+	AssetsPrefix string
 }
 
 templ Base(props BaseProps) {
@@ -11,7 +13,7 @@ templ Base(props BaseProps) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
 			<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-			<link rel="stylesheet" href="/assets/web/public/assets/main.css"/>
+			<link rel="stylesheet" href={props.Prefix + props.AssetsPrefix + "/main.css"}/>
 			<title>{ props.Title }</title>
 		</head>
 		<body hx-boost="true">
@@ -20,7 +22,7 @@ templ Base(props BaseProps) {
 				{ children... }
 			</div>
 			@ThemeInit()
-			<script src="/assets/web/public/assets/main.js"></script>
+			<script src={props.Prefix + props.AssetsPrefix + "/main.js"}></script>
 		</body>
 	</html>
 }

@@ -21,6 +21,7 @@ func TablesPage(c *fiber.Ctx) error {
 
 	props := tablesView.TablePageProps{
 		Tables: tables,
+		Prefix: sharedData.Prefix,
 	}
 
 	return utils.Render(c, tablesView.TablesPage(props))

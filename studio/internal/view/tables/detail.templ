@@ -8,10 +8,12 @@ type TableDetailProps struct {
 	Table  Table
 	Data   [][]string
 	Fields []model.FieldInfo
+	Prefix       string
+    AssetsPrefix string
 }
 
 templ TableDetailPage(props TableDetailProps) {
-	@layout.Base(layout.BaseProps{Title: props.Table.Title}) {
+	@layout.Base(layout.BaseProps{Title: props.Table.Title, Prefix: props.Prefix, AssetsPrefix: props.AssetsPrefix}) {
 		@layout.VerticalContainer() {
 			@layout.HorizontalContainer() {
 				@TableNavigationSection()

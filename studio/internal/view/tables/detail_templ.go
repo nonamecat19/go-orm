@@ -13,9 +13,11 @@ import "github.com/nonamecat19/go-orm/studio/internal/view/components"
 import "github.com/nonamecat19/go-orm/studio/internal/model"
 
 type TableDetailProps struct {
-	Table  Table
-	Data   [][]string
-	Fields []model.FieldInfo
+	Table        Table
+	Data         [][]string
+	Fields       []model.FieldInfo
+	Prefix       string
+	AssetsPrefix string
 }
 
 func TableDetailPage(props TableDetailProps) templ.Component {
@@ -117,7 +119,7 @@ func TableDetailPage(props TableDetailProps) templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layout.Base(layout.BaseProps{Title: props.Table.Title}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout.Base(layout.BaseProps{Title: props.Table.Title, Prefix: props.Prefix, AssetsPrefix: props.AssetsPrefix}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -212,7 +214,7 @@ func TableInfoSection(title string, id string) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/detail.templ`, Line: 34, Col: 13}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/detail.templ`, Line: 36, Col: 13}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -225,7 +227,7 @@ func TableInfoSection(title string, id string) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(id)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/detail.templ`, Line: 34, Col: 24}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/detail.templ`, Line: 36, Col: 24}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {

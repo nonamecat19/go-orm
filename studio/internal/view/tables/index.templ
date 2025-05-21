@@ -8,11 +8,13 @@ type Table struct {
 }
 
 type TablePageProps struct {
-	Tables []Table
+	Tables       []Table
+	Prefix       string
+	AssetsPrefix string
 }
 
 templ TablesPage(props TablePageProps) {
-	@layout.Base(layout.BaseProps{Title: "Main page"}) {
+	@layout.Base(layout.BaseProps{Title: "Main page", Prefix: props.Prefix, AssetsPrefix: props.AssetsPrefix}) {
 		@TablesList(props.Tables)
 	}
 }

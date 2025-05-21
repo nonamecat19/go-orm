@@ -7,5 +7,9 @@ import (
 )
 
 func SettingsPage(c *fiber.Ctx) error {
-	return utils.Render(c, settings.SettingsPage())
+	sharedData := utils.GetSharedData(c)
+	return utils.Render(c, settings.SettingsPage(settings.SettingsPageProps{
+		Prefix:       sharedData.Prefix,
+		AssetsPrefix: sharedData.AssetsPrefix,
+	}))
 }

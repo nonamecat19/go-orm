@@ -3,15 +3,16 @@ package components
 import "github.com/nonamecat19/go-orm/studio/internal/view/icons"
 
 templ ReturnBack() {
-	<div title="Повернутись назад">
-		<button
-			onclick="window.location.href='/'"
-			class="btn"
-			aria-label="Повернутись назад"
-		>
-			@icons.ArrowLeftCircle()
-		</button>
-	</div>
+	<a href="/">
+		<div title="Повернутись назад">
+			<button
+				class="btn"
+				aria-label="Повернутись назад"
+			>
+				@icons.ArrowLeftCircle()
+			</button>
+		</div>
+	</a>
 }
 
 templ RefreshButton() {
