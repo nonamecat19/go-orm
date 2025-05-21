@@ -9,12 +9,10 @@ type Table struct {
 
 type TablePageProps struct {
 	Tables       []Table
-	Prefix       string
-	AssetsPrefix string
 }
 
 templ TablesPage(props TablePageProps) {
-	@layout.Base(layout.BaseProps{Title: "Main page", Prefix: props.Prefix, AssetsPrefix: props.AssetsPrefix}) {
+	@layout.Base(layout.BaseProps{Title: "Main page"}) {
 		@TablesList(props.Tables)
 	}
 }

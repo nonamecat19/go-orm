@@ -118,10 +118,8 @@ func TableDetailPage(c *fiber.Ctx) error {
 			Title: coreUtils.ToHumanCase(tableID),
 			ID:    tableID,
 		},
-		Data:         dataSlice,
-		Fields:       fields,
-		Prefix:       sharedData.Prefix,
-		AssetsPrefix: "/assets/web/public/assets",
+		Data:   dataSlice,
+		Fields: fields,
 	}
 
 	if c.Get("HX-Request") == "true" {

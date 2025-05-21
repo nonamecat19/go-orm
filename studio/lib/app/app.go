@@ -17,11 +17,10 @@ func AddStudioFiberGroup(app *fiber.App, tables []coreEntities.IEntity, client c
 	studioGroup := app.Group(prefix)
 
 	sharedData := fiber.Map{
-		"tableMap":     utils.GetTableMap(tables),
-		"tables":       tables,
-		"client":       client,
-		"prefix":       prefix,
-		"assetsPrefix": prefix + "/assets/web/public/assets",
+		"tableMap": utils.GetTableMap(tables),
+		"tables":   tables,
+		"client":   client,
+		"prefix":   prefix,
 	}
 
 	studioGroup.Use(func(c *fiber.Ctx) error {

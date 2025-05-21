@@ -3,13 +3,8 @@ package settings
 import "github.com/nonamecat19/go-orm/studio/internal/view/layout"
 import "github.com/nonamecat19/go-orm/studio/internal/view/settings/themes"
 
-type SettingsPageProps struct {
-	Prefix       string
-	AssetsPrefix string
-}
-
-templ SettingsPage(props SettingsPageProps) {
-	@layout.Base(layout.BaseProps{Title: "Settings", Prefix: props.Prefix, AssetsPrefix: props.AssetsPrefix}) {
+templ SettingsPage() {
+	@layout.Base(layout.BaseProps{Title: "Settings"}) {
 		@themes.ThemeChangeSection()
 	}
 }

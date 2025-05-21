@@ -16,11 +16,10 @@ func GetTableMap(tables []coreEntities.IEntity) map[string]coreEntities.IEntity 
 }
 
 type SharedData struct {
-	TableMap     map[string]coreEntities.IEntity
-	Tables       []coreEntities.IEntity
-	DbClient     client.DbClient
-	Prefix       string
-	AssetsPrefix string
+	TableMap map[string]coreEntities.IEntity
+	Tables   []coreEntities.IEntity
+	DbClient client.DbClient
+	Prefix   string
 }
 
 func GetSharedData(c *fiber.Ctx) SharedData {
@@ -30,14 +29,12 @@ func GetSharedData(c *fiber.Ctx) SharedData {
 	tables := data["tables"].([]coreEntities.IEntity)
 	dbClient := data["client"].(client.DbClient)
 	prefix := data["prefix"].(string)
-	assetsPrefix := data["assetsPrefix"].(string)
 
 	return SharedData{
-		TableMap:     tableMap,
-		Tables:       tables,
-		DbClient:     dbClient,
-		Prefix:       prefix,
-		AssetsPrefix: assetsPrefix,
+		TableMap: tableMap,
+		Tables:   tables,
+		DbClient: dbClient,
+		Prefix:   prefix,
 	}
 }
 
