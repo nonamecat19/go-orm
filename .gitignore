@@ -3,5 +3,3 @@ studio/bin
 studio/tmp/build-errors.log
 studio/web/node_modules
 studio/web/package-lock.json
-studio/internal/view/**/*_templ.go
-studio/internal/view/**/*.txt
