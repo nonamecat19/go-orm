@@ -1,7 +1,7 @@
 BINPATH = ./bin/myapp
 
 .PHONY: build
-build: build-templ build-css build-js build-app
+build: build-css build-js embed-assets-in-template build-templ build-app
 
 .PHONY: build-app
 build-app:
@@ -49,7 +49,7 @@ watch-js:
 .PHONY: watch-assets
 watch-assets:
 	go run github.com/air-verse/air@latest \
-	--build.cmd "templ generate --notify-proxy" \
+	--build.cmd "$(MAKE) embed-assets-in-template && templ generate --notify-proxy" \
 	--build.bin "true" \
 	--build.exclude_dir "" \
 	--build.include_dir "web/public/assets" \
@@ -59,6 +59,18 @@ watch-assets:
 .PHONY: fmt
 fmt:
 	templ fmt internal/view
+
+.PHONY: embed-assets-in-template
+embed-assets-in-template:
+	@echo "Embedding assets into base.templ..."
+	@chmod +x scripts/embed_assets_in_template.sh
+	@./scripts/embed_assets_in_template.sh internal/view/layout/base.templ web/public/assets/main.css web/public/assets/main.js
+
+.PHONY: embed-assets
+embed-assets:
+	@echo "Embedding assets into base_templ.go..."
+	@chmod +x scripts/embed_assets.sh
+	@./scripts/embed_assets.sh internal/view/layout/base_templ.go web/public/assets/main.css web/public/assets/main.js
 
 .PHONY: install-deps
 install-deps:

@@ -1,134 +1,76 @@
 package main
 
 import (
-	adaptermssql "adapter-mssql"
-	"fmt"
+	adapterpostgres "adapter-postgres"
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
-	"github.com/nonamecat19/go-orm/core/utils"
+	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	querybuilder "github.com/nonamecat19/go-orm/orm/lib/querybuilder"
+	studioApp "github.com/nonamecat19/go-orm/studio/lib/app"
 )
 
 func main() {
-	//postgresConfig := config.ORMConfig{
-	//	Host:     "127.0.0.1",
-	//	Port:     15432,
-	//	User:     "postgres",
-	//	Password: "root",
-	//	DbName:   "orm",
-	//	SSLMode:  false,
-	//}
-	//
-	//postgresAdapter := adapterpostgres.AdapterPostgres{}
-	//
-	//client := client2.CreateClient(postgresConfig, postgresAdapter)
-
-	//sqliteConfig := config.ORMConfig{
-	//	Path: "./sqlite.sqlite",
-	//}
-	//
-	//sqliteAdapter := adaptersqlite.AdapterSQLite{}
-
-	//client := client2.CreateClient(sqliteConfig, sqliteAdapter)
-
-	mssqlConfig := config.ORMConfig{
+	server := fiber.New()
+	postgresConfig := config.ORMConfig{
 		Host:     "127.0.0.1",
-		Port:     1433,
-		User:     "sa",
-		Password: "1StrongPwd!!",
-		DbName:   "master",
+		Port:     15432,
+		User:     "postgres",
+		Password: "root",
+		DbName:   "orm",
 		SSLMode:  false,
 	}
 
-	mssqlAdapter := adaptermssql.AdapterMSSQL{}
+	postgresAdapter := adapterpostgres.AdapterPostgres{}
 
-	client := client2.CreateClient(mssqlConfig, mssqlAdapter)
+	client := client2.CreateClient(postgresConfig, postgresAdapter)
 
-	//mysqlConfig := config.ORMConfig{
-	//	Host:     "127.0.0.1",
-	//	Port:     3306,
-	//	User:     "admin",
-	//	Password: "root",
-	//	DbName:   "orm",
-	//}
-	//
-	//mysqlAdapter := adaptermysql.AdapterMySQL{}
-	//
-	//client := client2.CreateClient(mysqlConfig, mysqlAdapter)
+	server.Get("/api/users", func(c *fiber.Ctx) error {
+		var users []entities.User
+		err := querybuilder.CreateQueryBuilder(client).
+			Preload("orders").
+			Preload("role").
+			FindMany(&users)
 
-	//users := []entities.User{
-	//	{
-	//		Name:   "test",
-	//		Email:  "email@gmail.com",
-	//		Gender: "male",
-	//	},
-	//	{
-	//		Name:   "test2",
-	//		Email:  "email2@gmail.com",
-	//		Gender: "female",
-	//	},
-	//}
-	//
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	Debug().
-	//	InsertMany(users)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
 
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	Debug().
-	//	InsertOne(users[0])
+		return c.JSON(users)
+	})
 
-	var users []entities.User
+	server.Get("/api/users/:id", func(c *fiber.Ctx) error {
+		var user entities.User
+		err := querybuilder.CreateQueryBuilder(client).
+			Where("id = ?", c.Params("id")).
+			Preload("orders").
+			Preload("role").
+			Limit(1).
+			FindMany(&user)
 
-	err := querybuilder.CreateQueryBuilder(client).
-		Where("name <> ? OR name <> ?", "test1", "User 200").
-		AndWhere("name <> '2'").
-		//AndWhere("name <> ?", '3').
-		Preload("orders").
-		Preload("role").
-		OrderBy("id DESC").
-		Limit(8).
-		Offset(2).
-		FindMany(&users)
+		if err != nil {
+			return c.Status(404).JSON(fiber.Map{
+				"error": "User not found",
+			})
+		}
 
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	Where("id = ?", 35).
-	//	DeleteMany(&entities.User{})
-	//
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	Debug().
-	//	SetValues(map[string]any{"name": "test"}).
-	//	Where("id > ?", 32).
-	//	AndWhere("id < 42").
-	//	UpdateMany(&entities.User{})
+		return c.JSON(user)
+	})
 
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
+	tables := []coreEntities.IEntity{
+		entities.Order{},
+		entities.Role{},
+		entities.User{},
 	}
 
-	utils.PrintStructSlice(users)
+	studioApp.AddStudioFiberGroup(server, tables, client, "/studio")
 
-	//var orders []entities.Order
-	//
-	//err := querybuilder.CreateQueryBuilder(client).
-	//	Where("id <> ?", 8).
-	//	AndWhere("count <> ?", 7).
-	//	Debug().
-	//	OrderBy("id ASC").
-	//	Preload("user").
-	//	Limit(15).
-	//	Offset(1).
-	//	FindMany(&orders)
-	//
-	//if err != nil {
-	//	fmt.Println("Error:", err)
-	//	return
-	//}
-	//
-	//utils.PrintStructSlice(orders)
+	_ = server.Listen(":7777")
 }

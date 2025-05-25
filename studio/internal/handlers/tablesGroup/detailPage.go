@@ -102,8 +102,9 @@ func TableDetailPage(c *fiber.Ctx) error {
 
 	records, entityType := getTableRecords(sharedData, tableID, sortField, sortDir)
 	if entityType == nil {
-		c.Set("HX-Redirect", "/")
-		return c.Redirect("/")
+		route := sharedData.Prefix + "/"
+		c.Set("HX-Redirect", route)
+		return c.Redirect(route)
 	}
 
 	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())

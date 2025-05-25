@@ -35,6 +35,6 @@ func DeleteTableRecord(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Error updating record: %v", err))
 	}
 
-	c.Set("HX-Redirect", "/tables/"+tableID)
-	return c.SendString("Record updated successfully")
+	c.Set("HX-Redirect", sharedData.Prefix+"/tables/"+tableID)
+	return c.SendString("Record deleted successfully")
 }
