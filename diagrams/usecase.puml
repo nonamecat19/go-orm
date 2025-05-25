@@ -1,21 +1,17 @@
 @startuml
 left to right direction
 
-' Actors
 actor "Розробник" as DEV
 actor "Адміністратор БД" as DBA
 
 usecase "Розробка адаптерів нестандартних баз даних" as UC1
 usecase "Перегляд вихідного SQL коду" as UC2
-usecase "Опис таблиць" as UC3
+usecase "Опис моделей" as UC3
 usecase "Виконання нестандартних SQL запитів" as UC4
 usecase "Управління даними через GUI" as UC5
 usecase "Перегляд даних через GUI" as UC6
+usecase "Сортування даних" as UC7
 
-' Actor relationships
-DEV <|-- DBA
-
-' Use case relationships
 DEV --> UC3
 DEV --> UC4
 DEV --> UC1
@@ -24,7 +20,7 @@ DEV --> UC6
 
 DBA --> UC6
 
-' Include relations
 UC6 --> UC5 : <<include>>
+UC6 --> UC7 : <<include>>
 
 @enduml

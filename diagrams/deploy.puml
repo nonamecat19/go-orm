@@ -1,0 +1,25 @@
+@startuml
+
+node "Admin panel client" {
+  [Browser]
+}
+node "App client" {
+  [CLI, REST, GraphQL,etc]
+}
+
+node "App server" {
+  [App Fiber API]
+  [Admin Fiber routes group]
+}
+
+node "Database server" {
+  [SQL Database (PostgreSQL, MySQL, MS SQL or SQLite)]
+}
+
+[Browser] --> [Admin Fiber routes group] : HTTP/HTTPS
+[CLI, REST, GraphQL,etc] --> [App Fiber API]
+
+[Admin Fiber routes group] --> [SQL Database (PostgreSQL, MySQL, MS SQL or SQLite)] : TCP/IP
+
+[App Fiber API] --> [SQL Database (PostgreSQL, MySQL, MS SQL or SQLite)] : TCP/IP
+@enduml
