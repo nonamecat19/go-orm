@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-func AddStudioFiberGroup(app *fiber.App, tables []coreEntities.IEntity, client client.DbClient, prefix string) {
+func AddStudioFiberGroup(app *fiber.App, tables []coreEntities.Entity, client client.DbClient, prefix string) {
 	studioGroup := app.Group(prefix)
 
 	sharedData := fiber.Map{

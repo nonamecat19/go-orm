@@ -7,8 +7,8 @@ import (
 	"github.com/nonamecat19/go-orm/orm/lib/client"
 )
 
-func GetTableMap(tables []coreEntities.IEntity) map[string]coreEntities.IEntity {
-	tableMap := make(map[string]coreEntities.IEntity)
+func GetTableMap(tables []coreEntities.Entity) map[string]coreEntities.Entity {
+	tableMap := make(map[string]coreEntities.Entity)
 	for _, table := range tables {
 		tableMap[table.Info()] = table
 	}
@@ -16,8 +16,8 @@ func GetTableMap(tables []coreEntities.IEntity) map[string]coreEntities.IEntity 
 }
 
 type SharedData struct {
-	TableMap map[string]coreEntities.IEntity
-	Tables   []coreEntities.IEntity
+	TableMap map[string]coreEntities.Entity
+	Tables   []coreEntities.Entity
 	DbClient client.DbClient
 	Prefix   string
 }
@@ -25,8 +25,8 @@ type SharedData struct {
 func GetSharedData(c *fiber.Ctx) SharedData {
 	data := c.Locals("data").(fiber.Map)
 
-	tableMap := data["tableMap"].(map[string]coreEntities.IEntity)
-	tables := data["tables"].([]coreEntities.IEntity)
+	tableMap := data["tableMap"].(map[string]coreEntities.Entity)
+	tables := data["tables"].([]coreEntities.Entity)
 	dbClient := data["client"].(client.DbClient)
 	prefix := data["prefix"].(string)
 

@@ -9,6 +9,6 @@ type Model struct {
 	DeletedAt *time.Time `db:"deleted_at" json:"deleted_at"`
 }
 
-type IEntity interface {
+type Entity interface {
 	Info() string
 }

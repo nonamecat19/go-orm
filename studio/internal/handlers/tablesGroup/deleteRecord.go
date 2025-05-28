@@ -9,7 +9,7 @@ import (
 	"reflect"
 )
 
-func GetEntityPointer(entity coreEntities.IEntity) interface{} {
+func GetEntityPointer(entity coreEntities.Entity) interface{} {
 	entityType := reflect.TypeOf(entity).Elem()
 	entityPtr := reflect.New(entityType)
 	return entityPtr

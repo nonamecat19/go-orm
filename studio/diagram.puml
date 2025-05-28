@@ -91,8 +91,8 @@ namespace tables {
 
 namespace utils {
     class SharedData << (S,Aquamarine) >> {
-        + TableMap <font color=blue>map</font>[string]entities.IEntity
-        + Tables []entities.IEntity
+        + TableMap <font color=blue>map</font>[string]entities.Entity
+        + Tables []entities.Entity
         + DbClient client.DbClient
 
     }

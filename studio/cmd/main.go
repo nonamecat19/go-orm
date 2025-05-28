@@ -38,7 +38,7 @@ func run() error {
 	postgresAdapter := adapterpostgres.AdapterPostgres{}
 	client := client2.CreateClient(postgresConfig, postgresAdapter)
 
-	tables := []coreEntities.IEntity{
+	tables := []coreEntities.Entity{
 		appEntities.Order{},
 		appEntities.Role{},
 		appEntities.User{},
