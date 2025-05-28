@@ -14,10 +14,10 @@ type DbClient struct {
 	db      *sql.DB
 	config  config.ORMConfig
 	tables  Tables
-	adapter adapter.Adapter
+	adapter adapter.DbAdapter
 }
 
-func CreateClient(config config.ORMConfig, currentAdapter adapter.Adapter) DbClient {
+func CreateClient(config config.ORMConfig, currentAdapter adapter.DbAdapter) DbClient {
 	connStr := currentAdapter.GetConnString(config)
 	db, err := sql.Open(currentAdapter.GetDbDriver(), connStr)
 	if err != nil {
@@ -46,7 +46,7 @@ func (dc DbClient) GetTables() Tables {
 	return dc.tables
 }
 
-func (dc DbClient) GetAdapter() adapter.Adapter {
+func (dc DbClient) GetAdapter() adapter.DbAdapter {
 	return dc.adapter
 }
 

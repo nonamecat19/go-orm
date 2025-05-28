@@ -12,7 +12,7 @@ import (
 
 type QueryBuilder struct {
 	client       client.DbClient
-	adapter      adapter.Adapter
+	adapter      adapter.DbAdapter
 	query        string
 	selectFields []string
 	where        string
