@@ -1,8 +1,10 @@
 @startuml
 
+
+skinparam style strictuml
 skinparam padding 0
-skinparam nodesep 150
-skinparam ranksep 100
+skinparam nodesep 200
+skinparam ranksep 200
 skinparam linetype ortho
 
 package core #E4EDFF {
@@ -32,7 +34,7 @@ package core #E4EDFF {
             + PrepareQueryAndArgs(query string, args []any) (string, []any)
         }
     }
-    core.adapter.Adapter ..> core.config.ORMConfig
+    core.adapter.DbAdapter ..> core.config.ORMConfig
 
     package config {
         class ORMConfig << (S,Aquamarine) >> {
@@ -51,7 +53,7 @@ package core #E4EDFF {
     }
 
     package entities {
-        interface IEntity  {
+        interface Entity  {
             + Info() string
         }
         class Model << (S,Aquamarine) >> {
@@ -61,7 +63,7 @@ package core #E4EDFF {
             + DeletedAt *time.Time
         }
     }
-    core.entities.IEntity ..|> core.entities.Model
+    core.entities.Entity ..|> core.entities.Model
 
     package query {
         class JoinClause << (S,Aquamarine) >> {
@@ -117,7 +119,7 @@ package adapters #E9FFDD {
         }
         adapters.adapter_base.AdapterBase ..> core.config.ORMConfig
         adapters.adapter_base.AdapterBase ..> core.query.JoinClause
-        adapters.adapter_base.AdapterBase ..|> core.adapter.Adapter
+        adapters.adapter_base.AdapterBase ..|> core.adapter.DbAdapter
     }
 
     package adapter_mssql {
@@ -170,17 +172,15 @@ package orm #FFEDEC {
             - db *sql.DB
             - config config.ORMConfig
             - tables Tables
-            - adapter adapter.Adapter
+            - adapter adapter.DbAdapter
 
             + GetDb() *sql.DB
             + GetConfig() config.ORMConfig
-            + GetTables() Tables
-            + GetAdapter() adapter.Adapter
+            + GetAdapter() adapter.DbAdapter
             + Query(query string, args ...any) (*sql.Rows, error)
         }
         orm.client.DbClient ..> core.config.ORMConfig
-        orm.client.DbClient ..> core.adapter.Adapter
-'        orm.client.DbClient ..> orm.client.Tables
+        orm.client.DbClient ..> core.adapter.DbAdapter
         orm.client.DbClient ..> TableScheme
 
     }
@@ -188,7 +188,7 @@ package orm #FFEDEC {
     package querybuilder {
         class QueryBuilder << (S,Aquamarine) >> {
             - client client.DbClient
-            - adapter adapter.Adapter
+            - adapter adapter.DbAdapter
             - query string
             - selectFields []string
             - where string
@@ -240,7 +240,7 @@ package orm #FFEDEC {
             + OrWhere(condition string, args ...any) *QueryBuilder
         }
         orm.querybuilder.QueryBuilder ..> orm.client.DbClient
-        orm.querybuilder.QueryBuilder ..> core.adapter.Adapter
+        orm.querybuilder.QueryBuilder ..> core.adapter.DbAdapter
         orm.querybuilder.QueryBuilder ..> orm.querybuilder.QueryBuilder
         orm.querybuilder.QueryBuilder ..> core.query.JoinClause
     }

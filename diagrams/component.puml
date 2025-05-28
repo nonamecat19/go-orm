@@ -1,11 +1,14 @@
 @startuml
+
+skinparam style strictuml
+
 skinparam rectangle {
   BackgroundColor white
   BorderColor black
 }
 
 ' Title
-title ORM
+title NOT READY
 
 ' Frontend
 package "Frontend" {
@@ -21,7 +24,6 @@ package "Admin Backend" {
 ' App Backend
 package "App Backend" {
   [App (Golang)]
-  [CLI (Cobra)]
   [App Business Logic]
 }
 
@@ -30,19 +32,12 @@ package "Database" {
   [SQL Database\n(MySQL, PostgreSQL or SQLite)]
 }
 
-' Log Database
-package "Log Database" {
-  [NoSQL Database\n(Elasticsearch)]
-}
-
 ' Connections
 [HTMX] --> [API (Fiber)] : REST API (HTTPS)
 [API (Fiber)] --> [Admin Business Logic] : TCP/IP
 [Admin Business Logic] --> [SQL Database\n(MySQL, PostgreSQL or SQLite)] : TCP/IP
-[Admin Business Logic] --> [NoSQL Database\n(Elasticsearch)]
 
 [App (Golang)] --> [App Business Logic]
-[CLI (Cobra)] --> [App Business Logic]
 [App Business Logic] --> [SQL Database\n(MySQL, PostgreSQL or SQLite)] : TCP/IP
 
 @enduml

@@ -1,5 +1,7 @@
 @startuml
 
+skinparam style strictuml
+
 node "Admin panel client" {
   [Browser]
 }

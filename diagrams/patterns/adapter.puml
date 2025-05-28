@@ -1,0 +1,20 @@
+@startuml
+
+skinparam style strictuml
+
+interface Target {
+    +request()
+}
+
+class Adaptee {
+    +specificRequest()
+}
+
+class Adapter implements Target {
+    -adaptee: Adaptee
+    +request()
+}
+
+Adapter --> Adaptee : adapts
+
+@enduml

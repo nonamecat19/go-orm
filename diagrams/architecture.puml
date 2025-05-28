@@ -1,4 +1,7 @@
 @startuml
+
+skinparam style strictuml
+
 package "Presentation Layer" {
   [Admin panel UI]
   [User application interface (REST, GraphQL, etc)]

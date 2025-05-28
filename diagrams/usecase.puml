@@ -1,4 +1,7 @@
 @startuml
+
+skinparam style strictuml
+
 left to right direction
 
 actor "Розробник" as DEV
