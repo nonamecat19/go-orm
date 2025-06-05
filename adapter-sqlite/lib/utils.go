@@ -1,6 +1,8 @@
 package adapter_sqlite
 
-import base "adapter-base"
+import (
+	base "adapter-base/lib"
+)
 
 func (ap AdapterSQLite) JoinFieldsStrictly(fields []string) string {
 	return base.JoinFieldsStrictly(fields)

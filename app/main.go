@@ -1,7 +1,7 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres"
+	adapterpostgres "adapter-postgres/lib"
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"

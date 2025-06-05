@@ -1,7 +1,7 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres"
+	adapterpostgres "adapter-postgres/lib"
 	"context"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"

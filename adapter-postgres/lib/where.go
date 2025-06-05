@@ -1,7 +1,7 @@
 package adapter_postgres
 
 import (
-	base "adapter-base"
+	base "adapter-base/lib"
 )
 
 // Where adds a WHERE condition to the query

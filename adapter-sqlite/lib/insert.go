@@ -1,6 +1,8 @@
 package adapter_sqlite
 
-import base "adapter-base"
+import (
+	base "adapter-base/lib"
+)
 
 func (ap AdapterSQLite) Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any) {
 	return base.Insert(tableName, fieldNames, values, args)

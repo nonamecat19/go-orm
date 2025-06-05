@@ -1,7 +1,7 @@
 package adapter_mssql
 
 import (
-	base "adapter-base"
+	base "adapter-base/lib"
 	"database/sql"
 	"fmt"
 	"github.com/nonamecat19/go-orm/core/lib/query"

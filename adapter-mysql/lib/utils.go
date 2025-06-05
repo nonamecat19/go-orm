@@ -1,6 +1,8 @@
 package adapter_mysql
 
-import base "adapter-base"
+import (
+	base "adapter-base/lib"
+)
 
 func (ap AdapterMySQL) JoinFieldsStrictly(fields []string) string {
 	return base.JoinFieldsStrictly(fields)

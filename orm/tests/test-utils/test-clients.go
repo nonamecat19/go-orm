@@ -1,10 +1,10 @@
 package test_utils
 
 import (
-	adaptermssql "adapter-mssql"
-	adaptermysql "adapter-mysql"
-	adapterpostgres "adapter-postgres"
-	adaptersqlite "adapter-sqlite"
+	adaptermssql "adapter-mssql/lib"
+	adaptermysql "adapter-mysql/lib"
+	adapterpostgres "adapter-postgres/lib"
+	adaptersqlite "adapter-sqlite/lib"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 )

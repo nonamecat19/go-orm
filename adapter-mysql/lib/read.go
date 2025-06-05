@@ -1,7 +1,7 @@
 package adapter_mysql
 
 import (
-	base "adapter-base"
+	base "adapter-base/lib"
 )
 
 func (ap AdapterMySQL) GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string {

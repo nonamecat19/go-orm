@@ -1,6 +1,8 @@
 package adapter_postgres
 
-import base "adapter-base"
+import (
+	base "adapter-base/lib"
+)
 
 func (ap AdapterPostgres) JoinFieldsStrictly(fields []string) string {
 	return base.JoinFieldsStrictly(fields)

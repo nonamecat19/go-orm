@@ -1,7 +1,7 @@
 package adapter_sqlite
 
 import (
-	base "adapter-base"
+	base "adapter-base/lib"
 )
 
 func (ap AdapterSQLite) Update(tableName string) string {
