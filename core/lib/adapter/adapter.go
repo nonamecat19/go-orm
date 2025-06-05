@@ -5,7 +5,7 @@ import (
 	"github.com/nonamecat19/go-orm/core/lib/query"
 )
 
-type Adapter interface {
+type DbAdapter interface {
 	GetConnString(config config.ORMConfig) string
 	GetDbDriver() string
 	DeleteFromTable(tableName string) string

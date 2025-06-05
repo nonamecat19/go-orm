@@ -64,7 +64,7 @@ func main() {
 		return c.JSON(user)
 	})
 
-	tables := []coreEntities.IEntity{
+	tables := []coreEntities.Entity{
 		entities.Order{},
 		entities.Role{},
 		entities.User{},

@@ -1,0 +1,24 @@
+@startuml
+
+skinparam style strictuml
+
+package "Presentation Layer" {
+  [Admin panel UI]
+  [User application interface (REST, GraphQL, etc)]
+}
+
+package "Application Layer" {
+  [Admin panel API]
+  [User App]
+}
+
+package "Persistence layer" {
+  [SQL Database (MySQL, PostgreSQL, MS SQL or SQLite)]
+}
+
+[Admin panel UI] --> [Admin panel API]
+[User application interface (REST, GraphQL, etc)] --> [User App]
+
+[Admin panel API] --> [SQL Database (MySQL, PostgreSQL, MS SQL or SQLite)]
+[User App] --> [SQL Database (MySQL, PostgreSQL, MS SQL or SQLite)]
+@enduml

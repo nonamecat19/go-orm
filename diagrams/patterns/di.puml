@@ -1,0 +1,19 @@
+@startuml
+
+skinparam style strictuml
+
+class Service {
+    +execute()
+}
+
+class Client {
+    -service: Service
+    +Client(service: Service)
+    +doWork()
+}
+
+Client --> Service : injected via constructor
+
+
+
+@enduml

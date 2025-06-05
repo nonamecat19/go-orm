@@ -7,7 +7,6 @@ use (
 	./adapter-postgres
 	./adapter-sqlite
 	./app
-	./cli
 	./core
 	./orm
 	./studio

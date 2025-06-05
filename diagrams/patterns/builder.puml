@@ -1,0 +1,25 @@
+@startuml
+
+skinparam style strictuml
+
+class Product {
+    +parts: List<String>
+    +addPart(part: String)
+    +show()
+}
+
+class FluentBuilder {
+    -product: Product
+    +buildPartA(): FluentBuilder
+    +buildPartB(): FluentBuilder
+    +build(): Product
+}
+
+FluentBuilder --> Product : builds
+
+class Director {
+    +construct(builder: FluentBuilder)
+}
+
+Director --> FluentBuilder : uses
+@enduml
