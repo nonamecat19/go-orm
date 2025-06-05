@@ -1,7 +1,7 @@
 package adapter_postgres
 
 import (
-	base "adapter-base/lib"
+	base "github.com/nonamecat19/go-orm/adapter-base/lib"
 	"github.com/nonamecat19/go-orm/core/lib/query"
 )
 

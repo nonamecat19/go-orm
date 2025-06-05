@@ -1,7 +1,7 @@
 package adapter_sqlite
 
 import (
-	base "adapter-base/lib"
+	base "github.com/nonamecat19/go-orm/adapter-base/lib"
 )
 
 func (ap AdapterSQLite) Update(tableName string) string {

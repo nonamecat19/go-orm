@@ -1,7 +1,7 @@
 package adapter_mysql
 
 import (
-	base "adapter-base/lib"
+	base "github.com/nonamecat19/go-orm/adapter-base/lib"
 )
 
 func (ap AdapterMySQL) Insert(tableName string, fieldNames []string, values []any, args []any) (string, []any) {

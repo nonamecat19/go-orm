@@ -1,8 +1,8 @@
 package adapter_mssql
 
 import (
-	base "adapter-base/lib"
 	"fmt"
+	base "github.com/nonamecat19/go-orm/adapter-base/lib"
 	"strings"
 )
 

@@ -1,7 +1,7 @@
 package adapter_mssql
 
 import (
-	base "adapter-base/lib"
+	base "github.com/nonamecat19/go-orm/adapter-base/lib"
 )
 
 func (ap AdapterMSSQL) GetFromSubquery(tableName string, where string, orderBy []string, limit int, offset int) string {
