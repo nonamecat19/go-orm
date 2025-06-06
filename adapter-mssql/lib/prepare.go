@@ -33,7 +33,24 @@ func (ap AdapterMSSQL) PrepareOffset(query string, offset int) string {
 }
 
 func (ap AdapterMSSQL) PrepareSet(query string, set map[string]any, args []any) (string, []any) {
-	return base.PrepareSet(query, set, args)
+	if len(set) == 0 {
+		return query, args
+	}
+
+	newArgs := args
+
+	var setClauses []string
+	for column := range set {
+		setClauses = append(setClauses, fmt.Sprintf("%s = ?", column))
+	}
+
+	queryWithSet := fmt.Sprintf("%s SET %s", query, ap.JoinFields(setClauses))
+	normalizedQuery := ap.NormalizeSqlWithArgs(queryWithSet, args)
+	for _, value := range set {
+		newArgs = append(newArgs, value)
+	}
+
+	return normalizedQuery, newArgs
 }
 
 func (ap AdapterMSSQL) PrepareJoins(query string, joins []query.JoinClause) string {

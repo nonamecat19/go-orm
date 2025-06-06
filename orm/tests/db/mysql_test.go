@@ -15,3 +15,13 @@ func TestMySQLFindOrdersWithUsers(t *testing.T) {
 	client := test_utils.GetMySQLTestClient()
 	test_utils.FindOrdersWithUsers(t, client)
 }
+
+func TestMySQLDeleteUsers(t *testing.T) {
+	client := test_utils.GetMySQLTestClient()
+	test_utils.DeleteUsers(t, client)
+}
+
+func TestMySQLUpdateUsers(t *testing.T) {
+	client := test_utils.GetMySQLTestClient()
+	test_utils.UpdateUsers(t, client)
+}

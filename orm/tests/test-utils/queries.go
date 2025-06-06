@@ -42,3 +42,47 @@ func FindOrdersWithUsers(t *testing.T, client client2.DbClient) {
 	assert.NoError(t, err, "Expected no error")
 	CompareTestOutput(t, orders, "../outputs/FindOrdersWithUsers")
 }
+
+func DeleteUsers(t *testing.T, client client2.DbClient) {
+	PrepareDB(t, client)
+	var users []entities.User
+
+	err := querybuilder.CreateQueryBuilder(client).
+		Where("role_id = ?", 1).
+		OrWhere("gender <> 'female'").
+		DeleteMany(&entities.User{})
+
+	err = querybuilder.CreateQueryBuilder(client).
+		Select("users.id", "users.gender", "users.role_id").
+		OrderBy("id ASC").
+		Offset(0).
+		Limit(100).
+		FindMany(&users)
+
+	//_ = os.WriteFile("../outputs/DeleteUsers.json", []byte(utils.GetStructJSON(users)), 0644)
+
+	assert.NoError(t, err, "Expected no error")
+	CompareTestOutput(t, users, "../outputs/DeleteUsers")
+}
+
+func UpdateUsers(t *testing.T, client client2.DbClient) {
+	PrepareDB(t, client)
+	var users []entities.User
+
+	err := querybuilder.CreateQueryBuilder(client).
+		Where("role_id = 3").
+		SetValues(map[string]any{"name": "testName"}).
+		UpdateMany(&entities.User{})
+
+	err = querybuilder.CreateQueryBuilder(client).
+		Select("users.name", "users.role_id").
+		Offset(0).
+		Limit(100).
+		OrderBy("id ASC").
+		FindMany(&users)
+
+	//_ = os.WriteFile("../outputs/UpdateUsers.json", []byte(utils.GetStructJSON(users)), 0644)
+
+	assert.NoError(t, err, "Expected no error")
+	CompareTestOutput(t, users, "../outputs/UpdateUsers")
+}

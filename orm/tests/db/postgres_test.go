@@ -15,3 +15,13 @@ func TestPostgresFindOrdersWithUsers(t *testing.T) {
 	client := test_utils.GetPostgresTestClient()
 	test_utils.FindOrdersWithUsers(t, client)
 }
+
+func TestPostgresDeleteUsers(t *testing.T) {
+	client := test_utils.GetPostgresTestClient()
+	test_utils.DeleteUsers(t, client)
+}
+
+func TestPostgresUpdateUsers(t *testing.T) {
+	client := test_utils.GetPostgresTestClient()
+	test_utils.UpdateUsers(t, client)
+}

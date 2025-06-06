@@ -32,6 +32,7 @@ func CreateQueryBuilder(client client.DbClient) *QueryBuilder {
 		adapter: client.GetAdapter(),
 		client:  client,
 		limit:   -1, // Default to no limit
+		offset:  -1, // Default to no offset
 	}
 }
 
