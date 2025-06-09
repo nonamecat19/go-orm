@@ -2,7 +2,6 @@ package test_utils
 
 import (
 	"github.com/nonamecat19/go-orm/app/entities"
-	"github.com/nonamecat19/go-orm/core/utils"
 	client2 "github.com/nonamecat19/go-orm/orm/lib/client"
 	"github.com/nonamecat19/go-orm/orm/lib/querybuilder"
 	"github.com/stretchr/testify/assert"
@@ -72,7 +71,6 @@ func InsertUser(t *testing.T, client client2.DbClient) {
 	var roleId int64 = 1
 
 	err := querybuilder.CreateQueryBuilder(client).
-		Debug().
 		InsertOne(entities.User{
 			Name:   "testName",
 			Email:  "test@gmail.com",
@@ -88,8 +86,6 @@ func InsertUser(t *testing.T, client client2.DbClient) {
 		Offset(0).
 		Limit(1).
 		FindMany(&users)
-
-	utils.PrintStructSlice(users)
 
 	assert.NoError(t, err, "Expected no error")
 
