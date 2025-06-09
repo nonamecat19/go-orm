@@ -90,7 +90,7 @@ func (qb *QueryBuilder) insertSlice(sliceValue reflect.Value) error {
 
 			switch value.Kind() {
 			case reflect.Ptr:
-				newArg = value.Elem()
+				newArg = value.Elem().Interface()
 			default:
 				newArg = value.Interface()
 			}

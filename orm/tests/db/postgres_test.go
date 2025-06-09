@@ -21,6 +21,11 @@ func TestPostgresDeleteUsers(t *testing.T) {
 	test_utils.DeleteUsers(t, client)
 }
 
+func TestPostgresInsertUser(t *testing.T) {
+	client := test_utils.GetPostgresTestClient()
+	test_utils.InsertUser(t, client)
+}
+
 func TestPostgresUpdateUsers(t *testing.T) {
 	client := test_utils.GetPostgresTestClient()
 	test_utils.UpdateUsers(t, client)

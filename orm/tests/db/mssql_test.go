@@ -21,6 +21,11 @@ func TestMSSQLDeleteUsers(t *testing.T) {
 	test_utils.DeleteUsers(t, client)
 }
 
+func TestMSSQLInsertUser(t *testing.T) {
+	client := test_utils.GetMSSQLTestClient()
+	test_utils.InsertUser(t, client)
+}
+
 func TestMSSQLUpdateUsers(t *testing.T) {
 	client := test_utils.GetMSSQLTestClient()
 	test_utils.UpdateUsers(t, client)

@@ -21,6 +21,11 @@ func TestMySQLDeleteUsers(t *testing.T) {
 	test_utils.DeleteUsers(t, client)
 }
 
+func TestMySQLInsertUser(t *testing.T) {
+	client := test_utils.GetMySQLTestClient()
+	test_utils.InsertUser(t, client)
+}
+
 func TestMySQLUpdateUsers(t *testing.T) {
 	client := test_utils.GetMySQLTestClient()
 	test_utils.UpdateUsers(t, client)
