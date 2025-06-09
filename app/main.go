@@ -1,12 +1,12 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres/lib"
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	adapterpostgres "github.com/nonamecat19/go-orm/adapter-postgres/lib"
 	"github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"

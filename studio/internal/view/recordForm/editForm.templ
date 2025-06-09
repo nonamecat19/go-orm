@@ -19,7 +19,7 @@ templ EditRecordForm(props EditRecordFormProps) {
 		</div>
 		<form
 			id="edit-record-form"
-			hx-put={ "/api/tables/" + props.TableID + "/records/" + props.RowID }
+			hx-put={ "/api/tables/" + props.TableID + "/records/" + props.Row[0] }
 			hx-swap="none"
 			hx-indicator="#edit-form-spinner"
 			hx-target="#edit-success-message"
@@ -33,7 +33,7 @@ templ EditRecordForm(props EditRecordFormProps) {
 							<span class="label-text-alt text-xs text-gray-500">{ field.Type }</span>
 						</label>
 						if i < len(props.Row) {
-							@renderFieldInputWithValue(field, props.Row[i])
+							@renderFieldInputWithValue(field, props.Row[i+4])
 						} else {
 							@renderFieldInput(field)
 						}
@@ -42,11 +42,11 @@ templ EditRecordForm(props EditRecordFormProps) {
 			</div>
 			<div class="flex items-center gap-4 mt-6">
 				<button type="submit" class="btn btn-primary">
-					Update Record
+					Оновити запис
 				</button>
 				<div id="edit-form-spinner" class="htmx-indicator flex items-center">
 					<span class="loading loading-spinner loading-md mr-2"></span>
-					Updating...
+					Оновлення...
 				</div>
 			</div>
 		</form>

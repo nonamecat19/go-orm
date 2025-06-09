@@ -8,6 +8,7 @@ type TableDetailProps struct {
 	Table  Table
 	Data   [][]string
 	Fields []model.FieldInfo
+	NonSystemFields []model.FieldInfo
 }
 
 templ TableDetailPage(props TableDetailProps) {
@@ -15,10 +16,10 @@ templ TableDetailPage(props TableDetailProps) {
 		@layout.VerticalContainer() {
 			@layout.HorizontalContainer() {
 				@TableNavigationSection()
-				@TableInfoSection(props.Table.Title, props.Table.ID)
-				@TableEditSection(props.Fields, props.Table.ID)
+				@TableInfoSection(props.Table.Title)
+				@TableEditSection(props.NonSystemFields, props.Table.ID)
 			}
-			@TableViewSectionWithTableID(props.Fields, props.Data, props.Table.ID)
+			@TableViewSectionWithTableID(props.Fields, props.NonSystemFields, props.Data, props.Table.ID)
 		}
 	}
 }
@@ -29,9 +30,9 @@ templ TableNavigationSection() {
 	}
 }
 
-templ TableInfoSection(title string, id string) {
+templ TableInfoSection(title string) {
 	@layout.SectionContainer() {
-		<h1>{ title } ID: { id }</h1>
+		<h1>{ title }</h1>
 	}
 }
 

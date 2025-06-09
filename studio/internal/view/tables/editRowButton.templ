@@ -9,10 +9,11 @@ import (
 )
 
 type EditRowButtonProps struct {
-	TableID string
-	RowID   string
-	Row     []string
-	Fields  []model.FieldInfo
+	TableID         string
+	RowID           string
+	Row             []string
+	Fields          []model.FieldInfo
+	NonSystemFields []model.FieldInfo
 }
 
 templ EditRowButtonTrigger(text string) {
@@ -29,7 +30,7 @@ templ EditRowButtonWithProps(props EditRowButtonProps) {
 	}) {
 		<div class="p-2 max-w-4xl mx-auto">
 			@recordForm.EditRecordForm(recordForm.EditRecordFormProps{
-				Fields:  props.Fields,
+				Fields:  props.NonSystemFields,
 				TableID: props.TableID,
 				RowID:   props.RowID,
 				Row:     props.Row,

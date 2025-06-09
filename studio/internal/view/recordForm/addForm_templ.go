@@ -93,7 +93,7 @@ func AddNewRecordForm(props AddNewRecordFormProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div><div class=\"flex items-center gap-4 mt-6\"><button type=\"submit\" class=\"btn btn-primary\">Save Record</button><div id=\"form-spinner\" class=\"htmx-indicator flex items-center\"><span class=\"loading loading-spinner loading-md mr-2\"></span> Saving...</div></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div><div class=\"flex items-center gap-4 mt-6\"><button type=\"submit\" class=\"btn btn-primary\">Додати запис в таблицю</button><div id=\"form-spinner\" class=\"htmx-indicator flex items-center\"><span class=\"loading loading-spinner loading-md mr-2\"></span> Додавання...</div></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

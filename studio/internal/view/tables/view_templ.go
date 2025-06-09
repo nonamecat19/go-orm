@@ -9,15 +9,12 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"context"
 	"fmt"
 	"github.com/nonamecat19/go-orm/studio/internal/model"
-	"github.com/nonamecat19/go-orm/studio/internal/view/components"
 	"github.com/nonamecat19/go-orm/studio/internal/view/layout"
-	"io"
 )
 
-func TableViewSection(fields []model.FieldInfo, data [][]string) templ.Component {
+func TableViewSection(fields []model.FieldInfo, nonSystemFields []model.FieldInfo, data [][]string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -50,7 +47,7 @@ func TableViewSection(fields []model.FieldInfo, data [][]string) templ.Component
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = TableViewContent(fields, data, "").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = TableViewContent(fields, nonSystemFields, data, "").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -64,7 +61,7 @@ func TableViewSection(fields []model.FieldInfo, data [][]string) templ.Component
 	})
 }
 
-func TableViewSectionWithTableID(fields []model.FieldInfo, data [][]string, tableID string) templ.Component {
+func TableViewSectionWithTableID(fields []model.FieldInfo, nonSystemFields []model.FieldInfo, data [][]string, tableID string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -97,7 +94,7 @@ func TableViewSectionWithTableID(fields []model.FieldInfo, data [][]string, tabl
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = TableViewContent(fields, data, tableID).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = TableViewContent(fields, nonSystemFields, data, tableID).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -111,7 +108,7 @@ func TableViewSectionWithTableID(fields []model.FieldInfo, data [][]string, tabl
 	})
 }
 
-func TableViewContent(fields []model.FieldInfo, data [][]string, tableID string) templ.Component {
+func TableViewContent(fields []model.FieldInfo, nonSystemFields []model.FieldInfo, data [][]string, tableID string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -140,7 +137,7 @@ func TableViewContent(fields []model.FieldInfo, data [][]string, tableID string)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = TableViewBody(data, tableID, fields).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = TableViewBody(data, tableID, fields, nonSystemFields).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -185,7 +182,7 @@ func TableViewHeading(fields []model.FieldInfo) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("?sort=" + field.Name + "&dir=" + getSortDirection(field))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 39, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 36, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -198,7 +195,7 @@ func TableViewHeading(fields []model.FieldInfo) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(field.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 47, Col: 20}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 44, Col: 20}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -221,7 +218,7 @@ func TableViewHeading(fields []model.FieldInfo) templ.Component {
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(field.Type)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 52, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 49, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -264,7 +261,7 @@ func getSortDirection(field model.FieldInfo) string {
 	return "asc"
 }
 
-func TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) templ.Component {
+func TableViewBody(data [][]string, tableID string, fields []model.FieldInfo, nonSystemFields []model.FieldInfo) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -294,48 +291,26 @@ func TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) te
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			for fieldIndex, field := range row {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<td>")
+			for _, field := range row {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<td><div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Var11 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-					if !templ_7745c5c3_IsBuffer {
-						defer func() {
-							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-							if templ_7745c5c3_Err == nil {
-								templ_7745c5c3_Err = templ_7745c5c3_BufErr
-							}
-						}()
-					}
-					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<p class=\"py-4\">Press ESC key or click the button below to close</p>")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					return nil
-				})
-				templ_7745c5c3_Err = components.Modal(components.ModalProps{
-					Trigger: templ.Component(func() templ.Component {
-						return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-							return templ.Raw(`<div>`+field+`</div>`).Render(ctx, w)
-						})
-					}()),
-
-					ModalTitle: "Hello",
-					Key:        fmt.Sprintf("tableEdit_%d_%d", rowIndex, fieldIndex),
-				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var11), templ_7745c5c3_Buffer)
+				var templ_7745c5c3_Var11 string
+				templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(field)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/view/tables/view.templ`, Line: 79, Col: 18}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "</td>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "</div></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<td class=\"flex justify-end\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<td class=\"flex justify-end\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -352,15 +327,16 @@ func TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) te
 				}
 				ctx = templ.InitializeContext(ctx)
 				templ_7745c5c3_Err = EditRowButtonWithProps(EditRowButtonProps{
-					TableID: tableID,
-					RowID:   fmt.Sprintf("%d", rowIndex),
-					Row:     row,
-					Fields:  fields,
+					TableID:         tableID,
+					RowID:           fmt.Sprintf("%d", rowIndex),
+					Row:             row,
+					Fields:          fields,
+					NonSystemFields: nonSystemFields,
 				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, " ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -377,12 +353,12 @@ func TableViewBody(data [][]string, tableID string, fields []model.FieldInfo) te
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</td></tr>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</td></tr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</tbody>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "</tbody>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

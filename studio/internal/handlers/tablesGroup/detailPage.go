@@ -35,19 +35,21 @@ func getTableRecords(sharedData utils.SharedData, tableID, sortField, sortDir st
 	return records, entityType
 }
 
-func buildFieldInfo(entityType reflect.Type, systemFields, entityFields []string, sortField, sortDir string) []model.FieldInfo {
-	fields := make([]model.FieldInfo, len(systemFields)+len(entityFields))
+func buildFieldInfo(entityType reflect.Type, systemFields, entityFields []string, sortField, sortDir string, includeSystem bool) []model.FieldInfo {
+	fields := make([]model.FieldInfo, coreUtils.If(includeSystem, len(systemFields)+len(entityFields), len(entityFields)))
 
-	for i, fieldName := range systemFields {
-		fieldNameStr, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(entities2.Model{}), fieldName)
-		field, _ := reflect.TypeOf(entities2.Model{}).FieldByName(fieldNameStr)
-		fieldType := field.Type.String()
-		fields[i] = model.FieldInfo{
-			Name:          fieldName,
-			Type:          fieldType,
-			IsSorted:      sortField == fieldName,
-			SortDirection: sortDir,
-			IsNullable:    isFieldNullable(fieldType),
+	if includeSystem {
+		for i, fieldName := range systemFields {
+			fieldNameStr, _ := coreUtils.GetFieldNameByTagValue(reflect.TypeOf(entities2.Model{}), fieldName)
+			field, _ := reflect.TypeOf(entities2.Model{}).FieldByName(fieldNameStr)
+			fieldType := field.Type.String()
+			fields[i] = model.FieldInfo{
+				Name:          fieldName,
+				Type:          fieldType,
+				IsSorted:      sortField == fieldName,
+				SortDirection: sortDir,
+				IsNullable:    isFieldNullable(fieldType),
+			}
 		}
 	}
 
@@ -55,7 +57,8 @@ func buildFieldInfo(entityType reflect.Type, systemFields, entityFields []string
 		fieldNameStr, _ := coreUtils.GetFieldNameByTagValue(entityType, fieldName)
 		field, _ := entityType.FieldByName(fieldNameStr)
 		fieldType := field.Type.String()
-		fields[len(systemFields)+i] = model.FieldInfo{
+		currentIndex := coreUtils.If(includeSystem, len(systemFields)+i, i)
+		fields[currentIndex] = model.FieldInfo{
 			Name:          fieldName,
 			Type:          fieldType,
 			IsSorted:      sortField == fieldName,
@@ -110,7 +113,8 @@ func TableDetailPage(c *fiber.Ctx) error {
 	entityFields, _ := coreUtils.GetEntityFields(reflect.New(entityType).Interface())
 	systemFields := coreUtils.GetSystemFields()
 
-	fields := buildFieldInfo(entityType, systemFields, entityFields, sortField, sortDir)
+	fields := buildFieldInfo(entityType, systemFields, entityFields, sortField, sortDir, true)
+	nonSystemFields := buildFieldInfo(entityType, systemFields, entityFields, sortField, sortDir, false)
 	dataSlice := buildDataSlice(records, systemFields, entityFields)
 
 	props := tablesView.TableDetailProps{
@@ -118,13 +122,14 @@ func TableDetailPage(c *fiber.Ctx) error {
 			Title: coreUtils.ToHumanCase(tableID),
 			ID:    tableID,
 		},
-		Data:   dataSlice,
-		Fields: fields,
+		Data:            dataSlice,
+		Fields:          fields,
+		NonSystemFields: nonSystemFields,
 	}
 
 	if c.Get("HX-Request") == "true" {
 		if c.Get("HX-Target") == "table-container" {
-			return utils.Render(c, tablesView.TableViewContent(props.Fields, props.Data, tableID))
+			return utils.Render(c, tablesView.TableViewContent(props.Fields, props.NonSystemFields, props.Data, tableID))
 		}
 
 		return utils.Render(c, tablesView.TableDetailPage(props))

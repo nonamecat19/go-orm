@@ -1,10 +1,10 @@
 package main
 
 import (
-	adapterpostgres "adapter-postgres/lib"
 	"context"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
+	adapterpostgres "github.com/nonamecat19/go-orm/adapter-postgres/lib"
 	appEntities "github.com/nonamecat19/go-orm/app/entities"
 	"github.com/nonamecat19/go-orm/core/lib/config"
 	coreEntities "github.com/nonamecat19/go-orm/core/lib/entities"

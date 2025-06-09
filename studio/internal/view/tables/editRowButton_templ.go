@@ -17,10 +17,11 @@ import (
 )
 
 type EditRowButtonProps struct {
-	TableID string
-	RowID   string
-	Row     []string
-	Fields  []model.FieldInfo
+	TableID         string
+	RowID           string
+	Row             []string
+	Fields          []model.FieldInfo
+	NonSystemFields []model.FieldInfo
 }
 
 func EditRowButtonTrigger(text string) templ.Component {
@@ -98,7 +99,7 @@ func EditRowButtonWithProps(props EditRowButtonProps) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = recordForm.EditRecordForm(recordForm.EditRecordFormProps{
-				Fields:  props.Fields,
+				Fields:  props.NonSystemFields,
 				TableID: props.TableID,
 				RowID:   props.RowID,
 				Row:     props.Row,

@@ -94,7 +94,7 @@ func Modal(props ModalProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"modal-action\"><form method=\"dialog\"><!-- if there is a button in form, it will close the modal --><button class=\"btn\">Close</button></form></div></div></dialog><script>\n\t\t  function tableEdit_showModal(key) {\n\t\t\tdocument.getElementById(key).showModal();\n\t\t  }\n\t\t</script></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"modal-action\"><form method=\"dialog\"><button class=\"btn\">Закрити</button></form></div></div></dialog><script>\n\t\t  function tableEdit_showModal(key) {\n\t\t\tdocument.getElementById(key).showModal();\n\t\t  }\n\t\t</script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

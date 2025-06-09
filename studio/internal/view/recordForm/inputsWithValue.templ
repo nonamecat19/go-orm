@@ -6,7 +6,7 @@ templ IntegerInputWithValue(field model.FieldInfo, value string) {
 	<input
 		type="number"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		step="1"
 		required
@@ -24,7 +24,7 @@ templ FloatInputWithValue(field model.FieldInfo, value string) {
 	<input
 		type="number"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		step="0.01"
 		required
@@ -78,7 +78,7 @@ templ StringInputWithValue(field model.FieldInfo, value string) {
 	<input
 		type="text"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		required
 		value={ value }
@@ -94,7 +94,7 @@ templ DefaultInputWithValue(field model.FieldInfo, value string) {
 	<input
 		type="text"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		required
 		value={ value }

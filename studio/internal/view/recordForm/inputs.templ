@@ -6,7 +6,7 @@ templ IntegerInput(field model.FieldInfo) {
 	<input
 		type="number"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		step="1"
 		required
@@ -23,7 +23,7 @@ templ FloatInput(field model.FieldInfo) {
 	<input
 		type="number"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		step="0.01"
 		required
@@ -72,7 +72,7 @@ templ StringInput(field model.FieldInfo) {
 	<input
 		type="text"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		required
 		oninvalid="this.setCustomValidity('This field is required')"
@@ -87,7 +87,7 @@ templ DefaultInput(field model.FieldInfo) {
 	<input
 		type="text"
 		name={ field.Name }
-		placeholder={ "Enter " + field.Name }
+		placeholder={ "Введіть " + field.Name }
 		class="input input-bordered w-full"
 		required
 		oninvalid="this.setCustomValidity('This field is required')"
