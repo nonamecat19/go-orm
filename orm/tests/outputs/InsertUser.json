@@ -1,0 +1,11 @@
+[
+  {
+    "id": 21,
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "name": "testName",
+    "email": "test@gmail.com",
+    "gender": "non_binary"
+  }
+]
