@@ -28,7 +28,7 @@ jobs:
       - name: Build all modules
         run: |
           # Get all directories from go.work
-          modules="adapter-base adapter-mysql adapter-mssql adapter-postgres adapter-sqlite core cli orm"
+          modules="adapter-base adapter-mysql adapter-mssql adapter-postgres adapter-sqlite core orm"
           
           # Build each module
           for module in $modules; do

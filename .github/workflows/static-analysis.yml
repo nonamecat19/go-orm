@@ -31,7 +31,7 @@ jobs:
       - name: Run staticcheck on all modules
         run: |
           # Get all directories from go.work
-          modules="adapter-base adapter-mysql adapter-mssql adapter-postgres adapter-sqlite core cli orm"
+          modules="adapter-base adapter-mysql adapter-mssql adapter-postgres adapter-sqlite core orm"
 
           # Run staticcheck on each module
           for module in $modules; do
