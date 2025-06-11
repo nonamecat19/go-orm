@@ -49,7 +49,7 @@ func DeleteRowButtonWithProps(props DeleteRowButtonProps) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-confirm=\"Are you sure you want to delete this record? This action cannot be undone.\" hx-target=\"closest tr\" hx-swap=\"outerHTML swap:1s\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-confirm=\"Ви впевнені що хочете видалити цей запис?\" hx-target=\"closest tr\" hx-swap=\"outerHTML swap:1s\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
