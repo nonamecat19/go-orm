@@ -6,7 +6,6 @@ use (
 	./adapter-mysql
 	./adapter-postgres
 	./adapter-sqlite
-	./app
 	./core
 	./orm
 	./studio
