@@ -4,7 +4,7 @@ A reflection-based, adapter-driven ORM and query builder for Go, plus **Studio**
 
 Repository: `github.com/nonamecat19/go-orm` · License: MIT
 
-Looking for a working example? See the [demo application](https://github.com/nonamecat19/go-orm-test-app) — a full-stack shopping list app built on this library.
+Looking for a working example? See the [demo application](go-orm-test-app/README.md) — a full-stack shopping list app built on this library.
 
 Supported databases: **PostgreSQL**, **MySQL**, **SQLite**, **Microsoft SQL Server**.
 
@@ -542,14 +542,14 @@ Requires Node/npm and the `templ` CLI. `make watch` proxies through templ's dev 
 
 ## Demo application
 
-[**go-orm-test-app**](https://github.com/nonamecat19/go-orm-test-app) is a full-stack shopping list application that consumes this library as a published dependency. It is the reference for how the pieces fit together in a real project:
+[**go-orm-test-app**](go-orm-test-app/README.md) is a full-stack shopping list application included in this repository. Its backend consumes this library as a published dependency. It is the reference for how the pieces fit together in a real project:
 
 | Concern | Where to look |
 |---|---|
-| Client setup from env vars ([`ORMConfig`](#ormconfig), `AdapterPostgres`) | [`backend/database/database.go`](https://github.com/nonamecat19/go-orm-test-app/blob/main/backend/database/database.go) |
-| [Entity definitions](#defining-entities) with `db:` tags and a one-to-many `relation:` | [`backend/entities/`](https://github.com/nonamecat19/go-orm-test-app/tree/main/backend/entities) |
-| [Query builder](#query-builder-api) usage — reads, inserts, updates, deletes, [preloading](#relations-and-preloading) | [`backend/services/`](https://github.com/nonamecat19/go-orm-test-app/tree/main/backend/services) |
-| [Mounting Studio](#mounting-it) into a Fiber app (`AddStudioFiberGroup`) | [`backend/main.go`](https://github.com/nonamecat19/go-orm-test-app/blob/main/backend/main.go) |
+| Client setup from env vars ([`ORMConfig`](#ormconfig), `AdapterPostgres`) | [`backend/database/database.go`](go-orm-test-app/backend/database/database.go) |
+| [Entity definitions](#defining-entities) with `db:` tags and a one-to-many `relation:` | [`backend/entities/`](go-orm-test-app/backend/entities) |
+| [Query builder](#query-builder-api) usage — reads, inserts, updates, deletes, [preloading](#relations-and-preloading) | [`backend/services/`](go-orm-test-app/backend/services) |
+| [Mounting Studio](#mounting-it) into a Fiber app (`AddStudioFiberGroup`) | [`backend/main.go`](go-orm-test-app/backend/main.go) |
 
 The app pairs a Go/Fiber REST API with a React + Vite frontend and Postgres, and runs end to end via Docker Compose.
 
