@@ -14,7 +14,7 @@ Stack: Go + [Fiber](https://gofiber.io/) API · React + Vite + Tailwind frontend
 - [Configuration](#configuration)
 - [API](#api)
 - [Studio](#studio)
-- [Related repositories](#related-repositories)
+- [Related project](#related-project)
 
 ## What this demonstrates
 
